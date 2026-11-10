@@ -3,5 +3,5 @@ Please always provide the [GitHub issue(s)](../issues) your PR is for, as well a
 Fix #<gh-issue-id>
 
 Test URLs:
-- Before: https://main--bsca-careers--aemsites.aem.live/
-- After: https://<branch>--bsca-careers--aemsites.aem.live/
+- Before: https://main--bsca-careers--blueshieldca.aem.live/
+- After: https://<branch>--bsca-careers--blueshieldca.aem.live/
