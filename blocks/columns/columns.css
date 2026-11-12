@@ -136,7 +136,7 @@ main .columns.alternating a.button:hover {
 
 @media (width >= 992px) {
   .columns.alternating {
-    gap: 60px;
+    gap: var(--columns-alternating-gap);
   }
 
   .columns.alternating > div {

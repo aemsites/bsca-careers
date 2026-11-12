@@ -104,6 +104,11 @@
   --footer-logo-filter: none; /* recolors the footer logo image on light footers */
   --footer-logo-width: 142px;
   --footer-brand-width: 150px; /* desktop logo column */
+  --footer-social-link-width: 33.6px;
+  --footer-social-link-height: 36px;
+  --footer-social-icon-size: 24px;
+  --footer-social-links-width: 134.4px; /* four social links */
+  --footer-social-gap: 10.4px;
   --footer-icon-filter: brightness(0) invert(1); /* social icons (/icons/*.svg, black) shown white */
 
   /* buttons */
@@ -160,6 +165,7 @@
 
   /* spacing */
   --section-spacing: 60px;
+  --columns-alternating-gap: 60px;
   --content-max-width: 1320px;
   --content-padding: 15px;
   --footer-accent-line: none; /* decorative line above the footer (Stellarus) */

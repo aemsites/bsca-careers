@@ -114,11 +114,11 @@ footer .footer-link-group strong {
   font-weight: 600;
 }
 
-/* social icons: 34x36 boxes, 24px glyphs */
+/* Social link boxes and glyph sizing come from the brand tokens. */
 footer .footer-social ul {
   display: flex;
   flex-wrap: wrap;
-  column-gap: 10.4px;
+  column-gap: var(--footer-social-gap);
   margin: 30px 0 10px;
 }
 
@@ -126,8 +126,8 @@ footer .footer-band-main .footer-social a {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 33.6px;
-  height: 36px;
+  width: var(--footer-social-link-width);
+  height: var(--footer-social-link-height);
 }
 
 footer .footer-band-main .footer-social a:hover {
@@ -137,7 +137,7 @@ footer .footer-band-main .footer-social a:hover {
 footer .footer-social img {
   display: block;
   width: auto;
-  height: 24px;
+  height: var(--footer-social-icon-size);
   filter: var(--footer-icon-filter);
 }
 
@@ -254,8 +254,8 @@ footer .footer-band-legal {
   }
 
   footer .footer-social ul {
-    /* Fit four 33.6px links by reducing gaps before wrapping. */
-    column-gap: clamp(0px, calc((100% - 134.4px) / 3), 10.4px);
+    /* Fit four social links by reducing gaps before wrapping. */
+    column-gap: clamp(0px, calc((100% - var(--footer-social-links-width)) / 3), var(--footer-social-gap));
     margin: 0 0 10px;
   }
 }
