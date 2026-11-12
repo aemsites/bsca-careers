@@ -180,6 +180,13 @@ footer .footer-band-legal {
   line-height: 18px;
 }
 
+/* breakpoint-exception: remove the logo's baseline gap only above a stacked notice */
+@media (width < 992px) {
+  footer .footer-brand:has(+ .footer-notice) a:has(img) {
+    vertical-align: top;
+  }
+}
+
 /* breakpoint-exception: source widens gutters and puts utility links in one row at 768px */
 @media (width >= 768px) {
   footer .footer-band-inner {
@@ -247,6 +254,8 @@ footer .footer-band-legal {
   }
 
   footer .footer-social ul {
+    /* Fit four 33.6px links by reducing gaps before wrapping. */
+    column-gap: clamp(0px, calc((100% - 134.4px) / 3), 10.4px);
     margin: 0 0 10px;
   }
 }
