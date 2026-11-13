@@ -26,16 +26,23 @@ const NEW_TAB_SECTIONS = ['notice', 'social'];
  * Groups each "label paragraph + following list" pair into its own column.
  * @param {Element} section
  */
-function groupLinkLists(section) {
+function groupLinkLists(section, headingTag = 'p') {
   const groups = [];
   let current = null;
   [...section.children].forEach((el) => {
-    if (el.tagName === 'P' || !current) {
+    const isLabel = el.tagName === 'P';
+    if (isLabel || !current) {
       current = document.createElement('div');
       current.className = 'footer-link-group';
       groups.push(current);
     }
-    current.append(el);
+    if (isLabel && headingTag !== 'p') {
+      const heading = document.createElement(headingTag);
+      heading.append(...el.childNodes);
+      current.append(heading);
+    } else {
+      current.append(el);
+    }
   });
   section.replaceChildren(...groups);
 }
@@ -147,7 +154,10 @@ export default async function decorate(block) {
     NEW_TAB_SECTIONS.filter((name) => parts[name])
       .forEach((name) => openExternalLinksInNewTab(parts[name]));
   }
-  if (parts.links) groupLinkLists(parts.links);
+  if (parts.links) {
+    const headingTag = document.body.classList.contains('stellarus') ? 'h3' : 'p';
+    groupLinkLists(parts.links, headingTag);
+  }
   parts.social?.querySelector('ul')?.setAttribute('aria-label', 'Social media');
 
   let utility = null;

@@ -15,6 +15,8 @@ The footer is built from the document named by the page's `footer` metadata, by 
 5. **Utility:** a bulleted list of links.
 6. **Legal:** the copyright / disclaimer paragraph.
 
+The three-section Stellarus footer uses brand, link groups, and legal sections. Authors enter each link-group label as a bold paragraph; the block renders those labels as `h3` elements without changing their appearance.
+
 A link to `#cookie-preferences` opens the consent manager's preference center (OneTrust when present; otherwise a `consent.preferences` event is dispatched for the site's consent integration).
 
 ## Behavior
