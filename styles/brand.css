@@ -160,6 +160,8 @@
   --footer-social-link-width: 33.6px;
   --footer-social-link-height: 36px;
   --footer-social-icon-size: 24px;
+  --footer-social-links-width: 134.4px; /* four social links, excluding gaps */
+  --footer-social-gap-responsive: clamp(0px, calc((100% - var(--footer-social-links-width)) / 3), var(--footer-social-gap)); /* fit four links before wrapping */
   --footer-legal-line-height: 18px;
 
   /* three-section footer (stellarus.com) */

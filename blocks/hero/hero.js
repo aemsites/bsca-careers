@@ -1,4 +1,5 @@
-import { decorateLoneLinkButtons, unwrapPicture } from '../../scripts/scripts.js';
+import { createOptimizedPicture } from '../../scripts/aem.js';
+import { decorateLoneLinkButtons, openExternalLinksInNewTab, unwrapPicture } from '../../scripts/scripts.js';
 
 /**
  * Hero block.
@@ -60,17 +61,38 @@ function decorateCentered(block, picture, contentCell) {
       }
       actions.append(child);
     });
+    if (block.closest('body.stellarus')) {
+      contentCell.querySelectorAll('.hero-actions').forEach((group) => {
+        openExternalLinksInNewTab(group);
+      });
+    }
     children.push(contentCell);
   }
   block.replaceChildren(...children);
 }
 
 export default function decorate(block) {
-  const picture = block.querySelector('picture');
+  let picture = block.querySelector('picture');
   const cells = [...block.querySelectorAll(':scope > div > div')];
 
   // The content cell is the first cell with text (heading, copy or CTA).
   const contentCell = cells.find((cell) => cell.textContent.trim() !== '');
+
+  const image = picture?.querySelector('img');
+  if (image && !block.classList.contains('centered')) {
+    // Cover crops need enough vertical resolution even on narrow viewports.
+    const eager = image === block.closest('main')?.querySelector('img');
+    const optimized = createOptimizedPicture(image.src, image.alt, eager, [{ width: '2000' }]);
+    const optimizedImage = optimized.querySelector('img');
+    ['width', 'height'].forEach((attribute) => {
+      if (image.hasAttribute(attribute)) {
+        optimizedImage.setAttribute(attribute, image.getAttribute(attribute));
+      }
+    });
+    if (eager) optimizedImage.setAttribute('fetchpriority', 'high');
+    picture.replaceWith(optimized);
+    picture = optimized;
+  }
 
   if (picture) {
     // Unwrap a picture that the author placed inside a paragraph.
