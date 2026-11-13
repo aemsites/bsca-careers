@@ -313,6 +313,17 @@ footer .footer-wrapper-inner:has(.footer-brand + .footer-links) .footer-link-gro
   letter-spacing: var(--tracking-tight);
 }
 
+body.stellarus footer .footer-wrapper-inner:has(.footer-brand + .footer-links) .footer-link-group > h3 {
+  margin: 0 0 var(--footer-simple-heading-gap);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--body-font-size-s);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--tracking-tight);
+  text-transform: none;
+}
+
 footer .footer-wrapper-inner:has(.footer-brand + .footer-links) .footer-link-group strong {
   font-weight: inherit;
 }
@@ -383,6 +394,10 @@ footer .footer-wrapper-inner:has(.footer-brand + .footer-links) .footer-band-leg
   padding: 0 0 var(--footer-simple-legal-padding-bottom);
   background-color: transparent;
   color: var(--footer-text);
+}
+
+body.stellarus footer .footer-wrapper-inner:has(.footer-brand + .footer-links) .footer-band-legal {
+  background-color: var(--footer-background);
 }
 
 footer .footer-wrapper-inner:has(.footer-brand + .footer-links) .footer-legal {
