@@ -177,7 +177,7 @@ body {
   --header-scrolled-backdrop: blur(16px);
   --header-scrolled-border-color: rgb(255 255 255 / 8%);
   --header-button-background: rgb(255 255 255 / 4%);
-  --footer-background: var(--color-background);
+  --footer-background: transparent;
   --footer-text: #8794b4;
   --footer-utility-background: transparent;
   --footer-utility-text: #8794b4;

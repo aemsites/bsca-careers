@@ -396,10 +396,6 @@ footer .footer-wrapper-inner:has(.footer-brand + .footer-links) .footer-band-leg
   color: var(--footer-text);
 }
 
-body.stellarus footer .footer-wrapper-inner:has(.footer-brand + .footer-links) .footer-band-legal {
-  background-color: var(--footer-background);
-}
-
 footer .footer-wrapper-inner:has(.footer-brand + .footer-links) .footer-legal {
   padding-top: var(--footer-simple-legal-padding-top);
   border-top: var(--border-width) solid var(--color-border-subtle);
