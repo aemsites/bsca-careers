@@ -114,6 +114,22 @@ function getTheme() {
  */
 async function loadTheme(theme) {
   document.body.classList.add(theme);
+  if (theme === 'stellarus' && !document.querySelector('.stellarus-background')) {
+    const background = document.createElement('div');
+    background.className = 'stellarus-background';
+    background.setAttribute('aria-hidden', 'true');
+    ['a', 'b', 'c'].forEach((orbName) => {
+      const orb = document.createElement('div');
+      orb.className = `stellarus-background-orb stellarus-background-orb-${orbName}`;
+      background.append(orb);
+    });
+    ['stars', 'vignette'].forEach((layerName) => {
+      const layer = document.createElement('div');
+      layer.className = `stellarus-background-${layerName}`;
+      background.append(layer);
+    });
+    document.body.prepend(background);
+  }
   const { favicon } = THEMES[theme];
   const icon = document.head.querySelector('link[rel="icon"]');
   if (favicon && icon) icon.href = `${window.hlx.codeBasePath}${favicon}`;

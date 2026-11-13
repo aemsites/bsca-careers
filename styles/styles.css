@@ -29,10 +29,6 @@ body {
   text-rendering: var(--text-rendering);
 }
 
-body.stellarus {
-  background-attachment: fixed;
-}
-
 body.appear {
   display: block;
 }
