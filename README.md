@@ -32,5 +32,13 @@ Commit, branch and push rules (Git hooks and CI checks) are described in [RULES.
 1. Create a new repository based on the `aem-boilerplate` template
 1. Add the [AEM Code Sync GitHub App](https://github.com/apps/aem-code-sync) to the repository
 1. Install the [AEM CLI](https://github.com/adobe/helix-cli): `npm install -g @adobe/aem-cli`
-1. Start AEM Proxy: `aem up` (opens your browser at `http://localhost:3000`)
+1. Start AEM Proxy against the site's content (opens your browser at `http://localhost:3000`):
+
+   ```sh
+   aem up --url https://main--bsca-careers--blueshieldca.aem.page
+   ```
+
+   `blueshieldca/bsca-careers` is a [repoless site](https://www.aem.live/docs/repoless) that runs on this
+   repository's code, so plain `aem up` would use the settings of the `aemsites/bsca-careers` code site
+   instead. Your local code is served either way; `--url` only picks the content and site settings.
 1. Open the `bsca-careers` directory in your favorite IDE and start coding :)
