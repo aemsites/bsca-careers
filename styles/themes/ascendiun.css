@@ -119,7 +119,12 @@ body {
   --hero-eyebrow-font: var(--font-body);
 
   /* card links (source: 18px DemiBold text links such as "Explore Stellarus", at every width) */
+  --card-heading-font-size: 24px;
+  --card-heading-line-height: 28px;
+  --card-body-line-height: 24px;
   --card-cta-font-size: 18px;
+  --card-cta-line-height: 20px;
+  --card-cta-min-height: 20px;
 
   /* fonts (source: Fieldwork everywhere, light, ligatures off) */
   --font-body: fieldwork, fieldwork-fallback, sans-serif;
@@ -188,6 +193,8 @@ body {
 /* breakpoint-exception: source sizes between 768 and 1023px */
 @media (width < 1024px) {
   body {
+    --card-heading-font-size: 20px;
+    --card-heading-line-height: 24px;
     --heading-font-size-xxl: 40px;
     --body-font-size-m: 16px;
     --body-line-height: 1.5; /* 24px on 16px */

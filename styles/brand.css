@@ -203,6 +203,10 @@
   --card-min-width: 257px; /* default grid track */
   --card-gap: 24px;
   --card-spacing: 16px; /* card body inset, title and icon gaps */
+  --card-heading-font-size: var(--heading-font-size-l);
+  --card-heading-line-height: var(--body-line-height);
+  --card-body-line-height: var(--body-line-height);
+  --card-cta-line-height: var(--body-line-height);
   --card-cta-min-height: 28px; /* the source chevron glyph makes the link 28px tall */
   --card-cta-chevron-size: 6px;
   --card-cta-chevron-margin: 0 1px 0 4px; /* keeps the source glyph's 13px advance */

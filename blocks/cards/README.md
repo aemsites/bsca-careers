@@ -24,6 +24,10 @@ depends on the browser's autoplay policy; it is not forced to stay paused.
 Other brands and shared modal callers retain autoplay permission. Consent,
 player dimensions, and tile dimensions are unchanged.
 
+Ascendiun feature-link cards use the brand's light Fieldwork heading/body
+typography and DemiBold CTA text. CTA links use the Ascendiun full-arrow icon
+with the brand's hover movement; other themes retain their chevrons.
+
 ## Universal Editor fields
 
 N/A (Document Authoring project)
