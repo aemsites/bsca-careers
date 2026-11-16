@@ -114,6 +114,10 @@ footer .footer-link-group strong {
   font-weight: var(--font-weight-strong);
 }
 
+body.ascendiun footer .footer-links {
+  font-size: var(--body-font-size-m);
+}
+
 /* Social link boxes and glyph sizing come from the brand tokens. */
 footer .footer-social ul {
   display: flex;
