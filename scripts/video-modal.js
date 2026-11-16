@@ -100,16 +100,17 @@ function getDialog() {
  * @param {object} [options]
  * @param {string} [options.title] Accessible title for the player
  * @param {Element} [options.trigger] Element to return focus to on close
+ * @param {boolean} [options.autoplay] Whether the video starts when opened
  * @returns {boolean} false when the URL is not a YouTube video
  */
-export function openVideoModal(href, { title = 'Video', trigger } = {}) {
+export function openVideoModal(href, { title = 'Video', trigger, autoplay = true } = {}) {
   const id = getYouTubeId(href);
   if (!id) return false;
 
   const modal = getDialog();
   const frame = modal.querySelector('.video-modal-frame');
 
-  const params = new URLSearchParams({ autoplay: '1', rel: '0', playsinline: '1' });
+  const params = new URLSearchParams({ autoplay: autoplay ? '1' : '0', rel: '0', playsinline: '1' });
   const start = getStart(href);
   if (start) params.set('start', String(start));
 
@@ -134,9 +135,10 @@ export function openVideoModal(href, { title = 'Video', trigger } = {}) {
  * @param {string} [title] Accessible title for the player
  * @param {object} [options]
  * @param {boolean} [options.requireConsent] Whether opening the player requires consent
+ * @param {boolean} [options.autoplay] Whether the video starts when opened
  * @returns {boolean} true when the link is a YouTube video and was bound
  */
-export function bindVideoLink(link, title, { requireConsent = true } = {}) {
+export function bindVideoLink(link, title, { requireConsent = true, autoplay = true } = {}) {
   if (!link || !getYouTubeId(link.href)) return false;
   loadStyles();
   const label = (title || link.getAttribute('aria-label') || link.textContent || '').trim() || 'Video';
@@ -146,7 +148,7 @@ export function bindVideoLink(link, title, { requireConsent = true } = {}) {
     if (e.defaultPrevented || e.button !== 0 || modified) return;
     // without consent the link opens the video on YouTube, as the embed block offers
     if (requireConsent && !hasMediaConsent()) return;
-    if (openVideoModal(link.href, { title: label, trigger: link })) e.preventDefault();
+    if (openVideoModal(link.href, { title: label, trigger: link, autoplay })) e.preventDefault();
   });
   return true;
 }

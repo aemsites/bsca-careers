@@ -19,7 +19,8 @@ Story cards are not a Cards option: use the **Article List** block.
 | Video Tiles | `video-tiles` |
 
 On Blue Shield pages, selecting a video tile opens YouTube in a pop-up even before
-media consent is granted. Other brands retain their existing consent handling.
+media consent is granted. The viewer starts playback. Other brands retain their
+existing video behavior.
 
 ## Universal Editor fields
 
