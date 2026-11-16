@@ -148,6 +148,31 @@ main .cards.feature-links .cards-card-cta a:any-link {
   transform: translate(5px, -2px) rotate(45deg);
 }
 
+.ascendiun .cards.feature-links .cards-card-cta a:any-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--button-arrow-gap);
+}
+
+.ascendiun .cards.feature-links .cards-card-cta a::after {
+  flex-shrink: 0;
+  width: var(--button-arrow-size);
+  height: var(--button-arrow-size);
+  margin: 0;
+  border: 0;
+  background-color: currentcolor;
+  mask: var(--button-arrow-image) center / contain no-repeat;
+  transform: none;
+}
+
+.ascendiun .cards.feature-links .cards-card-cta a:is(:hover, :focus-visible) {
+  color: var(--color-link-hover);
+}
+
+.ascendiun .cards.feature-links .cards-card-cta a:is(:hover, :focus)::after {
+  transform: translateX(var(--button-arrow-hover-shift));
+}
+
 /* Option: icon-tiles - centered icon, title and description (source .tileIcons) */
 .cards.icon-tiles > ul {
   grid-template-columns: 1fr;
@@ -249,6 +274,10 @@ main .cards.feature-links .cards-card-cta a:any-link {
   color: var(--color-on-band-accent);
   font-size: var(--heading-font-size-l);
   font-weight: var(--font-weight-heading);
+  line-height: var(--heading-line-height);
+}
+
+.ascendiun .cards.feature-links .cards-card-body h3 {
   line-height: var(--heading-line-height);
 }
 

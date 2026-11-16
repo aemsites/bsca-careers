@@ -114,6 +114,10 @@ footer .footer-link-group strong {
   font-weight: var(--font-weight-strong);
 }
 
+body.ascendiun footer .footer-links {
+  font-size: var(--body-font-size-m);
+}
+
 /* Social link boxes and glyph sizing come from the brand tokens. */
 footer .footer-social ul {
   display: flex;
@@ -178,6 +182,13 @@ footer .footer-band-legal {
   background-color: var(--color-background);
   color: var(--color-text);
   line-height: var(--footer-legal-line-height);
+}
+
+/* breakpoint-exception: remove the logo's baseline gap only above a stacked notice */
+@media (width < 992px) {
+  footer .footer-brand:has(+ .footer-notice) a:has(img) {
+    vertical-align: top;
+  }
 }
 
 /* breakpoint-exception: source widens gutters and puts utility links in one row at 768px */
@@ -247,6 +258,7 @@ footer .footer-band-legal {
   }
 
   footer .footer-social ul {
+    column-gap: var(--footer-social-gap-responsive);
     margin: 0 0 var(--space-xs);
   }
 }
@@ -303,6 +315,17 @@ footer .footer-wrapper-inner:has(.footer-brand + .footer-links) .footer-link-gro
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-tight);
   letter-spacing: var(--tracking-tight);
+}
+
+body.stellarus footer .footer-wrapper-inner:has(.footer-brand + .footer-links) .footer-link-group > h3 {
+  margin: 0 0 var(--footer-simple-heading-gap);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--body-font-size-s);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--tracking-tight);
+  text-transform: none;
 }
 
 footer .footer-wrapper-inner:has(.footer-brand + .footer-links) .footer-link-group strong {
