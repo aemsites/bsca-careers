@@ -18,6 +18,9 @@ Story cards are not a Cards option: use the **Article List** block.
 | Icon Tiles | `icon-tiles` |
 | Video Tiles | `video-tiles` |
 
+On Blue Shield pages, selecting a video tile opens YouTube in a pop-up even before
+media consent is granted. Other brands retain their existing consent handling.
+
 ## Universal Editor fields
 
 N/A (Document Authoring project)

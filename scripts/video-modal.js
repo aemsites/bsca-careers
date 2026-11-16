@@ -9,8 +9,8 @@
  *   returns to the element that opened it.
  * - Links keep their real href, so they still work without JS, with
  *   modifier keys (new tab) or middle click.
- * - Like the embed block, the player only opens once consent is granted
- *   (see hasMediaConsent); without it the link opens the video on YouTube.
+ * - By default the player only opens once consent is granted; without it the
+ *   link opens the video on YouTube. Callers may opt out of this gate.
  *
  * Also hasMediaConsent, shared with the embed block (video URL helpers: scripts.js).
  */
@@ -30,7 +30,7 @@ window.addEventListener('consent.update', (event) => {
 /**
  * Whether third-party video players may load: scripts/consent.js publishes
  * `window.consentState` and `consent.update` (pages without OneTrust report
- * consent as granted). Until consent is known, players do not load.
+ * consent as granted). Until consent is known, consent-gated players do not load.
  * @returns {boolean}
  */
 export function hasMediaConsent() {
@@ -132,9 +132,11 @@ export function openVideoModal(href, { title = 'Video', trigger } = {}) {
  * The link keeps its href for no-JS, new-tab and middle-click use.
  * @param {HTMLAnchorElement} link
  * @param {string} [title] Accessible title for the player
+ * @param {object} [options]
+ * @param {boolean} [options.requireConsent] Whether opening the player requires consent
  * @returns {boolean} true when the link is a YouTube video and was bound
  */
-export function bindVideoLink(link, title) {
+export function bindVideoLink(link, title, { requireConsent = true } = {}) {
   if (!link || !getYouTubeId(link.href)) return false;
   loadStyles();
   const label = (title || link.getAttribute('aria-label') || link.textContent || '').trim() || 'Video';
@@ -143,7 +145,7 @@ export function bindVideoLink(link, title) {
     const modified = e.metaKey || e.ctrlKey || e.shiftKey || e.altKey;
     if (e.defaultPrevented || e.button !== 0 || modified) return;
     // without consent the link opens the video on YouTube, as the embed block offers
-    if (!hasMediaConsent()) return;
+    if (requireConsent && !hasMediaConsent()) return;
     if (openVideoModal(link.href, { title: label, trigger: link })) e.preventDefault();
   });
   return true;

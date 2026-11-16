@@ -269,10 +269,13 @@ main .cards.feature-links .cards-card-cta a:any-link {
     margin: 0;
   }
 
-  /* source tiles are 33.33% wide plus 40px gaps and overflow the container;
-     here they stay inside it (each tile ~27px narrower) */
   .cards.video-tiles > ul {
     gap: var(--space-xl);
+  }
+
+  /* Match the source width where the centered row fits within the viewport. */
+  body.bsc .cards.video-tiles > ul {
+    grid-template-columns: repeat(3, min(33.3333%, calc((100vw + 100% - 4 * var(--space-xl)) / 6)));
   }
 
   /* Tiles that follow a gallery in the same section overlap its lower edge */

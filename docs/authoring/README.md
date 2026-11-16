@@ -114,6 +114,8 @@ A block is a table. The first row holds the block name, with the variation in br
 | **Embed** | Responsive 16:9 video | `video` (MP4 file, used as story hero video) | Row 1: poster image (optional). Row 2: the link (`.mp4` for `video`, or a YouTube / Vimeo URL). Shortcut: a YouTube or Vimeo URL pasted alone on its own line becomes a video automatically |
 | **Fragment** | Reuse content from another document | none | One cell with the path of the document to include, e.g. `/drafts/fragments/find-your-next-role`. A link to a `/fragments/` path on its own also becomes a fragment |
 
+On Blue Shield pages, Cards video tiles open YouTube in a pop-up even before media consent is granted.
+
 ### Story blocks
 
 | Block | Purpose | Variations | How to author |

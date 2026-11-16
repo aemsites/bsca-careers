@@ -104,7 +104,7 @@ function decorateVideoTiles(ul) {
     // Keep the title as the accessible name (it is also the heading's name);
     // bindVideoLink adds aria-haspopup="dialog" to announce the player.
     li.classList.add('cards-card-linked');
-    bindVideoLink(titleLink, title);
+    bindVideoLink(titleLink, title, { requireConsent: !document.body.classList.contains('bsc') });
   });
 }
 
