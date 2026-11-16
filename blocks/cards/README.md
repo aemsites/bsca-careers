@@ -25,7 +25,7 @@ Other brands and shared modal callers retain autoplay permission. Consent,
 player dimensions, and tile dimensions are unchanged.
 
 Ascendiun feature-link cards consume the existing typography tokens in
-`styles/themes/ascendiun.css`, including its heading line height and responsive
+`styles/themes/ascendiun/ascendiun.css`, including its heading line height and responsive
 font sizes, without adding card-specific typography tokens. CTA links use the
 theme's full-arrow icon and hover movement; other themes retain their chevrons.
 
