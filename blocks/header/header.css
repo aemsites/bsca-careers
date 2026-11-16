@@ -713,7 +713,7 @@ header .nav-row-utility:empty + .nav-row-main .nav-tools .nav-cta::after {
   }
 }
 
-@media (max-width: 469px) {
+@media (width <= 469px) {
   header nav[aria-expanded='true'] .nav-menu {
     width: min(calc(100vw - var(--nav-row-height)));
   }
