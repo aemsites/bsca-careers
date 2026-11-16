@@ -636,3 +636,16 @@ main .section.article-list-container > .default-content-wrapper:has(> h2 + p:las
   content: '\203A';
   margin-left: var(--link-chevron-gap);
 }
+
+/* An empty trailing section and the content section before it should not add footer spacing. */
+body.bsc main > .section:last-child:empty {
+  margin-block: 0;
+}
+
+body.stellarus main > .section:last-child:empty {
+  margin-block: 0 var(--space-xl);
+}
+
+body.bsc main > .section:has(+ .section:last-child:empty) {
+  margin-bottom: 0;
+}
