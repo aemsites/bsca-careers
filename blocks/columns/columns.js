@@ -1,4 +1,4 @@
-import { getYouTubeId, unwrapPicture } from '../../scripts/scripts.js';
+import { getYouTubeId, openExternalLinksInNewTab, unwrapPicture } from '../../scripts/scripts.js';
 import { bindVideoLink } from '../../scripts/video-modal.js';
 
 /**
@@ -70,6 +70,11 @@ function decorateAlternating(block) {
     if (row.firstElementChild !== media) row.prepend(media);
     decorateVideo(media);
   });
+  if (block.closest('body.bsc')) {
+    block.querySelectorAll('.columns-text').forEach((cell) => {
+      openExternalLinksInNewTab(cell);
+    });
+  }
 }
 
 function decorateCurve(block) {

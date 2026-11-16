@@ -9,6 +9,7 @@ Edge Delivery Services. Read a block first. Omissions are in the repo or known.
 - Authors omit and add cells. Decorate defensively.
 - No build step; devDependencies only.
 - Scope CSS to `.blockname`; `-wrapper`/`-container` are section classes.
+- Check `styles/brand.css` and `styles/themes/*.css` for an existing design token before adding CSS lengths; add a semantic token there when a new design value is needed.
 - `fragment/fragment.js` is the only cross-block import. Otherwise use `/scripts/`.
 
 ## Outdated
