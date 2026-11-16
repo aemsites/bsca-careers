@@ -712,3 +712,13 @@ header .nav-row-utility:empty + .nav-row-main .nav-tools .nav-cta::after {
     height: var(--nav-bar-cta-icon-size-desktop);
   }
 }
+
+@media (max-width: 1199.98px) and (max-width: 469px) {
+  header nav[aria-expanded='true'] .nav-menu {
+    width: min(calc(100vw - var(--nav-row-height)));
+  }
+
+  header nav[aria-expanded='true'] .nav-hamburger button {
+    left: min(calc(100vw - var(--nav-row-height)));
+  }
+}
