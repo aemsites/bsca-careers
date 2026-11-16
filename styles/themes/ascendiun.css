@@ -1,7 +1,7 @@
 /*
  * Theme: Ascendiun (page metadata `theme: ascendiun`, set per folder through bulk metadata:
  * /ascendiun/** -> ascendiun). Loaded by scripts/scripts.js in loadEager.
- * Overrides token values only; the contract and BSC defaults are in styles/brand.css.
+ * Theme tokens and scoped font sizes; the contract and BSC defaults are in styles/brand.css.
  * Values: measured on https://www.ascendiun.com/ascendiun/ (November 2026): Fieldwork Geo Light,
  * Chicago Black #000 text, CTA Blue #0071bc links and calls to action (navy #162c55 on hover),
  * #f7f7f7 footer, a black statement band, square corners, no shadows. The source has no buttons:
@@ -73,6 +73,7 @@ body {
   --footer-link-hover-color: #162c55;
   --footer-utility-link-color: #0071bc;
   --footer-link-decoration: underline;
+  --footer-copy-font-size: 16px;
 
   /* logos: the black Ascendiun wordmark (scripts.js THEMES.ascendiun.logos), 288x26 on the source */
   --footer-logo-filter: none;
@@ -114,6 +115,7 @@ body {
   /* heroes (source: 906px wide 64px / 72px headline over the photo) */
   --hero-title-max-width: 906px;
   --hero-title-line-height: 1.125;
+  --hero-cta-font-size: 18px;
   --hero-centered-title-size: var(--heading-font-size-xxl);
   --hero-centered-title-weight: 300;
   --hero-eyebrow-font: var(--font-body);
@@ -176,10 +178,23 @@ body {
   --transition-duration-medium: 0s;
 }
 
+body.ascendiun .footer .footer-links {
+  font-size: var(--body-font-size-m);
+}
+
+body.ascendiun .footer .footer-notice p {
+  font-size: var(--footer-copy-font-size);
+}
+
+body.ascendiun .hero .hero-content a.button:any-link {
+  font-size: var(--hero-cta-font-size);
+}
+
 /* breakpoint-exception: source sizes between 1024 and 1439px (56px hero, 32px headings) */
 @media (width < 1440px) {
   body {
     --heading-font-size-xxl: 56px;
+    --hero-title-line-height: calc(64 / 56);
     --heading-font-size-xl: 32px;
     --nav-logo-width: 150px; /* the wide wordmark leaves room for the nav links and CTA */
   }
@@ -189,6 +204,7 @@ body {
 @media (width < 1024px) {
   body {
     --heading-font-size-xxl: 40px;
+    --hero-title-line-height: 1.1;
     --body-font-size-m: 16px;
     --body-line-height: 1.5; /* 24px on 16px */
   }
@@ -202,5 +218,6 @@ body {
     --body-font-size-l: 18px;
     --section-spacing: 40px;
     --nav-logo-width: 150px; /* leaves room for the site name beside the menu button */
+    --footer-copy-font-size: 15px;
   }
 }

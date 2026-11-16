@@ -26,6 +26,8 @@ A link to `#cookie-preferences` opens the consent manager's preference center (O
 - **Below 768px:** narrower 15px gutters; utility links stack vertically.
 - Links in the notice and social sections open in a new tab; text links underline on hover.
 
+Ascendiun keeps the same authored sections. Its navigation link groups use 18px text from 1024px and 16px below; notice paragraphs and their inline links use 16px from 768px and 15px below, matching the live site's navigation and supporting-copy sizes. Other themes are unchanged.
+
 ## Supported variations
 
 No variations.
