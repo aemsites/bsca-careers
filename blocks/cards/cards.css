@@ -98,14 +98,14 @@
 
 .cards.feature-links .cards-card-body h3 {
   margin: 0 0 var(--card-spacing);
-  font-size: var(--card-heading-font-size);
+  font-size: var(--heading-font-size-l);
   font-weight: var(--font-weight-heading);
-  line-height: var(--card-heading-line-height);
+  line-height: var(--body-line-height);
 }
 
 .cards.feature-links .cards-card-body p {
   font-size: var(--body-font-size-m);
-  line-height: var(--card-body-line-height);
+  line-height: var(--body-line-height);
 }
 
 /* source descriptions end in a blank line (24px) before the CTA */
@@ -125,7 +125,7 @@ main .cards.feature-links .cards-card-cta a:any-link {
   color: var(--color-link);
   font-size: var(--card-cta-font-size);
   font-weight: var(--font-weight-strong);
-  line-height: var(--card-cta-line-height);
+  line-height: var(--body-line-height);
   text-decoration: none;
 }
 
@@ -274,6 +274,10 @@ main .cards.feature-links .cards-card-cta a:any-link {
   color: var(--color-on-band-accent);
   font-size: var(--heading-font-size-l);
   font-weight: var(--font-weight-heading);
+  line-height: var(--heading-line-height);
+}
+
+.ascendiun .cards.feature-links .cards-card-body h3 {
   line-height: var(--heading-line-height);
 }
 
