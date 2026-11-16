@@ -100,9 +100,10 @@ function getDialog() {
  * @param {object} [options]
  * @param {string} [options.title] Accessible title for the player
  * @param {Element} [options.trigger] Element to return focus to on close
+ * @param {boolean} [options.allowAutoplay] Delegate autoplay permission (default true)
  * @returns {boolean} false when the URL is not a YouTube video
  */
-export function openVideoModal(href, { title = 'Video', trigger } = {}) {
+export function openVideoModal(href, { title = 'Video', trigger, allowAutoplay = true } = {}) {
   const id = getYouTubeId(href);
   if (!id) return false;
 
@@ -116,7 +117,7 @@ export function openVideoModal(href, { title = 'Video', trigger } = {}) {
   const iframe = document.createElement('iframe');
   iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?${params}`;
   iframe.title = title;
-  iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+  iframe.allow = `${allowAutoplay ? 'autoplay; ' : ''}encrypted-media; picture-in-picture; fullscreen`;
   iframe.referrerPolicy = 'strict-origin-when-cross-origin';
 
   frame.replaceChildren(iframe);
@@ -132,9 +133,10 @@ export function openVideoModal(href, { title = 'Video', trigger } = {}) {
  * The link keeps its href for no-JS, new-tab and middle-click use.
  * @param {HTMLAnchorElement} link
  * @param {string} [title] Accessible title for the player
+ * @param {object} [options] Player options forwarded to openVideoModal
  * @returns {boolean} true when the link is a YouTube video and was bound
  */
-export function bindVideoLink(link, title) {
+export function bindVideoLink(link, title, options = {}) {
   if (!link || !getYouTubeId(link.href)) return false;
   loadStyles();
   const label = (title || link.getAttribute('aria-label') || link.textContent || '').trim() || 'Video';
@@ -144,7 +146,7 @@ export function bindVideoLink(link, title) {
     if (e.defaultPrevented || e.button !== 0 || modified) return;
     // without consent the link opens the video on YouTube, as the embed block offers
     if (!hasMediaConsent()) return;
-    if (openVideoModal(link.href, { title: label, trigger: link })) e.preventDefault();
+    if (openVideoModal(link.href, { ...options, title: label, trigger: link })) e.preventDefault();
   });
   return true;
 }
