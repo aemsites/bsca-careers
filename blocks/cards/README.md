@@ -18,6 +18,12 @@ Story cards are not a Cards option: use the **Article List** block.
 | Icon Tiles | `icon-tiles` |
 | Video Tiles | `video-tiles` |
 
+On BSC pages, video tiles request YouTube autoplay but do not delegate iframe
+autoplay permission, matching the live careers site. Playback on opening therefore
+depends on the browser's autoplay policy; it is not forced to stay paused.
+Other brands and shared modal callers retain autoplay permission. Consent,
+player dimensions, and tile dimensions are unchanged.
+
 ## Universal Editor fields
 
 N/A (Document Authoring project)
