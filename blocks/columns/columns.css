@@ -19,7 +19,7 @@
   display: block;
 }
 
-@media (width >= 900px) {
+@media (width >= 992px) {
   .columns > div {
     align-items: center;
     flex-direction: unset;
@@ -134,7 +134,7 @@ main .columns.alternating a.button:hover {
   outline-offset: var(--focus-outline-offset-media);
 }
 
-@media (width >= 900px) {
+@media (width >= 992px) {
   .columns.alternating {
     gap: var(--columns-alternating-gap);
   }
@@ -172,7 +172,7 @@ main .columns.alternating a.button:hover {
 /*
  * Option: curve - page header rows (source .page-header): H1 and intro text beside a photo
  * with one curved corner facing the text. Cell order sets the side (photo cell first =
- * photo left). Mobile: full-width photo above centered text. Desktop (900px): 40% text,
+ * photo left). Mobile: full-width photo above centered text. Desktop (992px): 40% text,
  * 60% photo filling the row height. Formerly the Hero (page) variation.
  */
 main .section > .columns-wrapper:has(> .columns.curve) {
@@ -233,7 +233,13 @@ main .section > .columns-wrapper:has(> .columns.curve) {
   padding-top: var(--space-xl);
 }
 
-@media (width >= 900px) {
+body.bsc .columns.curve > div {
+  width: 100%;
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+}
+
+@media (width >= 992px) {
   .columns.curve > div {
     align-items: stretch;
     box-sizing: border-box;

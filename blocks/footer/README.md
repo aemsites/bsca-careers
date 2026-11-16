@@ -15,6 +15,8 @@ The footer is built from the document named by the page's `footer` metadata, by 
 5. **Utility:** a bulleted list of links.
 6. **Legal:** the copyright / disclaimer paragraph.
 
+The three-section Stellarus footer uses brand, link groups, and legal sections. Authors enter each link-group label as a bold paragraph; the block renders those labels as `h3` elements without changing their appearance.
+
 A link to `#cookie-preferences` opens the consent manager's preference center (OneTrust when present; otherwise a `consent.preferences` event is dispatched for the site's consent integration).
 
 ## Behavior
@@ -23,6 +25,8 @@ A link to `#cookie-preferences` opens the consent manager's preference center (O
 - **Below 992px:** all columns stack; social icons sit in one row.
 - **Below 768px:** narrower 15px gutters; utility links stack vertically.
 - Links in the notice and social sections open in a new tab; text links underline on hover.
+
+Ascendiun keeps the same authored sections. Its navigation link groups use the existing `--body-font-size-m` theme token; notice paragraphs and inline links inherit `--body-font-size-s` from the footer. The block does not redefine the theme's typography, and other themes are unchanged.
 
 ## Supported variations
 
