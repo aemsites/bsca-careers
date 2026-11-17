@@ -1,5 +1,7 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
-import { decorateLoneLinkButtons, openExternalLinksInNewTab, unwrapPicture } from '../../scripts/scripts.js';
+import {
+  decorateLoneLinkButtons, openExternalLinksInNewTab, splitMediaAndContent, unwrapPicture,
+} from '../../scripts/scripts.js';
 
 /**
  * Hero block.
@@ -15,6 +17,9 @@ import { decorateLoneLinkButtons, openExternalLinksInNewTab, unwrapPicture } fro
  *   Columns (curve) block.)
  *   - `centered` - centered text intro, usually without an image: optional eyebrow
  *     paragraph before the H1, body copy, then CTA buttons side by side.
+ *
+ * Hero opens the page (its image is the LCP image); a band further down the page is the Banner
+ * block. Both share splitMediaAndContent (scripts.js).
  */
 
 /**
@@ -72,11 +77,9 @@ function decorateCentered(block, picture, contentCell) {
 }
 
 export default function decorate(block) {
-  let picture = block.querySelector('picture');
-  const cells = [...block.querySelectorAll(':scope > div > div')];
-
-  // The content cell is the first cell with text (heading, copy or CTA).
-  const contentCell = cells.find((cell) => cell.textContent.trim() !== '');
+  const split = splitMediaAndContent(block);
+  let { picture } = split;
+  const { contentCell } = split;
 
   const image = picture?.querySelector('img');
   if (image && !block.classList.contains('centered')) {
@@ -101,7 +104,6 @@ export default function decorate(block) {
   }
 
   if (contentCell) contentCell.classList.add('hero-content');
-  if (!picture) block.classList.add('no-image');
 
   // photo heroes (default and home): a link alone in its paragraph is the CTA button
   if (!block.classList.contains('centered') && contentCell) {
