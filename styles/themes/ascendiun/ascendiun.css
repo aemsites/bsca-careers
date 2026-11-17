@@ -165,12 +165,10 @@ body {
   --section-spacing: 80px;
   --content-padding: 32px;
 
-  /* shapes (source: square corners everywhere) */
+  /* shapes (source: square corners; Columns curve retains the shared media tokens) */
   --radius-button: 0;
   --radius-card: 0;
   --radius-panel: 0;
-  --radius-media: 0;
-  --radius-media-mirror: 0;
   --radius-small: 0;
   --radius-large: 0;
   --radius-control: 0;
