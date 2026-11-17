@@ -649,3 +649,7 @@ body.stellarus main > .section:last-child:empty {
 body.bsc main > .section:has(+ .section:last-child:empty) {
   margin-bottom: 0;
 }
+
+body.bsc main > .columns-curve-container + .section:has(> .columns-wrapper > .columns.alternating) {
+  margin-top: var(--section-spacing-wide);
+}
