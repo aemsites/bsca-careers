@@ -157,3 +157,17 @@ Then the project team previews (and later publishes) the pages on the new site.
 - **Consent and analytics:** OneTrust uses its production configuration on `*.aem.live` and
   `*.blueshieldca.com` (test configuration on `aem.page`); the Adobe Launch property allows
   `blueshieldca.com`. No change is expected, but check both after the domain switch.
+
+## 5. Brand sites (created 17 Nov 2026)
+
+Each brand has its own DA site. All of them are repoless sites on the same code as `blueshieldca/bsca-careers`, so a code change
+reaches every brand.
+
+| Site | DA | Content source | Code and access | Preview |
+| --- | --- | --- | --- | --- |
+| `blueshieldca/stellarus` | https://da.live/#/blueshieldca/stellarus | `content.da.live/blueshieldca/stellarus/` | same as `blueshieldca/bsca-careers` | https://main--stellarus--blueshieldca.aem.page/careers |
+| `blueshieldca/ascendiun` | https://da.live/#/blueshieldca/ascendiun | `content.da.live/blueshieldca/ascendiun/` | same as `blueshieldca/bsca-careers` | https://main--ascendiun--blueshieldca.aem.page/careers |
+
+Each brand site has `/careers`, `/nav`, `/footer`, a `/metadata` sheet (`/**` → its theme; `noindex` for `/drafts/**`
+and `/tools/**`) and its own `/tools/library`. Production domains and CDN for the brand sites are still to be set up.
+
