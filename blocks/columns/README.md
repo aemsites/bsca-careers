@@ -10,6 +10,8 @@ Single block table. Content: one row per line of columns, one cell per column. W
 
 With 'curve' (page header, formerly Hero (page)): each row has a text cell (H1 and intro paragraphs) and a photo cell. **The cell order sets the side:** text cell first = photo on the right (curve on its bottom-left corner); photo cell first = photo on the left (curve on its bottom-right corner). The curve always faces the text. On mobile the photo stacks above centered text. A row without a photo shows the title only. Usually the first block on the page; the section below it starts 30px lower, as on the source. On BSC pages, an immediately following alternating Columns section starts 90px lower instead, matching the source header-to-content spacing.
 
+At desktop widths (992px and up), Ascendiun uses the same shared media-radius tokens as Blue Shield for the `curve` variation. The lower corner facing the text is curved and mirrors with the authored cell order. Below that breakpoint, stacked photos remain square. Other Ascendiun UI corners remain square.
+
 BSC alternating video posters open a paused YouTube player (`autoplay=0`); playback starts only when the visitor presses Play inside the player. Consent, modal sizing, closing, and focus restoration are unchanged. Other brands retain their existing autoplay behavior.
 
 ## Supported variations
