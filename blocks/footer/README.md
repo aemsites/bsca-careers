@@ -28,6 +28,8 @@ A link to `#cookie-preferences` opens the consent manager's preference center (O
 
 Ascendiun keeps the same authored sections. Its navigation link groups use the existing `--body-font-size-m` theme token; notice paragraphs and inline links inherit `--body-font-size-s` from the footer. The block does not redefine the theme's typography, and other themes are unchanged.
 
+Ascendiun's notice H2 ("Fair hiring practices") is 24px at every width, using `--heading-font-size-xl` below 768px and `--heading-font-size-l` from 768px to follow the existing responsive theme scale.
+
 ## Supported variations
 
 No variations.
