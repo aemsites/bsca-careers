@@ -118,6 +118,10 @@ body.ascendiun footer .footer-links {
   font-size: var(--body-font-size-m);
 }
 
+body.ascendiun footer .footer-notice h2 {
+  font-size: var(--heading-font-size-xl);
+}
+
 /* Social link boxes and glyph sizing come from the brand tokens. */
 footer .footer-social ul {
   display: flex;
@@ -193,6 +197,10 @@ footer .footer-band-legal {
 
 /* breakpoint-exception: source widens gutters and puts utility links in one row at 768px */
 @media (width >= 768px) {
+  body.ascendiun footer .footer-notice h2 {
+    font-size: var(--heading-font-size-l);
+  }
+
   footer .footer-band-inner {
     padding: 0 var(--gutter-wide);
   }
