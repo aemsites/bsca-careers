@@ -1,4 +1,4 @@
-import { decorateLoneLinkButtons, unwrapPicture } from '../../scripts/scripts.js';
+import { decorateLoneLinkButtons, openExternalLinksInNewTab, unwrapPicture } from '../../scripts/scripts.js';
 
 /**
  * Banner block: heading, copy and a call to action over a background image.
@@ -30,6 +30,9 @@ export default function decorate(block) {
     // A link alone in its paragraph is the CTA, even without bold/italic formatting.
     // The dark locations band uses the white (secondary) pill, like the source.
     decorateLoneLinkButtons(content, block.classList.contains('locations') ? 'secondary' : 'primary');
+    if (block.classList.contains('locations')) {
+      openExternalLinksInNewTab(content);
+    }
   }
 
   const children = [];

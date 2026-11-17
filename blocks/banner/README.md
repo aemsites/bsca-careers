@@ -16,6 +16,8 @@ Single block table. Content: row 1: background image; row 2: heading (H2), parag
 | Statement | `statement` |
 | Image CTA | `image-cta` |
 
+In the `locations` variation, external links open in a new tab; links within the site stay in the same tab. Other variations keep their authored link targets.
+
 ## Universal Editor fields
 
 N/A (Document Authoring project)
