@@ -100,17 +100,20 @@ function getDialog() {
  * @param {object} [options]
  * @param {string} [options.title] Accessible title for the player
  * @param {Element} [options.trigger] Element to return focus to on close
+ * @param {boolean} [options.autoplay] Request playback when opened (default true)
  * @param {boolean} [options.allowAutoplay] Delegate autoplay permission (default true)
  * @returns {boolean} false when the URL is not a YouTube video
  */
-export function openVideoModal(href, { title = 'Video', trigger, allowAutoplay = true } = {}) {
+export function openVideoModal(href, {
+  title = 'Video', trigger, autoplay = true, allowAutoplay = true,
+} = {}) {
   const id = getYouTubeId(href);
   if (!id) return false;
 
   const modal = getDialog();
   const frame = modal.querySelector('.video-modal-frame');
 
-  const params = new URLSearchParams({ autoplay: '1', rel: '0', playsinline: '1' });
+  const params = new URLSearchParams({ autoplay: autoplay ? '1' : '0', rel: '0', playsinline: '1' });
   const start = getStart(href);
   if (start) params.set('start', String(start));
 

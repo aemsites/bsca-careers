@@ -54,7 +54,8 @@ function decorateVideo(cell) {
   play.append(picture, icon);
 
   cell.replaceChildren(play);
-  bindVideoLink(play, title || 'Video');
+  const autoplay = !document.body.classList.contains('bsc');
+  bindVideoLink(play, title || 'Video', { autoplay, allowAutoplay: autoplay });
 }
 
 function decorateAlternating(block) {
