@@ -63,7 +63,7 @@ body {
   /* header (source: white bar, no rule under it) and footer (source: #f7f7f7, #333 text,
      underlined CTA Blue links, black wordmark) */
   --header-background: #fff;
-  --header-border-color: transparent;
+  --header-border-color: #f4f4f4;
   --header-button-background: #f7f7f7;
   --footer-background: #f7f7f7;
   --footer-text: #333;
@@ -136,7 +136,7 @@ body {
   /* body sizes (source, from 768px: 20px intro copy, 18px body; smaller below, see below) */
   --body-font-size-l: 20px;
   --body-font-size-m: 18px;
-  --body-font-size-s: 16px;
+  --body-font-size-s: 14px;
   --body-font-size-xs: 14px;
   --body-line-height: 1.34; /* 24px on 18px */
 
