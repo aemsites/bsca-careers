@@ -1,7 +1,7 @@
 version: 1
 indices:
   sitemap:
-    # every public page of both brands: BSC (/**) and Stellarus (/stellarus/careers)
+    # every public page of the Blue Shield careers site (Stellarus and Ascendiun have their own DA sites)
     target: /sitemap.json
     # paths are absolute: a pattern without the leading slash never matches
     include:
@@ -11,11 +11,9 @@ indices:
       - '/drafts/**'
       - '/fragments/**'
       - '/tools/**'
-      # header and footer fragments (BSC and Stellarus)
+      # header and footer fragments
       - '/nav'
       - '/footer'
-      - '/stellarus/nav'
-      - '/stellarus/footer'
     # also read by the article-list block for cards that link to non-story pages
     properties:
       title:
