@@ -18,6 +18,9 @@ Story cards are not a Cards option: use the **Article List** block.
 | Icon Tiles | `icon-tiles` |
 | Video Tiles | `video-tiles` |
 
+Video-tile title links stay un-underlined on hover, matching the live careers site.
+The whole tile remains clickable, with a visible keyboard-focus outline.
+
 On BSC pages, video tiles request YouTube autoplay but do not delegate iframe
 autoplay permission, matching the live careers site. Playback on opening therefore
 depends on the browser's autoplay policy; it is not forced to stay paused.
