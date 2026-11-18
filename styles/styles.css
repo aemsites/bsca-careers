@@ -500,6 +500,10 @@ main .section.blue a:any-link {
   color: var(--color-on-band-accent);
 }
 
+main .section.blue a:any-link {
+  background: transparent;
+}
+
 main .section.blue a:focus-visible {
   outline-color: var(--color-on-band-accent);
 }
