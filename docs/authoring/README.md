@@ -314,6 +314,20 @@ the choices that are up to you:
 | Bold | Body copy is not bolded. Use bold (DemiBold) only for subheads and to call out an important detail such as a phone number or web address |
 | Colour | Digital Blue is reserved for links and calls to action. Don't use it for headings or decoration |
 
+### Brand foundation and QA guides
+
+- [Blue Shield of California](../../drafts/branding-bsc.html)
+- [Stellarus](../../drafts/branding-stellarus.html)
+- [Ascendiun](../../drafts/branding-ascendiun.html)
+
+Open the corresponding `/drafts/branding-<brand>.html` URL on the local preview or a branch serving
+these files. Each guide links to the other brands and shows the current theme's tokens, typography,
+spacing, controls, logos and full shared icon collection. Token values update with the viewport.
+The guides do not load the site's analytics or consent runtime. They are marked `noindex, nofollow`,
+which is not access control.
+
+When adding or removing shared icons, update the `ICONS` list in `scripts/branding.js`.
+
 ### Page not found (404)
 
 Each site shows its own theme, header and footer on its "page not found" page. To write the message, create a
