@@ -158,15 +158,19 @@ Then the project team previews (and later publishes) the pages on the new site.
   `*.blueshieldca.com` (test configuration on `aem.page`); the Adobe Launch property allows
   `blueshieldca.com`. No change is expected, but check both after the domain switch.
 
-## 5. Brand sites (created 17 Nov 2026)
+## 5. Brand sites (created 17 Nov 2026, renamed 18 Nov 2026)
 
 Each brand has its own DA site. All of them are repoless sites on the same code as `blueshieldca/bsca-careers`, so a code change
 reaches every brand.
 
 | Site | DA | Content source | Code and access | Preview |
 | --- | --- | --- | --- | --- |
-| `blueshieldca/stellarus` | https://da.live/#/blueshieldca/stellarus | `content.da.live/blueshieldca/stellarus/` | same as `blueshieldca/bsca-careers` | https://main--stellarus--blueshieldca.aem.page/careers |
-| `blueshieldca/ascendiun` | https://da.live/#/blueshieldca/ascendiun | `content.da.live/blueshieldca/ascendiun/` | same as `blueshieldca/bsca-careers` | https://main--ascendiun--blueshieldca.aem.page/careers |
+| `blueshieldca/stellarus-careers` | https://da.live/#/blueshieldca/stellarus-careers | `content.da.live/blueshieldca/stellarus-careers/` | same as `blueshieldca/bsca-careers` | https://main--stellarus-careers--blueshieldca.aem.page/careers |
+| `blueshieldca/ascendiun-careers` | https://da.live/#/blueshieldca/ascendiun-careers | `content.da.live/blueshieldca/ascendiun-careers/` | same as `blueshieldca/bsca-careers` | https://main--ascendiun-careers--blueshieldca.aem.page/careers |
+
+The sites were renamed on 18 Nov 2026 to match `bsca-careers`. The first sites, `blueshieldca/stellarus` and
+`blueshieldca/ascendiun`, were copied to the `-careers` sites; they are retired once the new sites are published
+(redirects to the new sites, then the old DA content is removed; only an org admin can delete their site configuration).
 
 Each brand site has `/careers`, `/nav`, `/footer`, a `/metadata` sheet (`/**` → its theme; `noindex` for `/drafts/**`
 and `/tools/**`) and its own `/tools/library`. Production domains and CDN for the brand sites are still to be set up.

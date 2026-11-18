@@ -9,8 +9,8 @@ Test URLs:
 
 Brand sites (one code base runs every brand site):
 - [ ] This change doesn't affect the other brand sites, or I checked it on each one (delete the ones you didn't check):
-  - Stellarus: https://<branch>--stellarus--blueshieldca.aem.page/careers
-  - Ascendiun: https://<branch>--ascendiun--blueshieldca.aem.page/careers
+  - Stellarus: https://<branch>--stellarus-careers--blueshieldca.aem.page/careers
+  - Ascendiun: https://<branch>--ascendiun-careers--blueshieldca.aem.page/careers
   - Stage: https://<branch>--bsca-careers-stage--blueshieldca.aem.page/<path>
 
 Checklist (see [RULES.md](../blob/main/RULES.md)):
