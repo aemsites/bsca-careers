@@ -1,3 +1,4 @@
+import {openExternalLinksInNewTab} from '../../scripts/scripts.js';
 /**
  * Accordion block: one row per item; first cell is the question (summary),
  * second cell is the rich-text answer. Built on native <details>/<summary>.
@@ -32,6 +33,8 @@ export default function decorate(block) {
     const body = document.createElement('div');
     body.className = 'accordion-item-body';
     rest.forEach((cell) => body.append(...cell.childNodes));
+
+    openExternalLinksInNewTab(body);
 
     const details = document.createElement('details');
     details.className = 'accordion-item';
