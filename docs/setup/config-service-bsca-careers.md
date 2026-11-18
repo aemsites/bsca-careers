@@ -167,10 +167,17 @@ reaches every brand.
 | --- | --- | --- | --- | --- |
 | `blueshieldca/stellarus-careers` | https://da.live/#/blueshieldca/stellarus-careers | `content.da.live/blueshieldca/stellarus-careers/` | same as `blueshieldca/bsca-careers` | https://main--stellarus-careers--blueshieldca.aem.page/careers |
 | `blueshieldca/ascendiun-careers` | https://da.live/#/blueshieldca/ascendiun-careers | `content.da.live/blueshieldca/ascendiun-careers/` | same as `blueshieldca/bsca-careers` | https://main--ascendiun-careers--blueshieldca.aem.page/careers |
+| `blueshieldca/stellarus-careers-stage` | https://da.live/#/blueshieldca/stellarus-careers-stage | `content.da.live/blueshieldca/stellarus-careers-stage/` | same as `blueshieldca/bsca-careers` | https://main--stellarus-careers-stage--blueshieldca.aem.page/careers |
+| `blueshieldca/ascendiun-careers-stage` | https://da.live/#/blueshieldca/ascendiun-careers-stage | `content.da.live/blueshieldca/ascendiun-careers-stage/` | same as `blueshieldca/bsca-careers` | https://main--ascendiun-careers-stage--blueshieldca.aem.page/careers |
 
 The sites were renamed on 18 Nov 2026 to match `bsca-careers`. The first sites, `blueshieldca/stellarus` and
 `blueshieldca/ascendiun`, were copied to the `-careers` sites; they are retired once the new sites are published
 (redirects to the new sites, then the old DA content is removed; only an org admin can delete their site configuration).
+
+The `-stage` sites (created 18 Nov 2026) are full copies of their brand site, like `bsca-careers-stage`: their
+library and DA settings point at the Stage site, their `/metadata` adds `analytics: off` for `/**`, and they are
+previewed only. With them, the longest preview host label is 37 characters, so branch names may have at most
+24 characters (`tools/rules.mjs` checks this on push).
 
 Each brand site has `/careers`, `/nav`, `/footer`, a `/metadata` sheet (`/**` → its theme; `noindex` for `/drafts/**`
 and `/tools/**`) and its own `/tools/library`. Production domains and CDN for the brand sites are still to be set up.
