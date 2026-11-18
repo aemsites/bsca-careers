@@ -34,6 +34,15 @@ Each brand site has its own `/nav`, `/footer`, `/metadata` and author library (`
 the same code, so blocks and templates are the same everywhere. A brand site's header and footer are edited in
 that site only. The old `/stellarus/` and `/ascendiun/` folders here redirect to the brand sites.
 
+Every site has a **Stage** copy for trying changes before making them on the real site. Stage is previewed only
+(never published) and has analytics off:
+
+| Site | Stage in DA | Stage preview |
+| --- | --- | --- |
+| Blue Shield | https://da.live/#/blueshieldca/bsca-careers-stage | https://main--bsca-careers-stage--blueshieldca.aem.page/ |
+| Stellarus | https://da.live/#/blueshieldca/stellarus-careers-stage | https://main--stellarus-careers-stage--blueshieldca.aem.page/careers |
+| Ascendiun | https://da.live/#/blueshieldca/ascendiun-careers-stage | https://main--ascendiun-careers-stage--blueshieldca.aem.page/careers |
+
 Content source (Config Service): `content.da.live/blueshieldca/bsca-careers`. There is one language (English).
 
 ## Getting Started
@@ -259,8 +268,8 @@ pages after the visitor accepts cookies. Authors control it with the **Analytics
 | A folder or the whole site | The site's `/metadata` sheet: add a column `analytics`; one row per folder (`URL` such as `/drafts/**` or `/**`) | The same values, then Preview and Publish `/metadata`, and ask an administrator to re-index the site (publishing `/metadata` clears the index fields) |
 
 A value on the page wins over the sheet. `Consent: off` also turns analytics off (no cookie banner means no
-consent). The Stage site (`bsca-careers-stage`) sets `analytics: off` for `/**`, so test visits stay out of
-the production reports.
+consent). The Stage sites (`bsca-careers-stage`, `stellarus-careers-stage`, `ascendiun-careers-stage`) set
+`analytics: off` for `/**`, so test visits stay out of the production reports.
 
 ## Configuration Sheets
 
