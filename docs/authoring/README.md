@@ -53,6 +53,19 @@ Content source (Config Service): `content.da.live/blueshieldca/bsca-careers`. Th
 5. Fill in the **Metadata** table at the bottom of the page.
 6. Click **Preview** and check the page. Then click **Publish**.
 
+## Links in New Tabs
+
+For a normal text link outside a block, add `#_blank` to its URL in DA's **Edit link** dialog to open it in a new tab. Preview and publish the page after editing. The site removes this marker from the destination and adds `target="_blank"` and `rel="noopener"`. Unmarked links keep their existing behavior. This convention does not apply to generated story cards or links rebuilt by blocks.
+
+For the Black Employee Network article, set these link URLs:
+
+| Link text | URL in DA |
+| --- | --- |
+| culture of belonging | `/a-culture-of-belonging#_blank` |
+| job opportunities | `/how-to-get-hired#_blank` |
+
+Relative paths keep navigation on the current site, including localhost and preview hosts. Use a full URL when the destination is another website. The marker replaces the URL fragment, so it cannot be combined with a section anchor.
+
 ## Content Organization
 
 | Folder / document | What it holds |
