@@ -24,6 +24,7 @@ export const STORY_LISTING = {
   params: { roles: 'role', topics: 'topic' },
 };
 const sheetCache = new Map();
+const storyVideoCache = new Map();
 
 /**
  * Splits a comma-separated value (or an array of them) into trimmed items.
@@ -362,9 +363,11 @@ export function buildStoryTime(date) {
  * transcode).
  * @param {{image: string, imageAlt: string}} story
  * @param {string} className wrapper class
+ * @param {object} [options] image options
+ * @param {boolean} [options.videoBadge] mark stories with an authored video embed
  * @returns {HTMLDivElement|null} null when the story has no image
  */
-export function buildStoryImage(story, className) {
+export function buildStoryImage(story, className, { videoBadge = false } = {}) {
   if (!story.image) return null;
   const wrapper = document.createElement('div');
   wrapper.className = className;
@@ -378,6 +381,20 @@ export function buildStoryImage(story, className) {
     img.loading = 'lazy';
     img.decoding = 'async';
     wrapper.append(img);
+  }
+  if (videoBadge && story.path) {
+    if (!storyVideoCache.has(story.path)) {
+      storyVideoCache.set(story.path, fetch(`${story.path}.plain.html`)
+        .then(async (response) => {
+          if (!response.ok) return false;
+          const content = new DOMParser().parseFromString(await response.text(), 'text/html');
+          return Boolean(content.querySelector('.embed.video'));
+        })
+        .catch(() => false));
+    }
+    storyVideoCache.get(story.path).then((hasVideo) => {
+      wrapper.classList.toggle('has-video', hasVideo);
+    });
   }
   return wrapper;
 }

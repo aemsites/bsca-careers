@@ -560,6 +560,14 @@ export function openExternalLinksInNewTab(root, sameSiteHosts = []) {
   });
 }
 
+export function decorateLinkTargets(root) {
+  root.querySelectorAll('.default-content-wrapper a[href$="#_blank"]').forEach((link) => {
+    link.hash = '';
+    link.target = '_blank';
+    link.relList.add('noopener');
+  });
+}
+
 /**
  * Decorates the main element.
  * @param {Element} main The main element
@@ -572,6 +580,7 @@ export function decorateMain(main) {
   decorateSectionMetadata(main);
   decorateBlocks(main);
   decorateButtons(main);
+  decorateLinkTargets(main);
 }
 
 /**

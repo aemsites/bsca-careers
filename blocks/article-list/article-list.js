@@ -65,7 +65,9 @@ function buildCard(story, { showDate, showDescription, linkLabel }) {
   link.href = story.url;
   if (story.external) link.rel = 'noopener';
 
-  if (story.image) link.append(buildStoryImage(story, 'article-list-card-image story-card-image'));
+  if (story.image) {
+    link.append(buildStoryImage(story, 'article-list-card-image story-card-image', { videoBadge: true }));
+  }
 
   const body = document.createElement('div');
   body.className = 'article-list-card-body story-card-body';

@@ -65,6 +65,7 @@
   /* links */
   --color-link: #0071bc;
   --color-link-hover: #005a96;
+  --body-link-decoration: underline;
 
   /* primary action */
   --color-primary: #0071bc;
@@ -213,6 +214,8 @@
 
   /* story cards and listing */
   --story-card-padding-compact: 24px; /* 4-column article list */
+  --story-video-badge-size: 80px;
+  --icon-story-play: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='55' height='55' viewBox='0 0 55 55'%3E%3Ccircle fill='%230071bc' cx='27.5' cy='27.5' r='27.5'/%3E%3Cpath fill='%23fff' d='M22 15 40 28 22 41Z'/%3E%3C/svg%3E");
   --story-filters-padding-block: 25px;
   --story-filters-clear-line-height: 30px;
   --story-search-width: 253px; /* from 1400px */
@@ -246,6 +249,7 @@
   --quote-portrait-size: 94px;
   --quote-paragraph-gap: 1em;
   --embed-min-height: 315px; /* the source 560x315 player keeps its height in narrow columns */
+  --embed-youtube-aspect-ratio: 12 / 7;
   --embed-consent-gap: 12px;
   --modal-max-width: 1100px;
   --modal-margin: 16px;

@@ -12,6 +12,8 @@ Single block table. Content: One block table. Single-cell rows each hold one sto
 
 No variations. The Ground option also selects the source treatment: Tinted/Dark = the More Stories band (title 10px above the text, 'View highlights' label); Light = the plain tile row of /growth-development (30px inset, title 30px above the text, no label).
 
+Internal stories with an authored Embed (video) block display a centered blue play badge on their thumbnail. Detection reads the story's `.plain.html` content and is cached per path for the page lifetime. Inline video links alone do not add a badge. Cards still navigate to the story; the badge is decorative. External stories and unavailable content do not receive a badge.
+
 ## Universal Editor fields
 
 N/A (Document Authoring project)

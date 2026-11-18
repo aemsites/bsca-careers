@@ -38,7 +38,21 @@ body main > .section > div.article-list-wrapper {
 
 /* source .tiles-figure: padding-top 56% box, image object-fit cover, centered */
 .article-list .article-list-card-image {
+  position: relative;
   background-color: var(--color-surface-muted);
+}
+
+.article-list .article-list-card-image.has-video::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: var(--z-raised);
+  width: var(--story-video-badge-size);
+  height: var(--story-video-badge-size);
+  background: var(--icon-story-play) center no-repeat;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
 }
 
 .article-list .article-list-card-body {

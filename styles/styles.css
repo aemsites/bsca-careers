@@ -508,10 +508,8 @@ main .section.blue a:focus-visible {
   outline-color: var(--color-on-band-accent);
 }
 
-/* links inside running text are underlined: blue on body text is under 3:1,
-   so color alone does not mark them as links */
 main :is(.default-content-wrapper, .table, .accordion, .quote, .columns) :is(p, li) a:any-link:not(.button) {
-  text-decoration: underline;
+  text-decoration: var(--body-link-decoration);
   text-underline-offset: var(--link-underline-offset);
 }
 
