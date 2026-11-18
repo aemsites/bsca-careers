@@ -1,4 +1,4 @@
-import {openExternalLinksInNewTab} from '../../scripts/scripts.js';
+import { openExternalLinksInNewTab } from '../../scripts/scripts.js';
 /**
  * Accordion block: one row per item; first cell is the question (summary),
  * second cell is the rich-text answer. Built on native <details>/<summary>.
