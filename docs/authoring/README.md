@@ -27,8 +27,8 @@ The site runs on AEM Edge Delivery Services. Content is written in **Document Au
 | Brand | Pages | Theme | Preview example |
 | --- | --- | --- | --- |
 | Blue Shield of California | This DA site: https://da.live/#/blueshieldca/bsca-careers | `bsc` (default) | https://main--bsca-careers--blueshieldca.aem.page/ |
-| Stellarus | Its own DA site: https://da.live/#/blueshieldca/stellarus (`/careers`, `/nav`, `/footer`) | `stellarus` (for the whole site, in its `/metadata`) | https://main--stellarus--blueshieldca.aem.page/careers |
-| Ascendiun | Its own DA site: https://da.live/#/blueshieldca/ascendiun (`/careers`, `/nav`, `/footer`) | `ascendiun` (for the whole site, in its `/metadata`) | https://main--ascendiun--blueshieldca.aem.page/careers |
+| Stellarus | Its own DA site: https://da.live/#/blueshieldca/stellarus-careers (`/careers`, `/nav`, `/footer`) | `stellarus` (for the whole site, in its `/metadata`) | https://main--stellarus-careers--blueshieldca.aem.page/careers |
+| Ascendiun | Its own DA site: https://da.live/#/blueshieldca/ascendiun-careers (`/careers`, `/nav`, `/footer`) | `ascendiun` (for the whole site, in its `/metadata`) | https://main--ascendiun-careers--blueshieldca.aem.page/careers |
 
 Each brand site has its own `/nav`, `/footer`, `/metadata` and author library (`/tools/library`); all brands run
 the same code, so blocks and templates are the same everywhere. A brand site's header and footer are edited in
