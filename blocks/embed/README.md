@@ -20,6 +20,8 @@ For posterless YouTube embeds, `addThumbnail` retains a consent-gated thumbnail 
 | --- | --- |
 | Video | `video` |
 
+Interface text comes from the placeholders sheet (`/placeholders/global`, keys Video.PlayTitled, Video.Download, Video.Consent*); the code keeps the current text as the default. See the author guide, "Placeholders: interface text".
+
 ## Universal Editor fields
 
 N/A (Document Authoring project)
