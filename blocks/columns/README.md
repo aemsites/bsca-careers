@@ -21,6 +21,8 @@ BSC alternating video posters open a paused YouTube player (`autoplay=0`); playb
 | Alternating (image side set by cell order) | `alternating` |
 | Curve (page header; photo side set by cell order) | `curve` |
 
+Interface text comes from the placeholders sheet (`/placeholders/global`, keys Video.Play, Video.PlayTitled); the code keeps the current text as the default. See the author guide, "Placeholders: interface text".
+
 ## Universal Editor fields
 
 N/A (Document Authoring project)
