@@ -24,7 +24,7 @@ export const STORY_LISTING = {
   params: { roles: 'role', topics: 'topic' },
 };
 const sheetCache = new Map();
-const storyVideoCache = new Map();
+const storyContentCache = new Map();
 
 /**
  * Splits a comma-separated value (or an array of them) into trimmed items.
@@ -358,6 +358,22 @@ export function buildStoryTime(date) {
 }
 
 /**
+ * A story's authored content (its `.plain.html`), parsed once per path for the page lifetime.
+ * Shared by the card video badge and the card headline.
+ * @param {string} path story path on this site
+ * @returns {Promise<Document|null>} null when the story cannot be loaded
+ */
+export function loadStoryContent(path) {
+  if (!storyContentCache.has(path)) {
+    storyContentCache.set(path, fetch(`${path}.plain.html`)
+      .then(async (response) => (response.ok
+        ? new DOMParser().parseFromString(await response.text(), 'text/html') : null))
+      .catch(() => null));
+  }
+  return storyContentCache.get(path);
+}
+
+/**
  * The image of a story card in a wrapper div: an optimized picture for images on this site,
  * a plain lazy image otherwise (other hosts, and SVG, which createOptimizedPicture cannot
  * transcode).
@@ -383,17 +399,8 @@ export function buildStoryImage(story, className, { videoBadge = false } = {}) {
     wrapper.append(img);
   }
   if (videoBadge && story.path) {
-    if (!storyVideoCache.has(story.path)) {
-      storyVideoCache.set(story.path, fetch(`${story.path}.plain.html`)
-        .then(async (response) => {
-          if (!response.ok) return false;
-          const content = new DOMParser().parseFromString(await response.text(), 'text/html');
-          return Boolean(content.querySelector('.embed.video'));
-        })
-        .catch(() => false));
-    }
-    storyVideoCache.get(story.path).then((hasVideo) => {
-      wrapper.classList.toggle('has-video', hasVideo);
+    loadStoryContent(story.path).then((content) => {
+      wrapper.classList.toggle('has-video', Boolean(content?.querySelector('.embed.video')));
     });
   }
   return wrapper;

@@ -14,6 +14,8 @@ No variations. The Ground option also selects the source treatment: Tinted/Dark 
 
 Internal stories with an authored Embed (video) block display a centered blue play badge on their thumbnail. Detection reads the story's `.plain.html` content and is cached per path for the page lifetime. Inline video links alone do not add a badge. Cards still navigate to the story; the badge is decorative. External stories and unavailable content do not receive a badge.
 
+Card titles of internal stories use the story's headline (H1), as on the source; the index title is shown until the story content has loaded.
+
 ## Universal Editor fields
 
 N/A (Document Authoring project)
