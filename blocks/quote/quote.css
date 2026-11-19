@@ -64,6 +64,11 @@
     box-sizing: border-box;
   }
 
+  /* The content-width cap must not let a quote fit beside the section heading. */
+  main > .section:has(> .quote-wrapper + .quote-wrapper) > .default-content-wrapper {
+    max-width: 100%;
+  }
+
   main > .section:has(> .quote-wrapper + .quote-wrapper) > div.quote-wrapper {
     flex: 0 0 calc(var(--content-max-width) / 3);
     max-width: calc(100% / 3);
