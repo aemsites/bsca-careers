@@ -62,6 +62,17 @@ function renderVideo(block, href, img, title) {
   const source = document.createElement('source');
   source.src = href;
   source.type = 'video/mp4';
+  video.addEventListener('click', () => {
+    if (video.paused) {
+      queueMicrotask(() => {
+        if (!video.paused) return;
+        video.play().catch((error) => {
+          // eslint-disable-next-line no-console
+          console.error('Unable to play embedded MP4:', error);
+        });
+      });
+    }
+  });
   const fallback = document.createElement('a');
   fallback.href = href;
   fallback.textContent = 'Download the video';
