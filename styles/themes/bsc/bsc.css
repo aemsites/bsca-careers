@@ -14,8 +14,6 @@
  */
 
 body {
-  --body-link-decoration: none;
-
   /* accordion questions: 500 as on careers.blueshieldca.com (Proxima Nova Medium). The client's
      Fieldwork files are Light 300 and DemiBold 600 only, so 500 renders as Fieldwork Light until
      a Fieldwork Medium file is added to styles/fonts.css. */
