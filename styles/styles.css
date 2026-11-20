@@ -420,6 +420,11 @@ main .section.blue {
   --button-secondary-hover-border-color: var(--button-on-dark-secondary-hover-border-color);
 }
 
+/* padding top to add for sections */
+main .section.p-top-40 {
+  padding-top: var(--space-xl);
+}
+
 /*
  * Story cards: the tile shared by the article-list and story-listing blocks (source .tiles).
  * The blocks add these classes and keep only their own layout differences.

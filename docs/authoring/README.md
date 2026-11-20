@@ -101,7 +101,7 @@ the cursor.
 | Library tab | What it contains |
 | --- | --- |
 | **Blocks** | Every block with each of its variations (source: `/tools/library/blocks/`) |
-| **Templates** | Section landing page, Text page, Story article, Stellarus landing page |
+| **Templates** | Per site (see Page Templates): Blue Shield: Section landing page, Text page, Story article. Stellarus: Landing page, Text page. Ascendiun: Section landing page, Text page |
 | **Icons** | Logos: bsc-logo, bsc-logo-white, bsc-shield (the shield on its own), stellarus-logo (the star), stellarus-logo-full (star + Stellarus wordmark), ascendiun-logo, ascendiun-logo-white. Social and UI: facebook, twitter, instagram, linkedin, glassdoor, search. Line icons: the client's 2026 set of 159 (e.g. `:calendar:`, `:graduation-cap:`, `:heart-check:`), shown in the text colour; see them all in Storybook (Foundations → Icons). Inserted as `:name:` (e.g. `:bsc-shield:`) |
 | **Media** | Images already uploaded to Document Authoring |
 
@@ -208,14 +208,15 @@ or footer with the `nav` / `footer` metadata (not needed today).
 
 ## Page Templates
 
-Insert a template from **Library** → **Templates**, then replace the sample content.
+Insert a template from **Library** → **Templates**, then replace the sample content. Each site (and its Stage site)
+has only the starters that fit it; their sample photos are stored in the site's `/tools/library/templates/media/`.
 
 | Template | Use for | Contains | Required metadata |
 | --- | --- | --- | --- |
-| **Story article** | A new employee story in `/blog/` | H1, hero image (or an Embed (video) block) right after the H1, story text, "More Stories" heading and an Article List | Title, Description, **Template = blog-article**, Roles, Topics, Publication Date, Author, Author Title, Image |
-| **Section landing page** | Pages like Life at Blue Shield or How to Get Hired | Columns (curve) page header, a centered intro section, content sections, Banner (image-cta) | Title, Description, Image |
-| **Text page** | Simple text pages (e.g. Why Relocate) | H1, paragraphs, lists | Title, Description |
-| **Stellarus landing page** | Pages in the Stellarus DA site | Hero (centered) with the two buttons | Title, Description (the theme comes from the site's `/metadata`) |
+| **Story article** (Blue Shield) | A new employee story in `/blog/` | H1, hero image (or an Embed (video) block) right after the H1, story text, "More Stories" heading and an Article List | Title, Description, **Template = blog-article**, Roles, Topics, Publication Date, Author, Author Title, Image |
+| **Section landing page** (Blue Shield, Ascendiun) | Pages like Life at Blue Shield or How to Get Hired | Columns (curve) page header, a centered intro section, content sections, Banner (image-cta) | Title, Description, Image |
+| **Text page** (all sites) | Simple text pages (e.g. Why Relocate) | H1, paragraphs, lists | Title, Description |
+| **Landing page** (Stellarus) | Pages in the Stellarus DA site | Hero (centered) with the two buttons | Title, Description (the theme comes from the site's `/metadata`) |
 
 **Story video hero:** put an **Embed (video)** block directly after the H1, with the poster image in row 1 and
 the MP4 link in row 2. (The "Hero video" field offered in the metadata slash menu is not used; ignore it.)
