@@ -28,13 +28,13 @@ body {
    Keep the inline image's text baseline from adding extra space above the footer. */
 body:not(.blog-article) main > .section.centered.narrow:last-child:has(> .default-content-wrapper:only-child > p:last-child > picture:only-child) {
   margin-bottom: var(--closing-reading-image-gap-after);
-}
 
-body:not(.blog-article) main > .section.centered.narrow:last-child > .default-content-wrapper:only-child > p:last-child:has(> picture:only-child) {
-  margin-block: var(--closing-reading-image-gap-before) 0;
-}
+  & > .default-content-wrapper > p:last-child {
+    margin-block: var(--closing-reading-image-gap-before) 0;
 
-body:not(.blog-article) main > .section.centered.narrow:last-child > .default-content-wrapper:only-child > p:last-child > picture:only-child,
-body:not(.blog-article) main > .section.centered.narrow:last-child > .default-content-wrapper:only-child > p:last-child > picture:only-child > img {
-  display: block;
+    & > picture,
+    & > picture > img {
+      display: block;
+    }
+  }
 }
