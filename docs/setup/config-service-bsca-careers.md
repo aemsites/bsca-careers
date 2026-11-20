@@ -136,8 +136,13 @@ curl -s -X POST -H "x-auth-token: $AUTH_TOKEN" \
   https://admin.hlx.page/sitemap/blueshieldca/bsca-careers/main/sitemap.xml
 ```
 
-Done for `bsca-careers` and `bsca-careers-stage` on 20 November 2026. The brand sites have no
-blog and no index setting yet.
+Done for `bsca-careers` and `bsca-careers-stage` on 20 November 2026.
+
+**Brand sites** (`stellarus-careers`, `ascendiun-careers` and their `-stage` sites; set up on 20 November 2026):
+they have no blog, so their `query.yaml` is `default-query.yaml` **without the `blog` index** (only `sitemap` →
+`/sitemap.json`, same excludes and fields). Their `sitemap.yaml` is `default-sitemap.yaml` with the site's own
+`origin` (e.g. `https://main--stellarus-careers--blueshieldca.aem.live`). Upload both the same way, with the brand
+site's name in the URL. Their index fills as pages are published (only `/careers` today on Stellarus).
 
 ## 4. Access
 
