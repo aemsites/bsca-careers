@@ -65,13 +65,13 @@ function renderVideo(block, href, img, title) {
   source.type = 'video/mp4';
   video.addEventListener('click', () => {
     if (video.paused) {
-      queueMicrotask(() => {
+      window.setTimeout(() => {
         if (!video.paused) return;
         video.play().catch((error) => {
           // eslint-disable-next-line no-console
           console.error('Unable to play embedded MP4:', error);
         });
-      });
+      }, 50);
     }
   });
   const fallback = document.createElement('a');
