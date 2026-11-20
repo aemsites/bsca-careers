@@ -14,6 +14,10 @@
  */
 
 body {
+  /* links in running text: no underline, as on careers.blueshieldca.com (blue on body text alone is
+     under 3:1, so the WCAG 1.4.1 choice is `underline`; switched back to the LIVE look on 20 Nov 2026
+     at Neha Luthra's request) */
+  --body-link-decoration: none;
   --closing-reading-image-gap-before: 64px;
   --closing-reading-image-gap-after: 44px;
 
