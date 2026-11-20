@@ -77,6 +77,11 @@ Relative paths keep navigation on the current site, including localhost and prev
 
 ## Content Organization
 
+On Blue Shield, a final **Centered, Narrow** section ending with a standalone image
+(as on A Culture of Belonging) keeps the live site's spacing above the image and before
+the footer. Keep the image in its own paragraph; no spacer paragraphs or extra final
+section break are needed. This layout does not change blog images or the other brands.
+
 | Folder / document | What it holds |
 | --- | --- |
 | `/` (root) | The careers pages: `index` (home), `life-at-blue-shield`, `a-culture-of-belonging`, `growth-development`, `total-rewards`, `how-to-get-hired`, `events`, `why-relocate`, `blog` (story listing) |
