@@ -90,7 +90,33 @@ indices:
       lastModified:
         select: none
         value: parseTimestamp(headers["last-modified"], "ddd, DD MMM YYYY hh:mm:ss GMT")
-    stellarus-careers::
+    stellarus-careers:
+      # stories live at /blog/{story}; the listing page /blog itself does not match /blog/*.
+      # Read by the story-listing (/blog) and article-list (More Stories, Our Stories) blocks.
+      target: /query-index.json
+      include:
+        - '/**'
+      properties:
+        title:
+          select: head > meta[property="og:title"]
+          value: |
+            attribute(el, 'content')
+        description:
+          select: head > meta[name="description"]
+          value: |
+            attribute(el, 'content')
+        image:
+          select: head > meta[property="og:image"]
+          value: |
+            match(attribute(el, 'content'), 'https:\/\/[^/]+(\/.*)')
+        robots:
+          select: head > meta[name="robots"]
+          value: |
+            attribute(el, 'content')
+        lastModified:
+          select: none
+          value: parseTimestamp(headers["last-modified"], "ddd, DD MMM YYYY hh:mm:ss GMT")
+    life-at-blue-shield:
       # stories live at /blog/{story}; the listing page /blog itself does not match /blog/*.
       # Read by the story-listing (/blog) and article-list (More Stories, Our Stories) blocks.
       target: /query-index.json
