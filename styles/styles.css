@@ -592,19 +592,19 @@ body.blog-article main .default-content-wrapper p em:only-child {
   font-size: inherit;
 }
 
+/* caption: an italic paragraph right after the image (source .textImage-captionBody) */
+body.blog-article main .default-content-wrapper p:has(> picture) + p:has(> em:only-child) {
+  font-size: var(--body-font-size-s);
+  text-align: center;
+}
+
 /* inline story images (source .textImage-center): centered, 20px below, no line gap */
-body.blog-article main .default-content-wrapper p:has(> picture) {
+body.blog-article main :not(.section.left) .default-content-wrapper p:has(> picture) {
   text-align: center;
 }
 
 body.blog-article main .default-content-wrapper p > picture img {
   vertical-align: top;
-}
-
-/* caption: an italic paragraph right after the image (source .textImage-captionBody) */
-body.blog-article main .default-content-wrapper p:has(> picture) + p:has(> em:only-child) {
-  font-size: var(--body-font-size-s);
-  text-align: center;
 }
 
 /* "Find Your Next Role" (source .article-action): centered, 20px padding above and
