@@ -668,13 +668,11 @@ body.blog-article.article-wide main > .section:not(.article-header-container, .a
 }
 
 /* section heading with a single "View More Stories" link (source .contentSection-header):
-   heading left, link right on one row from 768px */
+   heading left, link right and bottom-aligned at every viewport */
 main .section.article-list-container > .default-content-wrapper:has(> h2 + p:last-child > a:only-child) {
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
+  align-items: flex-end;
   justify-content: space-between;
-  gap: 0 var(--space-m);
   margin-bottom: var(--space-l);
 }
 
@@ -682,7 +680,18 @@ main .section.article-list-container > .default-content-wrapper:has(> h2 + p:las
   margin: 0;
 }
 
+main .section.article-list-container > .default-content-wrapper:has(> h2 + p:last-child > a:only-child) > h2 {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+main .section.article-list-container > .default-content-wrapper:has(> h2 + p:last-child > a:only-child) > p {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
 main .section.article-list-container > .default-content-wrapper:has(> h2 + p:last-child > a:only-child) > p > a {
+  display: block;
   font-size: var(--heading-font-size-m);
   font-weight: var(--font-weight-strong);
   line-height: var(--body-line-height);

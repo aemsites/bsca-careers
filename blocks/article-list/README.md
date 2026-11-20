@@ -10,6 +10,11 @@ Single block table. Content: One block table. Single-cell rows each hold one sto
 
 Off-site stories (`/blog/external-stories`) with **`video: Yes`** (also `yes`, `true`, `x`, `1`) show the play badge on their image in the More Stories cards; an empty `video` cell means no badge.
 
+When the section starts with an H2 followed by a paragraph containing only the
+"View More Stories" link, the link stays to the right, bottom-aligned with the heading
+at every viewport, as on live. The heading wraps within the remaining space; no extra
+authoring or spacer content is needed.
+
 ## Supported variations
 
 No variations. The Ground option also selects the source treatment: Tinted/Dark = the More Stories band (title 10px above the text, 'View highlights' label); Light = the plain tile row of /growth-development (30px inset, title 30px above the text, no label).
