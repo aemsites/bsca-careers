@@ -422,7 +422,7 @@ main .section.blue {
 
 /* padding top to add for sections*/
 main .section.p-top-40 {
-  padding-top: 40px;
+  padding-top: var(--space-xl);
 }
 
 /*
