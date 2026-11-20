@@ -45,10 +45,6 @@
   text-decoration: none;
 }
 
-.article-header .article-header-categories a:hover {
-  text-decoration: underline;
-}
-
 .article-header .article-header-title {
   margin: 0 0 var(--space-m);
   font-size: var(--article-title-font-size);
