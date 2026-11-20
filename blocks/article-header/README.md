@@ -12,6 +12,9 @@ Single block table. Content: Auto-built on Template = blog-article pages (script
 
 No variations.
 
+Category links darken on hover without an underline, as on live. They retain the
+site's visible keyboard-focus outline; fonts, labels and category destinations are unchanged.
+
 The share row: a Share table in the story (moved into the header), then page metadata `Share: off` / `Share position: left | right | center`, then the site default `/fragments/share` (default: shown; right of the byline, or left without one). See blocks/share/README.md.
 
 ## Universal Editor fields
