@@ -8,6 +8,8 @@ Model: `standalone`
 
 Single block table. Content: row 1: poster image (optional); row 2: link to the media (.mp4 for the video option, or a YouTube/Vimeo URL).
 
+MP4 videos start playing when the user clicks anywhere on the video. Native controls remain available for pausing, seeking and volume.
+
 YouTube links without a poster show YouTube's native preview after media consent, without autoplay. The player uses `www.youtube.com`, matching production's native Share and Watch Later controls; availability also depends on YouTube's player and sign-in state. An authored poster keeps the custom click-to-play preview. Vimeo also remains click-to-play. Before consent, the play button offers an external watch link instead of loading the player.
 
 For posterless YouTube embeds, `addThumbnail` retains a consent-gated thumbnail behind the native player. It tries `maxresdefault.jpg`, falls back to `hqdefault.jpg` for missing or low-resolution images, and removes the thumbnail if both fail. The native player remains usable when the thumbnail is unavailable, and authored posters are never replaced.
@@ -17,6 +19,8 @@ For posterless YouTube embeds, `addThumbnail` retains a consent-gated thumbnail 
 | Variation | Option class |
 | --- | --- |
 | Video | `video` |
+
+Interface text comes from the placeholders sheet (`/placeholders/global`, keys Video.PlayTitled, Video.Download, Video.Consent*); the code keeps the current text as the default. See the author guide, "Placeholders: interface text".
 
 ## Universal Editor fields
 

@@ -15,6 +15,7 @@ import {
   toCamelCase,
   toClassName,
 } from './aem.js';
+import { applyPlaceholder } from './placeholders.js';
 
 if (window.trustedTypes && window.trustedTypes.createPolicy) {
   const innerTT = window.trustedTypes.createPolicy('tt-inner', {
@@ -189,9 +190,35 @@ const ARTICLE_HEADER_FIELDS = [
  * block, with the article metadata and a share block, in a new first section.
  * @param {Element} main The container element
  */
+/** The page holding the site's default Share table (see scripts/share-table.js). */
+export const SHARE_FRAGMENT_PATH = '/fragments/share';
+let shareFragment;
+
+/**
+ * Fetches the Share fragment once per page (started early on stories, before the header loads).
+ * @returns {Promise<string>} its HTML, or '' when there is none
+ */
+export function loadShareFragment() {
+  if (!shareFragment) {
+    shareFragment = fetch(`${SHARE_FRAGMENT_PATH}.plain.html`)
+      .then((resp) => (resp.ok ? resp.text() : ''))
+      .catch(() => '');
+  }
+  return shareFragment;
+}
+
 function buildArticleHeader(main) {
   const h1 = main.querySelector(':scope > div > h1');
   if (!h1 || main.querySelector('.article-header')) return;
+  loadShareFragment();
+  // a Share table authored in the story replaces the automatic one (moved into the header)
+  const authoredShare = main.querySelector(':scope > div > div.share');
+  if (authoredShare) {
+    const shareSection = authoredShare.parentElement;
+    authoredShare.remove();
+    if (shareSection !== h1.parentElement && !shareSection.textContent.trim()
+      && !shareSection.querySelector('picture, img, div')) shareSection.remove();
+  }
 
   const rows = ARTICLE_HEADER_FIELDS
     .map(([label, name]) => [label, getPageMetadata(name)])
@@ -212,7 +239,7 @@ function buildArticleHeader(main) {
 
   rows.push([h1]);
   if (hero) rows.push([hero]);
-  rows.push([buildBlock('share', '')]);
+  rows.push([authoredShare || buildBlock('share', '')]);
 
   const section = document.createElement('div');
   section.append(buildBlock('article-header', rows));
@@ -460,7 +487,8 @@ export function decorateFragmentIcons(root) {
     }
     const link = img.closest('a');
     if (link && !link.textContent.trim() && !link.getAttribute('aria-label')) {
-      link.setAttribute('aria-label', link.title || ICON_LABELS[name] || name.replace(/-/g, ' '));
+      if (link.title) link.setAttribute('aria-label', link.title);
+      else applyPlaceholder(`Icon.${name}`, ICON_LABELS[name] || name.replace(/-/g, ' '), {}, (text) => link.setAttribute('aria-label', text));
     }
   });
 }
@@ -659,3 +687,13 @@ async function loadPage() {
 }
 
 loadPage();
+
+/**
+ * Live preview in the Document Authoring editor (Preview tab):
+ * https://www.aem.live/docs/ew/authoring/live-preview. Loads only with ?dapreview.
+ */
+(async function loadDa() {
+  if (!new URL(window.location.href).searchParams.get('dapreview')) return;
+  // eslint-disable-next-line import/no-unresolved
+  import('https://da.live/scripts/dapreview.js').then(({ default: daPreview }) => daPreview(loadPage));
+}());

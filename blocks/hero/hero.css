@@ -72,6 +72,7 @@ main .section > .hero-wrapper {
   max-width: var(--content-max-width);
   margin: 0 auto;
   padding: var(--hero-centered-padding-top) var(--content-padding) var(--hero-centered-padding-bottom);
+  overflow-x: clip;
   color: var(--color-text);
   text-align: center;
 }

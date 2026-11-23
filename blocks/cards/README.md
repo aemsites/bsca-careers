@@ -32,6 +32,8 @@ Ascendiun feature-link cards consume the existing typography tokens in
 font sizes, without adding card-specific typography tokens. CTA links use the
 theme's full-arrow icon and hover movement; other themes retain their chevrons.
 
+Interface text comes from the placeholders sheet (`/placeholders/global`, keys Video.Play); the code keeps the current text as the default. See the author guide, "Placeholders: interface text".
+
 ## Universal Editor fields
 
 N/A (Document Authoring project)
