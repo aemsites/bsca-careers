@@ -415,7 +415,6 @@ export function buildStoryImage(story, className, { videoBadge = false } = {}) {
       if (alt && !img.alt) img.alt = alt;
     });
   }
-  if (videoBadge && story.path) {
   if (story.video) {
     wrapper.classList.add('has-video');
   } else if (videoBadge && story.path) {
