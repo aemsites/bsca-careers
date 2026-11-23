@@ -407,6 +407,14 @@ export function buildStoryImage(story, className, { videoBadge = false } = {}) {
     img.decoding = 'async';
     wrapper.append(img);
   }
+  // Older indexes lack imageAlt, so fall back to the story's hero image alt text.
+  const img = wrapper.querySelector('img');
+  if (img && !img.alt && story.path) {
+    loadStoryContent(story.path).then((content) => {
+      const alt = content?.querySelector('img')?.getAttribute('alt')?.trim();
+      if (alt && !img.alt) img.alt = alt;
+    });
+  }
   if (story.video) {
     wrapper.classList.add('has-video');
   } else if (videoBadge && story.path) {
