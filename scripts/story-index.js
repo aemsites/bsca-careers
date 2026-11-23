@@ -398,8 +398,7 @@ export function buildStoryImage(story, className, { videoBadge = false } = {}) {
     img.decoding = 'async';
     wrapper.append(img);
   }
-  // Indexes published before imageAlt existed omit it. That alt is also on the
-  // story's hero image, so fill it from the story until the index has the column.
+  // Older indexes lack imageAlt, so fall back to the story's hero image alt text.
   const img = wrapper.querySelector('img');
   if (img && !img.alt && story.path) {
     loadStoryContent(story.path).then((content) => {
