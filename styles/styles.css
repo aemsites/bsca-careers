@@ -420,9 +420,13 @@ main .section.blue {
   --button-secondary-hover-border-color: var(--button-on-dark-secondary-hover-border-color);
 }
 
-/* padding top to add for sections */
+/* padding and margin section metadata */
 main .section.p-top-40 {
   padding-top: var(--space-xl);
+}
+
+main .section.p-bottom-30 {
+  padding-top: var(--space-l);
 }
 
 /*
