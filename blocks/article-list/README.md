@@ -16,6 +16,8 @@ Internal stories with an authored Embed (video) block display a centered blue pl
 
 Card titles of internal stories use the story's headline (H1), as on the source; the index title is shown until the story content has loaded.
 
+Card image alt text is the story's metadata Image alt (`imageAlt` in the query index, from `og:image:alt`). When that column is missing, the card uses the alt on the story's hero image.
+
 ## Universal Editor fields
 
 N/A (Document Authoring project)

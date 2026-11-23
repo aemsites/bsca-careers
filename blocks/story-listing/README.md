@@ -34,7 +34,7 @@ N/A (Document Authoring project)
 
 ## Data sources
 
-- Query index: EDS sheet JSON with columns path, title, description, image, date (falls back to lastModified), roles, topics, author; roles/topics comma-separated
+- Query index: EDS sheet JSON with columns path, title, description, image, imageAlt (the metadata Image alt), date (falls back to lastModified), roles, topics, author; roles/topics comma-separated
 - External stories: EDS sheet JSON with columns title, url, image, description, date, roles, topics; links open off-site in the same tab with rel=noopener.
   `image` is a path on this site (`/blog/external-images/<name>.jpg`, uploaded to that Document Authoring folder and previewed), so the card gets an optimized picture; images on other hosts are shown as plain, unoptimized images
 
