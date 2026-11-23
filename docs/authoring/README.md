@@ -128,8 +128,8 @@ A block is a table. The first row holds the block name, with the variation in br
 
 | Block | Purpose | Variations | How to author |
 | --- | --- | --- | --- |
-| **Hero** | Page-opening image with a headline and button | `home` (home page, full image with headline), `centered` (centered text without an image, used on Stellarus). Section page headers are **Columns (curve)** | Row 1: background image (leave empty for `centered`). Row 2: H1 heading, optional paragraphs, and an optional button link in its own paragraph |
-| **Banner** | Heading, text and button over a background image | `locations` (navy band, office locations), `statement` (large statement text over an image), `image-cta` ("View our job opportunities" band) | Row 1: background image. Row 2: H2 heading, paragraphs, and a button link in its own paragraph |
+| **Hero** | Page-opening image with a headline and button | `home` (home page, full image with headline), `centered` (centered text without an image, used on Stellarus). Section page headers are **Columns (curve)** | Row 1: background image (leave empty for `centered`). Row 2: H1 heading, optional paragraphs, and an optional button link in its own paragraph. Any heading level or a plain paragraph still shows over the photo (white, each in its own size), but use **H1** for the page title: it is the page's main heading for search and screen readers |
+| **Banner** | Heading, text and button over a background image | `locations` (navy band, office locations), `statement` (large statement text over an image), `image-cta` ("View our job opportunities" band) | Row 1: background image. Row 2: H2 heading, paragraphs, and a button link in its own paragraph. Any heading level (H1-H6) shows in the band's light text colour |
 | **Gallery** | Edge-to-edge row of photos; the middle one is wider | none | One row per image; the cell holds the image and an optional caption. Photos are display-only: links are ignored (client decision) |
 
 ### Content blocks

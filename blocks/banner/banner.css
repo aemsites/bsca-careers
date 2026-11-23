@@ -75,7 +75,7 @@ main > .section > .banner-wrapper {
   padding: var(--banner-locations-padding-block) var(--content-padding);
 }
 
-.banner.locations .banner-content :is(h1, h2, h3, h4) {
+.banner.locations .banner-content :is(h1, h2, h3, h4, h5, h6) {
   margin-bottom: var(--space-l);
   color: inherit;
 }
@@ -148,7 +148,7 @@ body.bsc main > .section.blue:has(> .banner-wrapper:only-child > .banner.stateme
   padding: 0 var(--content-padding) var(--space-m);
 }
 
-.banner.image-cta .banner-content :is(h1, h2, h3) {
+.banner.image-cta .banner-content :is(h1, h2, h3, h4, h5, h6) {
   margin-bottom: var(--space-l);
   color: inherit;
 }
