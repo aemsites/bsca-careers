@@ -22,7 +22,7 @@ import {
  *   - key/value rows: Roles, Topics (comma-separated), Publication Date
  *     (yyyy-mm-dd), Author, Author Title and Author Image (semicolon-separated,
  *     one entry per author in the same order; names may contain commas)
- *   - a row holding the H1 title
+ *   - a row holding the H1 title (any heading level, or plain text, also works)
  *   - a row holding the hero: a picture or a nested embed block
  *   - a row holding a nested share block
  *
@@ -49,6 +49,7 @@ const FIELDS = {
 function readRows(block) {
   const config = {};
   const content = { title: null, hero: null, share: null };
+  let textTitle = null;
   [...block.children].forEach((row) => {
     const cells = [...row.children];
     const key = FIELDS[(cells[0]?.textContent || '').trim().toLowerCase()];
@@ -59,14 +60,23 @@ function readRows(block) {
     cells.forEach((cell) => {
       const share = cell.querySelector('div.share');
       const embed = cell.querySelector('div.embed');
-      const heading = cell.querySelector('h1, h2');
+      // any heading level is the title, so a title authored as H3-H6 still shows
+      const heading = cell.querySelector('h1, h2, h3, h4, h5, h6');
       const picture = cell.querySelector('picture');
       if (share && !content.share) content.share = share;
       else if (embed && !content.hero) content.hero = embed;
       else if (heading && !content.title) content.title = heading;
       else if (picture && !content.hero) content.hero = picture;
+      else if (!textTitle && cells.length === 1 && !share && !embed && !picture
+        && cell.textContent.trim()) {
+        textTitle = cell;
+      }
     });
   });
+  // no heading anywhere: a single-cell text row is the title (authored as plain text)
+  if (!content.title && textTitle) {
+    content.title = textTitle.querySelector('p') || el('p', {}, ...textTitle.childNodes);
+  }
   return { config, content };
 }
 
