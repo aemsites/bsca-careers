@@ -426,7 +426,7 @@ main .section.p-top-40 {
 }
 
 main .section.p-bottom-30 {
-  padding-top: var(--space-l);
+  padding-bottom: var(--space-l);
 }
 
 /*
