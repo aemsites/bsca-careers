@@ -23,7 +23,7 @@ Internal stories with an authored Embed (video) block display a centered blue pl
 
 Card titles of internal stories use the story's headline (H1), as on the source; the index title is shown until the story content has loaded.
 
-Card image alternative text comes from the indexed `imageAlt` field (`og:image:alt` on internal pages) or the `imageAlt` value in the external-stories sheet.
+Card image alternative text comes from the indexed `imageAlt` field (the story's `Image Alt` page metadata) or the `imageAlt` value in the external-stories sheet. It does not fall back to the story's hero-image alt.
 
 Interface text comes from the placeholders sheet (`/placeholders/global`, keys Stories.ViewHighlights); the code keeps the current text as the default. See the author guide, "Placeholders: interface text".
 

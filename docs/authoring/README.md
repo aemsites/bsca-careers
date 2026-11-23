@@ -213,7 +213,7 @@ has only the starters that fit it; their sample photos are stored in the site's 
 
 | Template | Use for | Contains | Required metadata |
 | --- | --- | --- | --- |
-| **Story article** (Blue Shield) | A new employee story in `/blog/` | H1, hero image (or an Embed (video) block) right after the H1, story text, "More Stories" heading and an Article List | Title, Description, **Template = blog-article**, Roles, Topics, Publication Date, Author, Author Title, Image |
+| **Story article** (Blue Shield) | A new employee story in `/blog/` | H1, hero image (or an Embed (video) block) right after the H1, story text, "More Stories" heading and an Article List | Title, Description, **Template = blog-article**, Roles, Topics, Publication Date, Author, Author Title, Image, Image Alt |
 | **Section landing page** (Blue Shield, Ascendiun) | Pages like Life at Blue Shield or How to Get Hired | Columns (curve) page header, a centered intro section, content sections, Banner (image-cta) | Title, Description, Image |
 | **Text page** (all sites) | Simple text pages (e.g. Why Relocate) | H1, paragraphs, lists | Title, Description |
 | **Landing page** (Stellarus) | Pages in the Stellarus DA site | Hero (centered) with the two buttons | Title, Description (the theme comes from the site's `/metadata`) |
@@ -250,6 +250,7 @@ Every page ends with a **Metadata** block. Type `/` in a value cell for the allo
 | Title | Yes | Browser tab and search result title | `Supporting our veterans in the workplace` |
 | Description | Yes | Search result text and the card text in story lists | One or two sentences |
 | Image | Recommended | Share image (social networks) and story card image. Replace the picture to change it | 1200×630 image |
+| Image Alt | Stories | Alternative text for the story card/share image; separate from the hero image's own alt text | Describe the card image |
 | Template | Stories | `blog-article` turns on the story layout and the automatic Article Header | `blog-article` |
 | Article width | Rarely | `wide`: the story text uses the full page width (the title stays narrow), for stories that are wide on the old site | `wide` |
 | Share | Rarely | `off` hides the Share buttons on the story (default `on`) | `off` |
