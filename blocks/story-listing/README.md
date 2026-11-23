@@ -38,8 +38,8 @@ N/A (Document Authoring project)
 
 ## Data sources
 
-- Query index: EDS sheet JSON with columns path, title, description, image, date (falls back to lastModified), roles, topics, author; roles/topics comma-separated
-- External stories: EDS sheet JSON with columns title, url, image, description, date, roles, topics; links open off-site in the same tab with rel=noopener.
+- Query index: EDS sheet JSON with columns path, title, description, image, imageAlt (from page `og:image:alt`), date (falls back to lastModified), roles, topics, author; roles/topics comma-separated
+- External stories: EDS sheet JSON with columns title, url, image, imageAlt, description, date, roles, topics; links open off-site in the same tab with rel=noopener.
   `image` is a path on this site (`/blog/external-images/<name>.jpg`, uploaded to that Document Authoring folder and previewed), so the card gets an optimized picture; images on other hosts are shown as plain, unoptimized images
 
 URL state: ?q=&role=&topic=&sort=&page= (defaults omitted); back/forward restores the view. Data loading lives in /scripts/story-index.js (loadStories, filterStories, sortStories) for reuse.
