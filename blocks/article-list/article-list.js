@@ -3,10 +3,12 @@ import {
   buildStoryImage,
   buildStoryTime,
   createStoryLookup,
+  loadStoryContent,
   loadStories,
   splitList,
   STORY_SOURCES,
 } from '../../scripts/story-index.js';
+import { loadPlaceholders, placeholder } from '../../scripts/placeholders.js';
 
 /**
  * Article list block: a curated grid of story cards. Authored content:
@@ -65,7 +67,9 @@ function buildCard(story, { showDate, showDescription, linkLabel }) {
   link.href = story.url;
   if (story.external) link.rel = 'noopener';
 
-  if (story.image) link.append(buildStoryImage(story, 'article-list-card-image story-card-image'));
+  if (story.image) {
+    link.append(buildStoryImage(story, 'article-list-card-image story-card-image', { videoBadge: true }));
+  }
 
   const body = document.createElement('div');
   body.className = 'article-list-card-body story-card-body';
@@ -73,6 +77,14 @@ function buildCard(story, { showDate, showDescription, linkLabel }) {
   title.className = 'article-list-card-title story-card-title';
   title.textContent = story.title;
   body.append(title);
+  // the source titles a card with the story's headline (H1), which can differ from the
+  // page title in the index; internal stories switch to it once their content is loaded
+  if (story.path && !story.external) {
+    loadStoryContent(story.path).then((content) => {
+      const heading = content?.querySelector('h1')?.textContent.trim();
+      if (heading) title.textContent = heading;
+    });
+  }
 
   if (showDate && story.date) {
     const date = document.createElement('p');
@@ -106,7 +118,8 @@ export default async function decorate(block) {
   block.classList.add(`columns-${columns}`, `ground-${ground}`);
   // the source shows "View highlights" on the More Stories band, not on plain tile rows
   const label = options['link-label'];
-  let linkLabel = ground === 'light' ? '' : 'View highlights';
+  const ph = await loadPlaceholders();
+  let linkLabel = ground === 'light' ? '' : placeholder(ph, 'Stories.ViewHighlights', 'View highlights');
   if (label !== undefined) linkLabel = isNo(label) ? '' : label;
   block.classList.toggle('with-link-label', Boolean(linkLabel));
   const config = {

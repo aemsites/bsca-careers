@@ -18,6 +18,8 @@ Single block table. Content: row 1: background image; row 2: heading (H2), parag
 
 In the `locations` variation, external links open in a new tab; links within the site stay in the same tab. Other variations keep their authored link targets.
 
+For Blue Shield, a standalone `statement` in a section styled `blue` uses the Banner's own spacing, without adding the section's padding again: 30px above and 60px below the statement text. The same spacing applies without the `blue` section style. Typography and text wrapping are unchanged.
+
 ## Hero or Banner?
 
 Both take the same table (row 1: image, row 2: heading, copy and link).

@@ -24,6 +24,7 @@ export const STORY_LISTING = {
   params: { roles: 'role', topics: 'topic' },
 };
 const sheetCache = new Map();
+const storyContentCache = new Map();
 
 /**
  * Splits a comma-separated value (or an array of them) into trimmed items.
@@ -163,6 +164,12 @@ export async function loadOptionValues(url, key) {
     .filter(Boolean);
 }
 
+/** `video` cell of a sheet row (column name in any case): yes, true, x or 1. */
+function isVideoRow(row) {
+  const key = Object.keys(row).find((k) => k.trim().toLowerCase() === 'video');
+  return ['yes', 'true', 'x', '1', 'y'].includes(String(key ? row[key] : '').trim().toLowerCase());
+}
+
 /**
  * Turns a sheet row into a story. Query-index rows use `path`; external rows
  * use `url`. Rows without a title or link are dropped (returns null).
@@ -193,6 +200,8 @@ export function normalizeStory(row) {
     roles: splitList(row.roles),
     topics: splitList(row.topics),
     author: String(row.author || '').trim(),
+    // off-site stories: `video: yes` in the external-stories sheet shows the play badge on cards
+    video: isVideoRow(row),
   };
 }
 
@@ -357,14 +366,33 @@ export function buildStoryTime(date) {
 }
 
 /**
+ * A story's authored content (its `.plain.html`), parsed once per path for the page lifetime.
+ * Shared by the card video badge and the card headline.
+ * @param {string} path story path on this site
+ * @returns {Promise<Document|null>} null when the story cannot be loaded
+ */
+export function loadStoryContent(path) {
+  if (!storyContentCache.has(path)) {
+    storyContentCache.set(path, fetch(`${path}.plain.html`)
+      .then(async (response) => (response.ok
+        ? new DOMParser().parseFromString(await response.text(), 'text/html') : null))
+      .catch(() => null));
+  }
+  return storyContentCache.get(path);
+}
+
+/**
  * The image of a story card in a wrapper div: an optimized picture for images on this site,
  * a plain lazy image otherwise (other hosts, and SVG, which createOptimizedPicture cannot
  * transcode).
  * @param {{image: string, imageAlt: string}} story
  * @param {string} className wrapper class
+ * @param {object} [options] image options
+ * @param {boolean} [options.videoBadge] mark on-site stories with an authored video embed (off-site
+ *   stories with `video: yes` are always marked)
  * @returns {HTMLDivElement|null} null when the story has no image
  */
-export function buildStoryImage(story, className) {
+export function buildStoryImage(story, className, { videoBadge = false } = {}) {
   if (!story.image) return null;
   const wrapper = document.createElement('div');
   wrapper.className = className;
@@ -378,6 +406,13 @@ export function buildStoryImage(story, className) {
     img.loading = 'lazy';
     img.decoding = 'async';
     wrapper.append(img);
+  }
+  if (story.video) {
+    wrapper.classList.add('has-video');
+  } else if (videoBadge && story.path) {
+    loadStoryContent(story.path).then((content) => {
+      wrapper.classList.toggle('has-video', Boolean(content?.querySelector('.embed.video')));
+    });
   }
   return wrapper;
 }

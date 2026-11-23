@@ -34,6 +34,8 @@ Ascendiun's notice H2 ("Fair hiring practices") is 24px at every width, using `-
 
 No variations.
 
+Interface text comes from the placeholders sheet (`/placeholders/global`, keys Footer.*); the code keeps the current text as the default. See the author guide, "Placeholders: interface text".
+
 ## Universal Editor fields
 
 N/A (Document Authoring project)

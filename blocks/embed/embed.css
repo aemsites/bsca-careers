@@ -44,6 +44,11 @@
   background-color: var(--color-media-background);
 }
 
+.embed.embed-youtube .embed-frame {
+  min-height: 0;
+  aspect-ratio: var(--embed-youtube-aspect-ratio);
+}
+
 .embed .embed-frame > picture img {
   object-fit: cover;
 }

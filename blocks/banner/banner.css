@@ -107,6 +107,11 @@ main > .section > .banner-wrapper {
   display: none;
 }
 
+/* The statement supplies its own spacing; do not add the blue section's padding again. */
+body.bsc main > .section.blue:has(> .banner-wrapper:only-child > .banner.statement) {
+  padding-block: 0;
+}
+
 /* source: section padding 30px 0; the lead keeps its 30px bottom margin inside the band */
 .banner.statement .banner-content {
   max-width: min(calc(var(--article-max-width) + 2 * var(--content-padding)), var(--content-max-width));
