@@ -611,7 +611,7 @@ body.blog-article main .default-content-wrapper p em:only-child {
 }
 
 /* caption: an italic paragraph right after the image (source .textImage-captionBody) */
-body.blog-article main .default-content-wrapper p:has(> picture) + p:has(> em:only-child) {
+body.blog-article main .default-content-wrapper p.article-image-caption {
   font-size: var(--body-font-size-s);
   text-align: center;
 }
