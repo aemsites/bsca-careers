@@ -610,8 +610,13 @@ body.blog-article main .default-content-wrapper p em:only-child {
   font-size: inherit;
 }
 
+/* Editorial exception: preserve this source heading's authored emphasis. */
+body.bsc.blog-article main .default-content-wrapper #impact-of-leading-an-employee-resource-group :is(em, strong) {
+  font-style: italic;
+}
+
 /* caption: an italic paragraph right after the image (source .textImage-captionBody) */
-body.blog-article main .default-content-wrapper p:has(> picture) + p:has(> em:only-child) {
+body.blog-article main .default-content-wrapper p.article-image-caption {
   font-size: var(--body-font-size-s);
   text-align: center;
 }

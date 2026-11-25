@@ -609,6 +609,16 @@ export function decorateMain(main) {
   buildAutoBlocks(main);
   decorateSections(main);
   decorateSectionMetadata(main);
+  if (toClassName(getPageMetadata('template')) === 'blog-article') {
+    main.querySelectorAll('.default-content-wrapper p:has(> picture) + p').forEach((p) => {
+      const emphasis = p.firstElementChild;
+      // :only-child ignores text nodes, so mixed prose must not become a caption.
+      if (p.children.length === 1 && emphasis?.tagName === 'EM'
+        && p.textContent.trim() === emphasis.textContent.trim()) {
+        p.classList.add('article-image-caption');
+      }
+    });
+  }
   decorateBlocks(main);
   decorateButtons(main);
   decorateLinkTargets(main);

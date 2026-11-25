@@ -125,6 +125,10 @@ A block is a table. The first row holds the block name, with the variation in br
   italic alone (Fieldwork Light Italic). Stellarus keeps its italics.
 - Always write alt text on images (right-click the image → alt text).
 
+Story image captions are fully italic paragraphs directly after an image. A paragraph with
+non-italic text alongside an italic phrase remains body text. The “Impact of Leading an Employee
+Resource Group” story heading retains its authored italics as a specific editorial exception.
+
 ## Available Blocks
 
 ### Page-opening and promotional blocks
