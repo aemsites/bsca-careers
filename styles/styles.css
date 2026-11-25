@@ -12,6 +12,10 @@
  * governing permissions and limitations under the License.
  */
 
+html {
+  font-size: var(--root-font-size);
+}
+
 body {
   display: none;
   margin: 0;

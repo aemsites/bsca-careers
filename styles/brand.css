@@ -19,6 +19,10 @@
  * - Tokens with a raw value are declared on :root. Tokens defined from other tokens
  *   (aliases) are declared on `body`, so they re-resolve when a theme overrides the base
  *   token on `body` (a var() is computed where it is declared, then inherited as a value).
+ * - The root font size is 62.5%: 1rem = 10px at the usual 16px browser default, and scales
+ *   with the user's default font size. Divide a design's px value by 10 when using rem.
+ *   Font-size tokens use rem; keep em for sizes relative to surrounding text (sup/sub).
+ *   Reuse existing tokens; other pixel tokens and media-query breakpoints are not bulk-converted.
  *
  * Values: careers.blueshieldca.com computed styles (docs/analysis/README.md §7.2, §7.5).
  */
@@ -69,6 +73,7 @@
 }
 
 :root {
+  --root-font-size: 62.5%;
   --color-scheme: light;
 
   /* page and surfaces */
@@ -146,7 +151,7 @@
   --nav-icon-width: 30px; /* menu icon bars */
   --nav-icon-stroke: 2px;
   --nav-icon-bar-gap: 9px;
-  --nav-site-name-font-size: 21px; /* "Careers" next to the logo, from 576px */
+  --nav-site-name-font-size: 2.1rem; /* "Careers" next to the logo, from 576px */
   --nav-site-name-line-height: 32px;
   --nav-site-name-padding-block: 23px;
   --nav-site-name-line-height-desktop: 30px;
@@ -341,11 +346,11 @@
   --text-rendering: auto;
 
   /* body sizes (source uses the same sizes on mobile and desktop) */
-  --body-font-size-l: 20px;
-  --body-font-size-m: 16px;
-  --body-font-size-s: 14px;
-  --body-font-size-xs: 12px;
-  --body-font-size-xxs: 11px; /* mono eyebrow and copyright line */
+  --body-font-size-l: 2rem;
+  --body-font-size-m: 1.6rem;
+  --body-font-size-s: 1.4rem;
+  --body-font-size-xs: 1.2rem;
+  --body-font-size-xxs: 1.1rem; /* mono eyebrow and copyright line */
   --body-line-height: 1.5;
   --font-size-script: 0.75em; /* sup and sub */
   --sup-offset: -0.5em;
@@ -354,16 +359,16 @@
   --link-chevron-gap: 6px; /* "View More Stories" link to its chevron */
 
   /* heading sizes */
-  --heading-font-size-xxl: 42px; /* h1 page title (display font) */
-  --heading-font-size-xl: 32px; /* h2 section title */
-  --heading-font-size-l: 24px; /* h3 card title */
-  --heading-font-size-m: 18px; /* h4 / tile title */
-  --heading-font-size-s: 16px;
-  --heading-font-size-xs: 14px;
-  --article-title-font-size: 36px;
-  --article-subhead-font-size: min(calc(1.265rem + 0.18vw), 1.4rem); /* story h3: Bootstrap fluid h3, 22.4px from 1200px */
+  --heading-font-size-xxl: 4.2rem; /* h1 page title (display font) */
+  --heading-font-size-xl: 3.2rem; /* h2 section title */
+  --heading-font-size-l: 2.4rem; /* h3 card title */
+  --heading-font-size-m: 1.8rem; /* h4 / tile title */
+  --heading-font-size-s: 1.6rem;
+  --heading-font-size-xs: 1.4rem;
+  --article-title-font-size: 3.6rem;
+  --article-subhead-font-size: min(calc(2.024rem + 0.18vw), 2.24rem); /* story h3: Bootstrap fluid h3, 22.4px from 1200px */
   --article-title-line-height: 40px;
-  --lead-font-size: 18px; /* intro copy under the centered hero heading (stellarus.com) */
+  --lead-font-size: 1.8rem; /* intro copy under the centered hero heading (stellarus.com) */
   --display-tracking: 1.3333px;
   --display-transform: uppercase;
 
@@ -379,7 +384,7 @@
   --space-2xl: 60px;
   --space-3xl: 80px;
   --gutter-wide: 45px; /* header and footer side gutters from 768px */
-  --list-indent: 2rem;
+  --list-indent: 3.2rem;
   --list-item-gap: 4px;
   --pre-padding: 16px;
 
@@ -458,7 +463,7 @@
   --hero-decoration-scale: 1; /* its size relative to the eyebrow + heading block */
 
   /* centered hero heading (default: the Stellarus measurements) */
-  --hero-centered-title-size: clamp(1.8rem, 3.4vw, 2.7rem);
+  --hero-centered-title-size: clamp(2.88rem, 3.4vw, 4.32rem);
   --hero-centered-title-weight: 700;
 
   /* home hero headline over the photo */
