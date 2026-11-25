@@ -120,6 +120,9 @@ A block is a table. The first row holds the block name, with the variation in br
 - Optional rows and cells can be left out.
 - Buttons: put the link alone in its own paragraph and format it. **Bold** = solid button, _italic_ =
   outline button, **_bold and italic_** = high-impact button. An unformatted link stays a text link.
+- Bold and italic together in text shows as bold, upright (Fieldwork DemiBold), as the Blue Shield
+  brand book asks; italic inside a Blue Shield heading is upright too. For editorial italics, use
+  italic alone (Fieldwork Light Italic). Stellarus keeps its italics.
 - Always write alt text on images (right-click the image → alt text).
 
 ## Available Blocks

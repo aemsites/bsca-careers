@@ -171,6 +171,8 @@ body {
   --font-body: inter, inter-fallback, sans-serif;
   --font-weight-body: 400; /* source: Inter Regular (BSC default is Fieldwork Light 300) */
   --font-weight-display: 500;
+  --bold-italic-style: italic; /* Inter / Space Grotesk: keep italics as they are */
+  --heading-italic-style: italic;
   --font-heading: 'Space Grotesk', space-grotesk-fallback, sans-serif;
   --font-display: 'Space Grotesk', space-grotesk-fallback, sans-serif;
   --font-mono: 'JetBrains Mono', jetbrains-mono-fallback, ui-monospace, monospace;
