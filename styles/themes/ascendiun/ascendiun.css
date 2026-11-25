@@ -137,6 +137,7 @@ body {
   --font-display: fieldwork, fieldwork-fallback, fieldwork-fallback-roboto, sans-serif;
   --font-weight-body: 300;
   --font-weight-heading: 300;
+  --heading-italic-style: italic; /* Light headings: Fieldwork Light Italic exists (bold + italic stays upright) */
   --font-weight-display: 300;
   --font-ligatures: no-common-ligatures;
   --heading-line-height: 1.1; /* source: 40px / 44px section heading */

@@ -312,6 +312,13 @@
   --font-weight-medium: 500; /* story subheads, single-row nav links, hero eyebrow */
   --font-weight-strong: 600; /* bold text, buttons, labels, nav links */
   --font-weight-bold: 700; /* footer headings, brand names, table headers */
+
+  /* italics (Blue Shield brand book, client recommendation 24 Nov 2026): Fieldwork has no
+     DemiBold Italic and DemiBold is never italicised, so bold + italic text is DemiBold upright;
+     italic alone stays Fieldwork Light Italic. Headings are DemiBold too, so italic inside a
+     heading is upright as well. Themes with a real bold italic set these back to italic. */
+  --bold-italic-style: normal;
+  --heading-italic-style: normal;
   --font-ligatures: normal; /* font-variant-ligatures */
   --heading-line-height: 1.2;
 

@@ -139,6 +139,16 @@ strong {
   font-weight: var(--font-weight-strong);
 }
 
+/* bold + italic, in any nesting, and italic inside headings: upright per the brand (tokens) */
+:is(strong, b) :is(em, i),
+:is(em, i) :is(strong, b) {
+  font-style: var(--bold-italic-style);
+}
+
+:is(h1, h2, h3, h4, h5, h6) :is(em, i) {
+  font-style: var(--heading-italic-style);
+}
+
 /* superscripts and subscripts do not open up the line (source reboot) */
 sub,
 sup {
