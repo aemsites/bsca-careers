@@ -276,6 +276,11 @@
 }
 
 .story-listing .story-listing-pages a:any-link {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-width: var(--pagination-target-size);
+  min-height: var(--pagination-target-size);
   color: var(--color-link);
 }
 
@@ -298,8 +303,8 @@
   color: var(--color-link);
 }
 
-.story-listing .story-listing-page-prev[aria-disabled='true'],
-.story-listing .story-listing-page-next[aria-disabled='true'] {
+.story-listing .story-listing-page-prev[data-disabled],
+.story-listing .story-listing-page-next[data-disabled] {
   color: var(--color-text-subtle);
   opacity: 0.25;
   pointer-events: none;
@@ -375,7 +380,13 @@
 }
 
 @media (width > 1400px) {
-  /* All three filter groups on one row */
+  /* All three filter groups on one row, 30px apart as on the source; the selects size to
+     their options and shrink a little to fit (the brand font is wider than the source's) */
+  .story-listing .story-listing-filters {
+    flex-wrap: nowrap;
+    column-gap: var(--space-l);
+  }
+
   .story-listing .story-listing-search {
     flex: 0 0 var(--story-search-width);
     margin-bottom: 0;

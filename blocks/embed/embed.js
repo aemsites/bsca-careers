@@ -1,5 +1,6 @@
 import { getVimeoId, getYouTubeId } from '../../scripts/scripts.js';
 import { hasMediaConsent } from '../../scripts/video-modal.js';
+import { applyPlaceholder, placeholder } from '../../scripts/placeholders.js';
 
 /**
  * Embed block.
@@ -9,15 +10,11 @@ import { hasMediaConsent } from '../../scripts/video-modal.js';
  * - Option `video` (or any direct .mp4 link): a native, responsive 16:9
  *   <video controls preload="none"> using the image as poster. MP4 files are
  *   served from the site's own media host, so they play without a consent gate.
- * - Otherwise a YouTube or Vimeo link renders a lazy facade (poster + play
- *   button) in the source player box (16:9, at least 315px tall like the
- *   source's 560x315 iframes). Without an authored poster, a YouTube facade
- *   shows the video thumbnail (i.ytimg.com), requested only once consent is
- *   granted. The third-party iframe (youtube-nocookie / Vimeo dnt) is only
- *   created on click, and only when consent has been granted (hasMediaConsent in
- *   scripts/video-modal.js; pages without OneTrust report consent as granted).
- *   Without consent, a notice with a link to watch the video on the provider
- *   site is shown instead.
+ * - YouTube links without an authored poster show the native player preview
+ *   after media consent, without autoplay. Authored posters and Vimeo links
+ *   retain the click-to-play facade. All third-party players require consent
+ *   (hasMediaConsent in scripts/video-modal.js). Without consent, clicking play
+ *   shows a notice with a link to watch on the provider site instead.
  * - Any other link is left as an ordinary link.
  */
 
@@ -35,7 +32,7 @@ function getProvider(href) {
     const id = encodeURIComponent(youtube);
     return {
       name: 'YouTube',
-      src: `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`,
+      src: `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`,
       thumbnails: [
         `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`,
         `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
@@ -66,19 +63,25 @@ function renderVideo(block, href, img, title) {
   const source = document.createElement('source');
   source.src = href;
   source.type = 'video/mp4';
+  video.addEventListener('click', () => {
+    if (video.paused) {
+      window.setTimeout(() => {
+        if (!video.paused) return;
+        video.play().catch((error) => {
+          // eslint-disable-next-line no-console
+          console.error('Unable to play embedded MP4:', error);
+        });
+      }, 50);
+    }
+  });
   const fallback = document.createElement('a');
   fallback.href = href;
-  fallback.textContent = 'Download the video';
+  applyPlaceholder('Video.Download', 'Download the video', {}, (text) => { fallback.textContent = text; });
   video.append(source, fallback);
   block.classList.add('embed-video');
   block.replaceChildren(frame(video));
 }
 
-/**
- * Shows the provider thumbnail as the facade poster once consent is granted
- * (the thumbnail is a third-party request). A missing maxres rendition comes
- * back as a 120x90 placeholder, so the next rendition is tried.
- */
 function addThumbnail(container, provider) {
   const [first, ...fallbacks] = provider.thumbnails || [];
   if (!first) return;
@@ -96,10 +99,10 @@ function addThumbnail(container, provider) {
       else img.parentElement?.remove();
     });
     img.src = first;
-    const picture = document.createElement('picture');
-    picture.className = 'embed-thumbnail';
-    picture.append(img);
-    container.prepend(picture);
+    const thumbnail = document.createElement('picture');
+    thumbnail.className = 'embed-thumbnail';
+    thumbnail.append(img);
+    container.prepend(thumbnail);
   };
   if (hasMediaConsent()) {
     show();
@@ -118,7 +121,7 @@ function renderFacade(block, link, picture, provider, title) {
   const button = document.createElement('button');
   button.type = 'button';
   button.className = 'embed-play video-play';
-  button.setAttribute('aria-label', `Play video: ${label}`);
+  applyPlaceholder('Video.PlayTitled', 'Play video: {title}', { title: label }, (text) => button.setAttribute('aria-label', text));
 
   const container = frame(...[picture, button].filter(Boolean));
   container.classList.add('embed-placeholder');
@@ -126,18 +129,24 @@ function renderFacade(block, link, picture, provider, title) {
   block.replaceChildren(container);
   if (!picture) addThumbnail(container, provider);
 
+  const loadPlayer = (autoplay, focus = false) => {
+    const iframe = document.createElement('iframe');
+    const url = new URL(provider.src);
+    url.searchParams.set('autoplay', autoplay ? '1' : '0');
+    iframe.src = url.href;
+    iframe.title = label;
+    iframe.allow = 'autoplay; fullscreen; picture-in-picture; encrypted-media';
+    iframe.allowFullscreen = true;
+    container.classList.remove('embed-placeholder');
+    container.replaceChildren(...container.querySelectorAll('picture'), iframe);
+    block.querySelector('.embed-consent')?.remove();
+    block.classList.add('embed-is-loaded');
+    if (focus) iframe.focus();
+  };
+
   button.addEventListener('click', () => {
     if (hasMediaConsent()) {
-      const iframe = document.createElement('iframe');
-      iframe.src = provider.src;
-      iframe.title = label;
-      iframe.allow = 'autoplay; fullscreen; picture-in-picture; encrypted-media';
-      iframe.allowFullscreen = true;
-      container.classList.remove('embed-placeholder');
-      container.replaceChildren(iframe);
-      block.querySelector('.embed-consent')?.remove();
-      block.classList.add('embed-is-loaded');
-      iframe.focus();
+      loadPlayer(true, true);
       return;
     }
     if (block.querySelector('.embed-consent')) return;
@@ -148,15 +157,29 @@ function renderFacade(block, link, picture, provider, title) {
     watch.href = link;
     watch.target = '_blank';
     watch.rel = 'noopener noreferrer';
-    watch.textContent = `watch it on ${provider.name}`;
+    watch.textContent = placeholder(null, 'Video.ConsentLink', 'watch it on {provider}', { provider: provider.name });
     notice.append(
-      `This video is hosted by ${provider.name}. Accept cookies to play it here, or `,
+      // sheet values are trimmed, so the spaces around the link are added here
+      `${placeholder(null, 'Video.ConsentText', 'This video is hosted by {provider}. Accept cookies to play it here, or', { provider: provider.name })} `,
       watch,
-      ' (opens in a new tab).',
+      ` ${placeholder(null, 'Video.ConsentEnd', '(opens in a new tab).')}`,
     );
     block.append(notice);
     watch.focus();
   });
+
+  if (provider.name === 'YouTube' && !picture) {
+    if (hasMediaConsent()) {
+      loadPlayer(false);
+    } else {
+      const onConsent = (event) => {
+        if (!event.detail?.consented) return;
+        window.removeEventListener('consent.update', onConsent);
+        if (container.isConnected && !container.querySelector('iframe')) loadPlayer(false);
+      };
+      window.addEventListener('consent.update', onConsent);
+    }
+  }
 }
 
 export default function decorate(block) {

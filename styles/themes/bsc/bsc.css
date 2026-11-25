@@ -14,8 +14,30 @@
  */
 
 body {
+  /* links in running text: no underline, as on careers.blueshieldca.com (blue on body text alone is
+     under 3:1, so the WCAG 1.4.1 choice is `underline`; switched back to the LIVE look on 20 Nov 2026
+     at Neha Luthra's request) */
+  --body-link-decoration: none;
+  --closing-reading-image-gap-before: 64px;
+  --closing-reading-image-gap-after: 44px;
+
   /* accordion questions: 500 as on careers.blueshieldca.com (Proxima Nova Medium). The client's
      Fieldwork files are Light 300 and DemiBold 600 only, so 500 renders as Fieldwork Light until
      a Fieldwork Medium file is added to styles/fonts.css. */
   --accordion-label-font-weight: 500;
+}
+
+/* The source's resource-group image ends a centered reading section with fixed gaps.
+   Keep the inline image's text baseline from adding extra space above the footer. */
+body:not(.blog-article) main > .section.centered.narrow:last-child:has(> .default-content-wrapper:only-child > p:last-child > picture:only-child) {
+  margin-bottom: var(--closing-reading-image-gap-after);
+
+  & > .default-content-wrapper > p:last-child {
+    margin-block: var(--closing-reading-image-gap-before) 0;
+
+    & > picture,
+    & > picture > img {
+      display: block;
+    }
+  }
 }

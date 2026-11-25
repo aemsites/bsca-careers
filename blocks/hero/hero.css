@@ -65,6 +65,22 @@ main .section > .hero-wrapper {
   margin: var(--space-m) 0 0;
 }
 
+/* any other tag an author picks (H3-H6, paragraph, list) still shows on the photo: white
+   with the same shadow; each tag keeps its own size. The CTA button keeps its own look. */
+.hero:not(.centered) .hero-content > :is(h3, h4, h5, h6, p:not(.button-wrapper), ul, ol) {
+  color: var(--color-on-media);
+  text-shadow: var(--shadow-text-on-media);
+}
+
+.hero:not(.centered) .hero-content > :is(h3, h4, h5, h6) {
+  margin: 0;
+}
+
+.hero:not(.centered) .hero-content > :not(.button-wrapper) a:any-link {
+  color: inherit;
+  text-decoration: underline;
+}
+
 /* ---------- centered: text-only intro (eyebrow, H1, copy, CTAs) ----------
    Source: stellarus.com/careers (fluid padding and H1 size, measured at 390-1440px). */
 .hero.centered {
@@ -72,6 +88,7 @@ main .section > .hero-wrapper {
   max-width: var(--content-max-width);
   margin: 0 auto;
   padding: var(--hero-centered-padding-top) var(--content-padding) var(--hero-centered-padding-bottom);
+  overflow-x: clip;
   color: var(--color-text);
   text-align: center;
 }

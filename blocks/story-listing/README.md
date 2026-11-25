@@ -8,9 +8,13 @@ Model: `standalone`
 
 Single block table. Content: Configuration only: two-cell key | value rows (read with readBlockConfig). Cards, filters and pagination are built at runtime from the site query index merged with the external-stories sheet.
 
+Off-site stories (`/blog/external-stories`) with **`video: Yes`** (also `yes`, `true`, `x`, `1`) show the play badge on their image in the listing cards; an empty `video` cell means no badge.
+
 ## Supported variations
 
 No variations.
+
+Interface text comes from the placeholders sheet (`/placeholders/global`, keys Global.SearchLabel, Global.SearchPlaceholder and Blog.*); the code keeps the current text as the default. See the author guide, "Placeholders: interface text".
 
 ## Universal Editor fields
 
@@ -34,7 +38,7 @@ N/A (Document Authoring project)
 
 ## Data sources
 
-- Query index: EDS sheet JSON with columns path, title, description, image, date (falls back to lastModified), roles, topics, author; roles/topics comma-separated
+- Query index: EDS sheet JSON with columns path, title, description, image, imageAlt (the metadata Image alt), date (falls back to lastModified), roles, topics, author; roles/topics comma-separated
 - External stories: EDS sheet JSON with columns title, url, image, description, date, roles, topics; links open off-site in the same tab with rel=noopener.
   `image` is a path on this site (`/blog/external-images/<name>.jpg`, uploaded to that Document Authoring folder and previewed), so the card gets an optimized picture; images on other hosts are shown as plain, unoptimized images
 
