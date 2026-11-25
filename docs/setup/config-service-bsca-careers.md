@@ -7,7 +7,7 @@ Authoring, so the site runs at `https://{branch}--bsca-careers--blueshieldca.aem
 | | Value |
 | --- | --- |
 | Organization / site | `blueshieldca` / `bsca-careers` (the same names as in Document Authoring, so the DA Preview and Publish buttons reach this site) |
-| Code | GitHub `aemsites/bsca-careers` (branches `develop`, `storybook`; `main` is not used yet) |
+| Code | GitHub `aemsites/bsca-careers` (branches `develop` → Dev, `stage` → Stage, `main` → Prod, see §7; also `storybook`) |
 | Content | Document Authoring `blueshieldca/bsca-careers` (`https://content.da.live/blueshieldca/bsca-careers`) |
 | Reference | The working site `nehaadobe/aca-careers-eds` has the same settings with the old names |
 
@@ -218,8 +218,9 @@ The sites were renamed on 18 Nov 2026 to match `bsca-careers`. The first sites, 
 
 The `-stage` sites (created 18 Nov 2026) are full copies of their brand site, like `bsca-careers-stage`: their
 library and DA settings point at the Stage site, their `/metadata` adds `analytics: off` for `/**`, and they are
-previewed only. With them, the longest preview host label is 37 characters, so branch names may have at most
-24 characters (`tools/rules.mjs` checks this on push).
+previewed only. With the `-develop` sites (§7), the longest preview host label is 39 characters
+(`ascendiun-careers-develop--blueshieldca`), so branch names may have at most 22 characters (`tools/rules.mjs`
+checks this on push).
 
 Each brand site has `/careers`, `/nav`, `/footer`, a `/metadata` sheet (`/**` → its theme; `noindex` for `/drafts/**`
 and `/tools/**`) and its own `/tools/library`. Production domains and CDN for the brand sites are still to be set up.
@@ -241,3 +242,46 @@ Only values in the expected format are used: a OneTrust ID (`xxxxxxxx-xxxx-xxxx-
 `-test`) and a Launch URL on `https://assets.adobedtm.com/…min.js`; anything else is ignored (a console warning)
 and the default applies. The sheet is public: put IDs and URLs in it, never secrets (API keys, tokens).
 
+## 7. Environments: branch and content for each brand
+
+Each code branch is shown with its own Document Authoring content. All nine sites are repoless sites on
+GitHub `aemsites/bsca-careers`; only the content folder differs.
+
+| Branch | Environment | Blue Shield | Stellarus | Ascendiun |
+| --- | --- | --- | --- | --- |
+| `develop` | Dev | [`bsca-careers-develop`](https://da.live/#/blueshieldca/bsca-careers-develop) | [`stellarus-careers-develop`](https://da.live/#/blueshieldca/stellarus-careers-develop) | [`ascendiun-careers-develop`](https://da.live/#/blueshieldca/ascendiun-careers-develop) |
+| `stage` | Stage | [`bsca-careers-stage`](https://da.live/#/blueshieldca/bsca-careers-stage) | [`stellarus-careers-stage`](https://da.live/#/blueshieldca/stellarus-careers-stage) | [`ascendiun-careers-stage`](https://da.live/#/blueshieldca/ascendiun-careers-stage) |
+| `main` | Prod | [`bsca-careers`](https://da.live/#/blueshieldca/bsca-careers) | [`stellarus-careers`](https://da.live/#/blueshieldca/stellarus-careers) | [`ascendiun-careers`](https://da.live/#/blueshieldca/ascendiun-careers) |
+
+Environment addresses: `https://{branch}--{site}--blueshieldca.aem.page`, for example
+`https://develop--bsca-careers-develop--blueshieldca.aem.page/`, `https://stage--bsca-careers-stage--blueshieldca.aem.page/`
+and `https://main--bsca-careers--blueshieldca.aem.page/`. Code moves `develop` → `stage` → `main` through release pull
+requests (`RULES.md`).
+
+Content belongs to a site, not a branch, so any branch can be opened on any site. To make the matching branch the
+default, the Dev and Stage sites set `cdn.preview.host` and `cdn.live.host` in their site configuration
+(`develop--<brand>-develop--blueshieldca.aem.page` / `.aem.live`, `stage--<brand>-stage--blueshieldca.aem.page` /
+`.aem.live`); the Sidekick and Document Authoring then open that branch. The Prod sites keep the default (`main`) until
+the production domain is set up.
+
+The `-develop` sites (created 25 Nov 2026) are full copies of their `-stage` site: content links, the library and the DA
+settings point at the Dev site, and they have their own content storage. They are previewed only.
+
+### Setting up a Dev site (`<brand>-develop`) from Stage
+
+An `admin` of `blueshieldca` does this once per brand:
+
+1. **Content.** Copy the Document Authoring folder `/blueshieldca/<brand>-stage/` to `/blueshieldca/<brand>-develop/`
+   (DA copy API). Then change the links in the copy that still name the Stage site (`content.da.live/blueshieldca/<brand>-stage/`,
+   `--<brand>-stage--`) to the Dev site.
+2. **Site configuration.** Read `config/blueshieldca/sites/<brand>-stage.json` (as in step 2). Remove
+   `content.contentBusId` and `apiKeys`: a new site gets its own, and reusing them would share Stage's content. Set
+   `content.source.url` to `https://content.da.live/blueshieldca/<brand>-develop/` and `cdn.preview.host` /
+   `cdn.live.host` to the `develop` branch, keep `code` and `access`, and create
+   `config/blueshieldca/sites/<brand>-develop.json` with a `PUT`.
+3. **Query index.** Copy the Stage site's `content/query.yaml` (step 3) to the Dev site.
+4. **DA library.** Copy the Stage site's DA settings (`https://da.live/config#/blueshieldca/<brand>-stage/`) to the Dev
+   site, with every library `path` pointing to `https://content.da.live/blueshieldca/<brand>-develop/tools/library/…`.
+5. **Preview.** Preview the pages (bulk preview with the list of paths; wildcards are not supported for Document
+   Authoring content), then check that `https://develop--<brand>-develop--blueshieldca.aem.page/head.html` returns 200
+   and that the home or careers page shows the brand theme, header and footer.

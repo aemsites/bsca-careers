@@ -12,6 +12,10 @@
  * governing permissions and limitations under the License.
  */
 
+html {
+  font-size: var(--root-font-size);
+}
+
 body {
   display: none;
   margin: 0;
@@ -137,6 +141,16 @@ li {
 b,
 strong {
   font-weight: var(--font-weight-strong);
+}
+
+/* bold + italic, in any nesting, and italic inside headings: upright per the brand (tokens) */
+:is(strong, b) :is(em, i),
+:is(em, i) :is(strong, b) {
+  font-style: var(--bold-italic-style);
+}
+
+:is(h1, h2, h3, h4, h5, h6) :is(em, i) {
+  font-style: var(--heading-italic-style);
 }
 
 /* superscripts and subscripts do not open up the line (source reboot) */
@@ -426,7 +440,7 @@ main .section.p-top-40 {
 }
 
 main .section.p-bottom-30 {
-  padding-top: var(--space-l);
+  padding-bottom: var(--space-l);
 }
 
 /*
@@ -597,7 +611,7 @@ body.blog-article main .default-content-wrapper p em:only-child {
 }
 
 /* caption: an italic paragraph right after the image (source .textImage-captionBody) */
-body.blog-article main .default-content-wrapper p:has(> picture) + p:has(> em:only-child) {
+body.blog-article main .default-content-wrapper p.article-image-caption {
   font-size: var(--body-font-size-s);
   text-align: center;
 }

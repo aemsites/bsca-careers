@@ -129,7 +129,7 @@ body {
   --hero-eyebrow-font: var(--font-body);
 
   /* card links (source: 18px DemiBold text links such as "Explore Stellarus", at every width) */
-  --card-cta-font-size: 18px;
+  --card-cta-font-size: 1.8rem;
 
   /* fonts (source: Fieldwork everywhere, light, ligatures off) */
   --font-body: fieldwork, fieldwork-fallback, fieldwork-fallback-roboto, sans-serif;
@@ -137,6 +137,7 @@ body {
   --font-display: fieldwork, fieldwork-fallback, fieldwork-fallback-roboto, sans-serif;
   --font-weight-body: 300;
   --font-weight-heading: 300;
+  --heading-italic-style: italic; /* Light headings: Fieldwork Light Italic exists (bold + italic stays upright) */
   --font-weight-display: 300;
   --font-ligatures: no-common-ligatures;
   --heading-line-height: 1.1; /* source: 40px / 44px section heading */
@@ -146,20 +147,20 @@ body {
   --tracking-eyebrow: 0.15em;
 
   /* body sizes (source, from 768px: 20px intro copy, 18px body; smaller below, see below) */
-  --body-font-size-l: 20px;
-  --body-font-size-m: 18px;
-  --body-font-size-s: 14px;
-  --body-font-size-xs: 14px;
+  --body-font-size-l: 2rem;
+  --body-font-size-m: 1.8rem;
+  --body-font-size-s: 1.4rem;
+  --body-font-size-xs: 1.4rem;
   --body-line-height: 1.34; /* 24px on 18px */
 
   /* heading sizes (source, from 1440px: 64px hero, 40px section heading, 24px company name) */
-  --heading-font-size-xxl: 64px;
-  --heading-font-size-xl: 40px;
-  --heading-font-size-l: 24px;
-  --heading-font-size-m: 20px;
-  --heading-font-size-s: 18px;
-  --heading-font-size-xs: 16px;
-  --article-title-font-size: 40px;
+  --heading-font-size-xxl: 6.4rem;
+  --heading-font-size-xl: 4rem;
+  --heading-font-size-l: 2.4rem;
+  --heading-font-size-m: 2rem;
+  --heading-font-size-s: 1.8rem;
+  --heading-font-size-xs: 1.6rem;
+  --article-title-font-size: 4rem;
 
   /* spacing (source: 80px below the statement band, 32px side gutters) */
   --section-spacing: 80px;
@@ -189,8 +190,8 @@ body {
 /* breakpoint-exception: source sizes between 1024 and 1439px (56px hero, 32px headings) */
 @media (width < 1440px) {
   body {
-    --heading-font-size-xxl: 56px;
-    --heading-font-size-xl: 32px;
+    --heading-font-size-xxl: 5.6rem;
+    --heading-font-size-xl: 3.2rem;
     --nav-logo-width: 170px; /* guideline minimum on the web; leaves room for the nav links and CTA */
   }
 }
@@ -198,8 +199,8 @@ body {
 /* breakpoint-exception: source sizes between 768 and 1023px */
 @media (width < 1024px) {
   body {
-    --heading-font-size-xxl: 40px;
-    --body-font-size-m: 16px;
+    --heading-font-size-xxl: 4rem;
+    --body-font-size-m: 1.6rem;
     --body-line-height: 1.5; /* 24px on 16px */
   }
 }
@@ -207,9 +208,9 @@ body {
 /* breakpoint-exception: source sizes below 768px */
 @media (width < 768px) {
   body {
-    --heading-font-size-xl: 24px;
-    --heading-font-size-l: 20px;
-    --body-font-size-l: 18px;
+    --heading-font-size-xl: 2.4rem;
+    --heading-font-size-l: 2rem;
+    --body-font-size-l: 1.8rem;
     --section-spacing: 40px;
     --nav-logo-width: 170px; /* guideline minimum on the web (ascendiun.com: 195px on phones) */
     --nav-brand-gap: 16px; /* fits the 170px logo on 360px phones; still wider than the logo star */
