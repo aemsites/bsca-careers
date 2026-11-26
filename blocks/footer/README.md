@@ -17,7 +17,7 @@ The footer is built from the document named by the page's `footer` metadata, by 
 
 The three-section Stellarus footer uses brand, link groups, and legal sections. Authors enter each link-group label as a bold paragraph; the block renders those labels as `h3` elements without changing their appearance.
 
-A link to `#cookie-preferences` opens the consent manager's preference center (OneTrust when present; otherwise a `consent.preferences` event is dispatched for the site's consent integration).
+A link to `#cookie-preferences` (or a list item with the text "Cookie preferences") opens the OneTrust preference center. The click is handled by Blue Shield's `scripts/cookieprefs.js` (used as delivered, loaded with OneTrust by `scripts/consent.js`); on sites without OneTrust (Stellarus) the footer hides the item.
 
 ## Behavior
 
@@ -33,6 +33,8 @@ Ascendiun's notice H2 ("Fair hiring practices") is 24px at every width, using `-
 ## Supported variations
 
 No variations.
+
+Interface text comes from the placeholders sheet (`/placeholders/global`, keys Footer.*); the code keeps the current text as the default. See the author guide, "Placeholders: interface text".
 
 ## Universal Editor fields
 

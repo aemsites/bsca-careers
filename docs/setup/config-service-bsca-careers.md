@@ -7,7 +7,7 @@ Authoring, so the site runs at `https://{branch}--bsca-careers--blueshieldca.aem
 | | Value |
 | --- | --- |
 | Organization / site | `blueshieldca` / `bsca-careers` (the same names as in Document Authoring, so the DA Preview and Publish buttons reach this site) |
-| Code | GitHub `aemsites/bsca-careers` (branches `develop`, `storybook`; `main` is not used yet) |
+| Code | GitHub `aemsites/bsca-careers` (branches `develop` → Dev, `stage` → Stage, `main` → Prod, see §7; tooling branches `tools/storybook` and `tools/visual-testing` are not site code, see RULES.md) |
 | Content | Document Authoring `blueshieldca/bsca-careers` (`https://content.da.live/blueshieldca/bsca-careers`) |
 | Reference | The working site `nehaadobe/aca-careers-eds` has the same settings with the old names |
 
@@ -106,6 +106,44 @@ curl -s -X POST -H "x-auth-token: $AUTH_TOKEN" -H "Content-Type: text/yaml" \
 
 The indexes fill when pages are **published**; previewing alone does not add them.
 
+Then upload the sitemap setting, `default-sitemap.yaml` in the repository root (set `origin` to the
+site's own host first):
+
+```sh
+curl -s -o default-sitemap.yaml \
+  https://raw.githubusercontent.com/aemsites/bsca-careers/develop/default-sitemap.yaml
+curl -s -X POST -H "x-auth-token: $AUTH_TOKEN" -H "Content-Type: text/yaml" \
+  --data-binary @default-sitemap.yaml \
+  https://admin.hlx.page/config/blueshieldca/sites/bsca-careers/content/sitemap.yaml
+```
+
+Without it, Edge Delivery adds its automatic sitemap, which writes **every** published document
+(`/nav`, `/footer`, `/fragments/...`) into `/sitemap.json`, ignores the excludes above and leaves
+those rows without title, description and image. With it, `sitemap.xml` is built from the
+`sitemap` index, so the excludes and `robots: noindex` apply.
+
+If excluded paths are already in `/sitemap.json` (e.g. the setting was added late), remove them
+from the index (the pages stay published), re-index the published pages and rebuild the sitemap:
+
+```sh
+# per excluded path, e.g. /nav
+curl -s -X DELETE -H "x-auth-token: $AUTH_TOKEN" \
+  https://admin.hlx.page/index/blueshieldca/bsca-careers/main/nav
+# per published page, e.g. /blog
+curl -s -X POST -H "x-auth-token: $AUTH_TOKEN" \
+  https://admin.hlx.page/index/blueshieldca/bsca-careers/main/blog
+curl -s -X POST -H "x-auth-token: $AUTH_TOKEN" \
+  https://admin.hlx.page/sitemap/blueshieldca/bsca-careers/main/sitemap.xml
+```
+
+Done for `bsca-careers` and `bsca-careers-stage` on 20 November 2026.
+
+**Brand sites** (`stellarus-careers`, `ascendiun-careers` and their `-stage` sites; set up on 20 November 2026):
+they have no blog, so their `query.yaml` is `default-query.yaml` **without the `blog` index** (only `sitemap` →
+`/sitemap.json`, same excludes and fields). Their `sitemap.yaml` is `default-sitemap.yaml` with the site's own
+`origin` (e.g. `https://main--stellarus-careers--blueshieldca.aem.live`). Upload both the same way, with the brand
+site's name in the URL. Their index fills as pages are published (only `/careers` today on Stellarus).
+
 ## 4. Access
 
 The working site uses the default (`"access": { "admin": { "role": {}, "requireAuth": "auto" } }`):
@@ -144,6 +182,8 @@ The project team that runs the migration needs `author` (preview) and, for go-li
 | `https://develop--bsca-careers--blueshieldca.aem.page/head.html` | 200 (code from GitHub) |
 | `https://develop--bsca-careers--blueshieldca.aem.page/` after previewing `/index` | The careers home page with header, footer and the Blue Shield theme |
 | `https://admin.hlx.page/config/blueshieldca/sites/bsca-careers/content/query.yaml` | The two indexes `sitemap` and `blog` |
+| `https://admin.hlx.page/config/blueshieldca/sites/bsca-careers/content/sitemap.yaml` | The `default` sitemap from `/sitemap.json`, with the site's `origin` |
+| `https://main--bsca-careers--blueshieldca.aem.live/sitemap.xml` (after publishing) | Only public pages: no `/nav`, `/footer`, `/fragments/...`, `/drafts/...`, `/tools/...`; no `https://undefined/` |
 
 Then the project team previews (and later publishes) the pages on the new site.
 
@@ -152,22 +192,96 @@ Then the project team previews (and later publishes) the pages on the new site.
 - **Production domain:** the CDN for careers.blueshieldca.com points to
   `main--bsca-careers--blueshieldca.aem.live`, and the site's CDN settings
   (`cdn.prod.host: careers.blueshieldca.com`, CDN type) are added so cache purges reach it.
+- **Sitemap host:** change `origin` in the site's `sitemap.yaml` (and `default-sitemap.yaml`) to
+  `https://careers.blueshieldca.com`, then rebuild the sitemap.
 - **Code on `main`:** the live site (`aem.live`) serves the `main` branch, which is still the
   repository template; the code is merged to `main` only when the team decides.
 - **Consent and analytics:** OneTrust uses its production configuration on `*.aem.live` and
   `*.blueshieldca.com` (test configuration on `aem.page`); the Adobe Launch property allows
   `blueshieldca.com`. No change is expected, but check both after the domain switch.
 
-## 5. Brand sites (created 17 Nov 2026)
+## 5. Brand sites (created 17 Nov 2026, renamed 18 Nov 2026)
 
 Each brand has its own DA site. All of them are repoless sites on the same code as `blueshieldca/bsca-careers`, so a code change
 reaches every brand.
 
 | Site | DA | Content source | Code and access | Preview |
 | --- | --- | --- | --- | --- |
-| `blueshieldca/stellarus` | https://da.live/#/blueshieldca/stellarus | `content.da.live/blueshieldca/stellarus/` | same as `blueshieldca/bsca-careers` | https://main--stellarus--blueshieldca.aem.page/careers |
-| `blueshieldca/ascendiun` | https://da.live/#/blueshieldca/ascendiun | `content.da.live/blueshieldca/ascendiun/` | same as `blueshieldca/bsca-careers` | https://main--ascendiun--blueshieldca.aem.page/careers |
+| `blueshieldca/stellarus-careers` | https://da.live/#/blueshieldca/stellarus-careers | `content.da.live/blueshieldca/stellarus-careers/` | same as `blueshieldca/bsca-careers` | https://main--stellarus-careers--blueshieldca.aem.page/careers |
+| `blueshieldca/ascendiun-careers` | https://da.live/#/blueshieldca/ascendiun-careers | `content.da.live/blueshieldca/ascendiun-careers/` | same as `blueshieldca/bsca-careers` | https://main--ascendiun-careers--blueshieldca.aem.page/careers |
+| `blueshieldca/stellarus-careers-stage` | https://da.live/#/blueshieldca/stellarus-careers-stage | `content.da.live/blueshieldca/stellarus-careers-stage/` | same as `blueshieldca/bsca-careers` | https://main--stellarus-careers-stage--blueshieldca.aem.page/careers |
+| `blueshieldca/ascendiun-careers-stage` | https://da.live/#/blueshieldca/ascendiun-careers-stage | `content.da.live/blueshieldca/ascendiun-careers-stage/` | same as `blueshieldca/bsca-careers` | https://main--ascendiun-careers-stage--blueshieldca.aem.page/careers |
+
+The sites were renamed on 18 Nov 2026 to match `bsca-careers`. The first sites, `blueshieldca/stellarus` and
+`blueshieldca/ascendiun`, were copied to the `-careers` sites; they are retired once the new sites are published
+(redirects to the new sites, then the old DA content is removed; only an org admin can delete their site configuration).
+
+The `-stage` sites (created 18 Nov 2026) are full copies of their brand site, like `bsca-careers-stage`: their
+library and DA settings point at the Stage site, their `/metadata` adds `analytics: off` for `/**`, and they are
+previewed only. With the `-develop` sites (§7), the longest preview host label is 39 characters
+(`ascendiun-careers-develop--blueshieldca`), so branch names may have at most 22 characters (`tools/rules.mjs`
+checks this on push).
 
 Each brand site has `/careers`, `/nav`, `/footer`, a `/metadata` sheet (`/**` → its theme; `noindex` for `/drafts/**`
 and `/tools/**`) and its own `/tools/library`. Production domains and CDN for the brand sites are still to be set up.
 
+## 6. Per-site settings: the `/configs` sheet
+
+Each site can have a sheet named `configs` at its root in Document Authoring (columns `key` and `value`),
+previewed and published like a page (`/configs.json`). The code reads it on every page; a missing sheet or key
+uses the default below, so a site needs only the rows it changes.
+
+| key | Default | Used for |
+| --- | --- | --- |
+| `onetrust-id` | `019878d6-0d4b-7b81-b399-94a1c6d2e133` (Blue Shield) | OneTrust domain script on `*.aem.live` and the production domain |
+| `onetrust-id-test` | `onetrust-id` + `-test` | OneTrust domain script on previews (`*.aem.page`) and localhost |
+| `launch-url` | `https://assets.adobedtm.com/4292fae30116/d60ed27415b5/launch-93c4e2f28128.min.js` | Adobe Launch (CJA) library |
+| `launch-url-staging` | `launch-url` with `-staging.min.js` | Launch library for pages with `analytics: staging` |
+
+Only values in the expected format are used: a OneTrust ID (`xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`, optionally
+`-test`) and a Launch URL on `https://assets.adobedtm.com/…min.js`; anything else is ignored (a console warning)
+and the default applies. The sheet is public: put IDs and URLs in it, never secrets (API keys, tokens).
+
+## 7. Environments: branch and content for each brand
+
+Each code branch is shown with its own Document Authoring content. All nine sites are repoless sites on
+GitHub `aemsites/bsca-careers`; only the content folder differs.
+
+| Branch | Environment | Blue Shield | Stellarus | Ascendiun |
+| --- | --- | --- | --- | --- |
+| `develop` | Dev | [`bsca-careers-develop`](https://da.live/#/blueshieldca/bsca-careers-develop) | [`stellarus-careers-develop`](https://da.live/#/blueshieldca/stellarus-careers-develop) | [`ascendiun-careers-develop`](https://da.live/#/blueshieldca/ascendiun-careers-develop) |
+| `stage` | Stage | [`bsca-careers-stage`](https://da.live/#/blueshieldca/bsca-careers-stage) | [`stellarus-careers-stage`](https://da.live/#/blueshieldca/stellarus-careers-stage) | [`ascendiun-careers-stage`](https://da.live/#/blueshieldca/ascendiun-careers-stage) |
+| `main` | Prod | [`bsca-careers`](https://da.live/#/blueshieldca/bsca-careers) | [`stellarus-careers`](https://da.live/#/blueshieldca/stellarus-careers) | [`ascendiun-careers`](https://da.live/#/blueshieldca/ascendiun-careers) |
+
+Environment addresses: `https://{branch}--{site}--blueshieldca.aem.page`, for example
+`https://develop--bsca-careers-develop--blueshieldca.aem.page/`, `https://stage--bsca-careers-stage--blueshieldca.aem.page/`
+and `https://main--bsca-careers--blueshieldca.aem.page/`. Code moves `develop` → `stage` → `main` through release pull
+requests (`RULES.md`).
+
+Content belongs to a site, not a branch, so any branch can be opened on any site. To make the matching branch the
+default, the Dev and Stage sites set `cdn.preview.host` and `cdn.live.host` in their site configuration
+(`develop--<brand>-develop--blueshieldca.aem.page` / `.aem.live`, `stage--<brand>-stage--blueshieldca.aem.page` /
+`.aem.live`); the Sidekick and Document Authoring then open that branch. The Prod sites keep the default (`main`) until
+the production domain is set up.
+
+The `-develop` sites (created 25 Nov 2026) are full copies of their `-stage` site: content links, the library and the DA
+settings point at the Dev site, and they have their own content storage. They are previewed only.
+
+### Setting up a Dev site (`<brand>-develop`) from Stage
+
+An `admin` of `blueshieldca` does this once per brand:
+
+1. **Content.** Copy the Document Authoring folder `/blueshieldca/<brand>-stage/` to `/blueshieldca/<brand>-develop/`
+   (DA copy API). Then change the links in the copy that still name the Stage site (`content.da.live/blueshieldca/<brand>-stage/`,
+   `--<brand>-stage--`) to the Dev site.
+2. **Site configuration.** Read `config/blueshieldca/sites/<brand>-stage.json` (as in step 2). Remove
+   `content.contentBusId` and `apiKeys`: a new site gets its own, and reusing them would share Stage's content. Set
+   `content.source.url` to `https://content.da.live/blueshieldca/<brand>-develop/` and `cdn.preview.host` /
+   `cdn.live.host` to the `develop` branch, keep `code` and `access`, and create
+   `config/blueshieldca/sites/<brand>-develop.json` with a `PUT`.
+3. **Query index.** Copy the Stage site's `content/query.yaml` (step 3) to the Dev site.
+4. **DA library.** Copy the Stage site's DA settings (`https://da.live/config#/blueshieldca/<brand>-stage/`) to the Dev
+   site, with every library `path` pointing to `https://content.da.live/blueshieldca/<brand>-develop/tools/library/…`.
+5. **Preview.** Preview the pages (bulk preview with the list of paths; wildcards are not supported for Document
+   Authoring content), then check that `https://develop--<brand>-develop--blueshieldca.aem.page/head.html` returns 200
+   and that the home or careers page shows the brand theme, header and footer.

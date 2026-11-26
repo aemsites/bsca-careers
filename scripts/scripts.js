@@ -15,6 +15,7 @@ import {
   toCamelCase,
   toClassName,
 } from './aem.js';
+import { applyPlaceholder } from './placeholders.js';
 
 if (window.trustedTypes && window.trustedTypes.createPolicy) {
   const innerTT = window.trustedTypes.createPolicy('tt-inner', {
@@ -102,10 +103,13 @@ export function getPageMetadata(name, doc = document) {
 function getTheme() {
   const theme = toClassName(getPageMetadata('theme').split(',')[0]);
   if (THEMES[theme]) return theme;
-  // no theme metadata (e.g. a local preview, which drops it): the brand site in the host
-  // (main--stellarus--blueshieldca.aem.page) or the brand folder in the path (/ascendiun/careers)
+  // no theme metadata (e.g. a local preview, which drops it): the brand site in the host, named
+  // <theme> or <theme>-<anything> (main--stellarus-careers--blueshieldca.aem.page), or the brand
+  // folder in the path (/ascendiun/careers)
   const siteName = toClassName(window.location.hostname.split('.')[0].split('--')[1] || '');
-  if (siteName !== DEFAULT_THEME && THEMES[siteName]) return siteName;
+  const siteTheme = Object.keys(THEMES).find((name) => name !== DEFAULT_THEME
+    && (siteName === name || siteName.startsWith(`${name}-`)));
+  if (siteTheme) return siteTheme;
   const folder = window.location.pathname.split('/').map(toClassName)
     .find((segment) => segment !== DEFAULT_THEME && THEMES[segment]);
   return folder || DEFAULT_THEME;
@@ -143,6 +147,18 @@ function isConsentEnabled(theme) {
 }
 
 /**
+ * Page metadata `analytics` for Adobe Launch (CJA): `off`, `staging` or `on` (the default, '').
+ * Independent of `consent`; Launch still needs the cookie banner (OneTrust) to run on the page.
+ * @returns {string}
+ */
+function getAnalyticsMode() {
+  const value = toClassName(getPageMetadata('analytics'));
+  if (['off', 'false', 'no'].includes(value)) return 'off';
+  if (value === 'staging') return 'staging';
+  return value ? 'on' : '';
+}
+
+/**
  * loads the theme's fonts (the base fonts.css or the brand's own) and sets a session storage flag
  */
 async function loadFonts() {
@@ -174,9 +190,35 @@ const ARTICLE_HEADER_FIELDS = [
  * block, with the article metadata and a share block, in a new first section.
  * @param {Element} main The container element
  */
+/** The page holding the site's default Share table (see scripts/share-table.js). */
+export const SHARE_FRAGMENT_PATH = '/fragments/share';
+let shareFragment;
+
+/**
+ * Fetches the Share fragment once per page (started early on stories, before the header loads).
+ * @returns {Promise<string>} its HTML, or '' when there is none
+ */
+export function loadShareFragment() {
+  if (!shareFragment) {
+    shareFragment = fetch(`${SHARE_FRAGMENT_PATH}.plain.html`)
+      .then((resp) => (resp.ok ? resp.text() : ''))
+      .catch(() => '');
+  }
+  return shareFragment;
+}
+
 function buildArticleHeader(main) {
   const h1 = main.querySelector(':scope > div > h1');
   if (!h1 || main.querySelector('.article-header')) return;
+  loadShareFragment();
+  // a Share table authored in the story replaces the automatic one (moved into the header)
+  const authoredShare = main.querySelector(':scope > div > div.share');
+  if (authoredShare) {
+    const shareSection = authoredShare.parentElement;
+    authoredShare.remove();
+    if (shareSection !== h1.parentElement && !shareSection.textContent.trim()
+      && !shareSection.querySelector('picture, img, div')) shareSection.remove();
+  }
 
   const rows = ARTICLE_HEADER_FIELDS
     .map(([label, name]) => [label, getPageMetadata(name)])
@@ -197,7 +239,7 @@ function buildArticleHeader(main) {
 
   rows.push([h1]);
   if (hero) rows.push([hero]);
-  rows.push([buildBlock('share', '')]);
+  rows.push([authoredShare || buildBlock('share', '')]);
 
   const section = document.createElement('div');
   section.append(buildBlock('article-header', rows));
@@ -445,7 +487,8 @@ export function decorateFragmentIcons(root) {
     }
     const link = img.closest('a');
     if (link && !link.textContent.trim() && !link.getAttribute('aria-label')) {
-      link.setAttribute('aria-label', link.title || ICON_LABELS[name] || name.replace(/-/g, ' '));
+      if (link.title) link.setAttribute('aria-label', link.title);
+      else applyPlaceholder(`Icon.${name}`, ICON_LABELS[name] || name.replace(/-/g, ' '), {}, (text) => link.setAttribute('aria-label', text));
     }
   });
 }
@@ -548,6 +591,14 @@ export function openExternalLinksInNewTab(root, sameSiteHosts = []) {
   });
 }
 
+export function decorateLinkTargets(root) {
+  root.querySelectorAll('.default-content-wrapper a[href$="#_blank"]').forEach((link) => {
+    link.hash = '';
+    link.target = '_blank';
+    link.relList.add('noopener');
+  });
+}
+
 /**
  * Decorates the main element.
  * @param {Element} main The main element
@@ -558,8 +609,19 @@ export function decorateMain(main) {
   buildAutoBlocks(main);
   decorateSections(main);
   decorateSectionMetadata(main);
+  if (toClassName(getPageMetadata('template')) === 'blog-article') {
+    main.querySelectorAll('.default-content-wrapper p:has(> picture) + p').forEach((p) => {
+      const emphasis = p.firstElementChild;
+      // :only-child ignores text nodes, so mixed prose must not become a caption.
+      if (p.children.length === 1 && emphasis?.tagName === 'EM'
+        && p.textContent.trim() === emphasis.textContent.trim()) {
+        p.classList.add('article-image-caption');
+      }
+    });
+  }
   decorateBlocks(main);
   decorateButtons(main);
+  decorateLinkTargets(main);
 }
 
 /**
@@ -573,6 +635,8 @@ async function loadEager(doc) {
   // so add the template class through the case-insensitive lookup as well
   const template = toClassName(getPageMetadata('template'));
   if (template) document.body.classList.add(template);
+  // Article width: wide - the story text uses the full content width (some source stories)
+  if (toClassName(getPageMetadata('article-width')) === 'wide') document.body.classList.add('article-wide');
   // theme tokens load in parallel with decoration and are applied before the first paint
   const themeLoaded = loadTheme(getTheme());
   const main = doc.querySelector('main');
@@ -622,7 +686,7 @@ async function loadLazy(doc) {
  */
 function loadDelayed() {
   window.setTimeout(() => {
-    import('./consent.js').then(({ loadAnalytics }) => loadAnalytics());
+    import('./consent.js').then(({ loadAnalytics }) => loadAnalytics({ mode: getAnalyticsMode() }));
   }, 3000);
 }
 
@@ -633,3 +697,13 @@ async function loadPage() {
 }
 
 loadPage();
+
+/**
+ * Live preview in the Document Authoring editor (Preview tab):
+ * https://www.aem.live/docs/ew/authoring/live-preview. Loads only with ?dapreview.
+ */
+(async function loadDa() {
+  if (!new URL(window.location.href).searchParams.get('dapreview')) return;
+  // eslint-disable-next-line import/no-unresolved
+  import('https://da.live/scripts/dapreview.js').then(({ default: daPreview }) => daPreview(loadPage));
+}());

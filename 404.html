@@ -13,8 +13,48 @@
     window.errorCode = '404';
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" href="/favicons/bsc.png">
   <meta property="og:title" content="Page not found">
-  <script nonce="aem" src="/scripts/scripts.js" type="module"></script>
+  <!--
+    A 404 has no page metadata, so the site's /metadata row for /** (theme, analytics, consent, nav,
+    footer) is applied first: every brand site shows its own theme, header and footer on any domain.
+    When the site has an authored /fragments/errors/404, it replaces the default content below.
+  -->
+  <script nonce="aem" type="module">
+    try {
+      const resp = await fetch('/metadata.json');
+      if (resp.ok) {
+        const { data = [] } = await resp.json();
+        const site = data.find((row) => row.URL === '/**') || {};
+        Object.entries(site).forEach(([name, value]) => {
+          if (name === 'URL' || !value || document.head.querySelector(`meta[name="${name.toLowerCase()}"]`)) return;
+          const meta = document.createElement('meta');
+          meta.name = name.toLowerCase();
+          meta.content = value;
+          document.head.append(meta);
+        });
+      }
+    } catch (e) {
+      // no metadata: the page code falls back to the site name in the host
+    }
+    try {
+      const resp = await fetch('/fragments/errors/404.plain.html');
+      if (resp.ok) {
+        document.querySelector('main.error').innerHTML = '<div><div class="fragment"><div><div>'
+          + '<a href="/fragments/errors/404">/fragments/errors/404</a></div></div></div></div>';
+      }
+    } catch (e) {
+      // no authored 404: keep the default content
+    }
+    await import('/scripts/scripts.js');
+    // the default 404 texts from the placeholders sheet (an authored /fragments/errors/404 replaces them)
+    const { loadPlaceholders, placeholder } = await import('/scripts/placeholders.js');
+    const ph = await loadPlaceholders();
+    const message = document.querySelector('main.error .error-message');
+    if (message) message.textContent = placeholder(ph, 'Error.NotFound', message.textContent);
+    const home = document.querySelector('main.error .error-button-home');
+    if (home) home.textContent = placeholder(ph, 'Error.GoHome', home.textContent);
+  </script>
   <script nonce="aem" type="module">
     window.addEventListener('load', () => {
       if (document.referrer) {
@@ -25,8 +65,12 @@
           backBtn.href = pathname;
           backBtn.textContent = 'Go back';
           backBtn.title = 'Go back';
-          const btnContainer = document.querySelector('.button-container');
-          btnContainer.append(backBtn);
+          import('/scripts/placeholders.js').then(({ loadPlaceholders, placeholder }) => loadPlaceholders().then((ph) => {
+            backBtn.textContent = placeholder(ph, 'Error.GoBack', 'Go back');
+            backBtn.title = backBtn.textContent;
+          }));
+          const btnContainer = document.querySelector('main.error .button-container');
+          if (btnContainer) btnContainer.append(backBtn);
         }
       }
     });
@@ -43,12 +87,29 @@
       align-items: center;
     }
 
-    main.error .error-number {
+    /* the flex layout centres the message vertically; the section stays full width so the
+       content lines up with the header, like on every other page */
+    main.error > .section {
       width: 100%;
+    }
+
+    main.error .error-number {
+      width: 300px;
+      max-width: 100%;
     }
 
     main.error .error-number text {
       font-family: var(--font-mono);
+    }
+
+    /* the default message is the page's H1 but keeps the H2 look it always had */
+    main.error .error-message {
+      margin-bottom: var(--space-l);
+      font-family: var(--font-heading);
+      font-size: var(--heading-font-size-xl);
+      font-weight: var(--font-weight-heading);
+      letter-spacing: normal;
+      text-transform: none;
     }
   </style>
   <link rel="stylesheet" href="/styles/lazy-styles.css">
@@ -61,7 +122,7 @@
       <svg viewBox="1 0 38 18" class="error-number">
         <text x="0" y="17">404</text>
       </svg>
-      <h2 class="error-message">Page Not Found</h2>
+      <h1 class="error-message">Page Not Found</h1>
       <p class="button-container">
         <a href="/" class="button secondary error-button-home">Go home</a>
       </p>

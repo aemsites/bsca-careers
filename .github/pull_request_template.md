@@ -1,10 +1,17 @@
-Please always provide the [GitHub issue(s)](../issues) your PR is for, as well as test URLs where your change can be observed (before and after):
+Please always provide the Jira ticket your PR is for, as well as test URLs where your change can be observed (before and after):
 
-Fix #<gh-issue-id>
+Jira: ASCCAEM-<id>
+Fix #<gh-issue-id> (only if there is a GitHub issue; otherwise delete this line)
 
-Test URLs:
-- Before: https://main--bsca-careers--blueshieldca.aem.page/<path>
-- After: https://<branch>--bsca-careers--blueshieldca.aem.page/<path>
+Test URLs (feature PRs into `develop` use the Dev sites `<brand>-develop`; release PRs `develop` → `stage`
+use the Stage sites `<brand>-stage`, and `stage` → `main` the Prod sites; see RULES.md, "Branches and environments"):
+- Before: https://develop--bsca-careers-develop--blueshieldca.aem.page/<path>
+- After: https://<branch>--bsca-careers-develop--blueshieldca.aem.page/<path>
+
+Brand sites (one code base runs every brand site):
+- [ ] This change doesn't affect the other brand sites, or I checked it on each one (delete the ones you didn't check):
+  - Stellarus: https://<branch>--stellarus-careers-develop--blueshieldca.aem.page/careers
+  - Ascendiun: https://<branch>--ascendiun-careers-develop--blueshieldca.aem.page/careers
 
 Checklist (see [RULES.md](../blob/main/RULES.md)):
 - [ ] `npm run lint` passes

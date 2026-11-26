@@ -17,6 +17,7 @@ import {
   openExternalLinksInNewTab,
   resolveFragmentMedia,
 } from '../../scripts/scripts.js';
+import { loadPlaceholders, placeholder } from '../../scripts/placeholders.js';
 
 const SECTION_NAMES = ['brand', 'notice', 'links', 'social', 'utility', 'legal'];
 // sections whose off-site links open in a new tab (as on the source site)
@@ -62,40 +63,18 @@ function isConsentLink(a) {
     || a.textContent.trim().toLowerCase() === CONSENT_LABEL;
 }
 
-/** Opens the OneTrust preference center (any of the SDK globals, as in cookieprefs.js). */
-function openConsentPreferences() {
-  const sdk = [window.Optanon, window.OneTrust, window.Onetrust]
-    .find((candidate) => typeof candidate?.ToggleInfoDisplay === 'function');
-  sdk?.ToggleInfoDisplay();
-}
-
 /**
- * Wires "Cookie preferences" to the OneTrust preference center, as the client cookieprefs.js
- * does: a list item with that text and no link gets one; the link gets the OneTrust id,
- * classes and data-text. The click is handled here only (stopImmediatePropagation), so the
- * SDK's own `.ot-sdk-show-settings` handler cannot toggle the center closed again.
- * Pages without OneTrust (Stellarus) hide the item: there is no preference center to open.
+ * Prepares "Cookie preferences" for the client's scripts/cookieprefs.js, which opens the
+ * OneTrust preference center on click (loaded by scripts/consent.js with OneTrust): the link
+ * never navigates to a `javascript:` URL. Pages without OneTrust (Stellarus) hide the item:
+ * there is no preference center to open.
  * @param {Element} root
  */
 function wireConsentLinks(root) {
-  root.querySelectorAll('li').forEach((li) => {
-    if (li.querySelector('a') || li.textContent.trim().toLowerCase() !== CONSENT_LABEL) return;
-    const a = document.createElement('a');
-    a.textContent = li.textContent.trim();
-    li.replaceChildren(a);
-  });
   root.querySelectorAll('a').forEach((a) => {
     if (!isConsentLink(a)) return;
     a.setAttribute('href', '#cookie-preferences'); // never navigate to a javascript: URL
     a.setAttribute('role', 'button');
-    a.id = 'ot-cookie-pref';
-    a.classList.add('ot-link', 'ot-sdk-show-settings');
-    a.dataset.text = 'cookie-preferences';
-    a.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      openConsentPreferences();
-    });
     const item = a.closest('li') || a;
     const update = (state) => { item.hidden = state?.managed === false; };
     update(window.consentState);
@@ -125,7 +104,7 @@ function buildBand(name, children, tag = 'div') {
  * @param {Element} block The footer block element
  */
 export default async function decorate(block) {
-  const fragment = await fetchLayoutFragment('footer', '/footer');
+  const [fragment] = await Promise.all([fetchLayoutFragment('footer', '/footer'), loadPlaceholders()]);
   block.textContent = '';
   if (!fragment) return;
 
@@ -158,13 +137,13 @@ export default async function decorate(block) {
     const headingTag = document.body.classList.contains('stellarus') ? 'h3' : 'p';
     groupLinkLists(parts.links, headingTag);
   }
-  parts.social?.querySelector('ul')?.setAttribute('aria-label', 'Social media');
+  parts.social?.querySelector('ul')?.setAttribute('aria-label', placeholder(null, 'Footer.SocialMedia', 'Social media'));
 
   let utility = null;
   if (parts.utility) {
     utility = document.createElement('nav');
     utility.className = 'footer-utility';
-    utility.setAttribute('aria-label', 'Blue Shield of California');
+    utility.setAttribute('aria-label', placeholder(null, 'Footer.UtilityLinks', 'Blue Shield of California'));
     utility.append(...parts.utility.childNodes);
   }
 

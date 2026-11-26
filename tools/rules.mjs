@@ -21,16 +21,24 @@ import { existsSync, readFileSync } from 'node:fs';
 export const COMMIT_TYPES = [
   'feat', 'fix', 'chore', 'docs', 'style', 'refactor', 'test', 'perf', 'ci', 'build', 'revert',
 ];
-export const BRANCH_TYPES = ['feature', 'fix', 'hotfix', 'release', 'chore', 'docs', 'refactor'];
-const PROTECTED_BRANCH = 'main'; // blocked unless ALLOW_MAIN=1
+// `tools/*`: long-lived tooling branches outside the site code (Storybook, visual tests; RULES.md)
+export const BRANCH_TYPES = ['feature', 'fix', 'hotfix', 'release', 'chore', 'docs', 'refactor', 'tools'];
+// release branches: changed only through release pull requests (develop -> stage -> main);
+// direct pushes are blocked unless ALLOW_MAIN=1
+const PROTECTED_BRANCHES = ['main', 'stage'];
 const DIRECT_BRANCHES = ['develop']; // may be pushed without a <type>/ prefix
 const VENDORED = ['scripts/aem.js']; // blocked unless ALLOW_AEM_JS=1
-export const GENERATED_PATHS = ['storybook/storybook-static/', 'helix-importer-ui/']; // not linted
+export const GENERATED_PATHS = ['helix-importer-ui/']; // not linted
 const MAX_DESCRIPTION = 72;
 const MAX_HOST_LABEL = 63; // DNS label limit for <branch>--<repo>--<owner>.aem.page
-// extra sites on the same code (repoless): GitHub owner/repo -> more <repo>--<owner> labels
+// extra sites on the same code (repoless): GitHub owner/repo -> more <repo>--<owner> labels.
+// Every branch preview host must fit, so the longest label (the Dev sites,
+// ascendiun-careers-develop) sets the branch limit.
 const SITE_OVERRIDES = {
-  'aemsites/bsca-careers': ['bsca-careers--blueshieldca'],
+  'aemsites/bsca-careers': ['bsca-careers', 'stellarus-careers', 'ascendiun-careers']
+    .flatMap((site) => [site, `${site}-stage`, `${site}-develop`])
+    .map((site) => `${site}--blueshieldca`),
+  'nehaadobe/aca-careers-eds': ['ascendiun--nehaadobe'],
 };
 
 /* ---------- helpers ---------- */
@@ -147,8 +155,8 @@ function siteLabels(remoteUrl) {
  * @returns {string[]} problems (empty when valid)
  */
 export function branchProblems(branch, remoteUrl, env = process.env) {
-  if (branch === PROTECTED_BRANCH) {
-    return env.ALLOW_MAIN === '1' ? [] : [`pushing to "${PROTECTED_BRANCH}" is blocked: open a pull request (or set ALLOW_MAIN=1 if you really must)`];
+  if (PROTECTED_BRANCHES.includes(branch)) {
+    return env.ALLOW_MAIN === '1' ? [] : [`pushing to "${branch}" is blocked: open a pull request (or set ALLOW_MAIN=1 if you really must)`];
   }
   const problems = [];
   if (!DIRECT_BRANCHES.includes(branch)) {

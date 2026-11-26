@@ -27,12 +27,21 @@ The site runs on AEM Edge Delivery Services. Content is written in **Document Au
 | Brand | Pages | Theme | Preview example |
 | --- | --- | --- | --- |
 | Blue Shield of California | This DA site: https://da.live/#/blueshieldca/bsca-careers | `bsc` (default) | https://main--bsca-careers--blueshieldca.aem.page/ |
-| Stellarus | Its own DA site: https://da.live/#/blueshieldca/stellarus (`/careers`, `/nav`, `/footer`) | `stellarus` (for the whole site, in its `/metadata`) | https://main--stellarus--blueshieldca.aem.page/careers |
-| Ascendiun | Its own DA site: https://da.live/#/blueshieldca/ascendiun (`/careers`, `/nav`, `/footer`) | `ascendiun` (for the whole site, in its `/metadata`) | https://main--ascendiun--blueshieldca.aem.page/careers |
+| Stellarus | Its own DA site: https://da.live/#/blueshieldca/stellarus-careers (`/careers`, `/nav`, `/footer`) | `stellarus` (for the whole site, in its `/metadata`) | https://main--stellarus-careers--blueshieldca.aem.page/careers |
+| Ascendiun | Its own DA site: https://da.live/#/blueshieldca/ascendiun-careers (`/careers`, `/nav`, `/footer`) | `ascendiun` (for the whole site, in its `/metadata`) | https://main--ascendiun-careers--blueshieldca.aem.page/careers |
 
 Each brand site has its own `/nav`, `/footer`, `/metadata` and author library (`/tools/library`); all brands run
 the same code, so blocks and templates are the same everywhere. A brand site's header and footer are edited in
 that site only. The old `/stellarus/` and `/ascendiun/` folders here redirect to the brand sites.
+
+Every site has a **Stage** copy for trying changes before making them on the real site. Stage is previewed only
+(never published) and has analytics off:
+
+| Site | Stage in DA | Stage preview |
+| --- | --- | --- |
+| Blue Shield | https://da.live/#/blueshieldca/bsca-careers-stage | https://main--bsca-careers-stage--blueshieldca.aem.page/ |
+| Stellarus | https://da.live/#/blueshieldca/stellarus-careers-stage | https://main--stellarus-careers-stage--blueshieldca.aem.page/careers |
+| Ascendiun | https://da.live/#/blueshieldca/ascendiun-careers-stage | https://main--ascendiun-careers-stage--blueshieldca.aem.page/careers |
 
 Content source (Config Service): `content.da.live/blueshieldca/bsca-careers`. There is one language (English).
 
@@ -53,7 +62,25 @@ Content source (Config Service): `content.da.live/blueshieldca/bsca-careers`. Th
 5. Fill in the **Metadata** table at the bottom of the page.
 6. Click **Preview** and check the page. Then click **Publish**.
 
+## Links in New Tabs
+
+For a normal text link outside a block, add `#_blank` to its URL in DA's **Edit link** dialog to open it in a new tab. Preview and publish the page after editing. The site removes this marker from the destination and adds `target="_blank"` and `rel="noopener"`. Unmarked links keep their existing behavior. This convention does not apply to generated story cards or links rebuilt by blocks.
+
+For the Black Employee Network article, set these link URLs:
+
+| Link text | URL in DA |
+| --- | --- |
+| culture of belonging | `/a-culture-of-belonging#_blank` |
+| job opportunities | `/how-to-get-hired#_blank` |
+
+Relative paths keep navigation on the current site, including localhost and preview hosts. Use a full URL when the destination is another website. The marker replaces the URL fragment, so it cannot be combined with a section anchor.
+
 ## Content Organization
+
+On Blue Shield, a final **Centered, Narrow** section ending with a standalone image
+(as on A Culture of Belonging) keeps the live site's spacing above the image and before
+the footer. Keep the image in its own paragraph; no spacer paragraphs or extra final
+section break are needed. This layout does not change blog images or the other brands.
 
 | Folder / document | What it holds |
 | --- | --- |
@@ -74,13 +101,13 @@ the cursor.
 | Library tab | What it contains |
 | --- | --- |
 | **Blocks** | Every block with each of its variations (source: `/tools/library/blocks/`) |
-| **Templates** | Section landing page, Text page, Story article, Stellarus landing page |
-| **Icons** | Logos: bsc-logo, bsc-logo-white, bsc-shield (the shield on its own), stellarus-logo (the star), stellarus-logo-full (star + Stellarus wordmark), ascendiun-logo, ascendiun-logo-white. Social and UI: facebook, twitter, instagram, linkedin, glassdoor, search. Line icons: the client's 2026 set of 159 (e.g. `:calendar:`, `:graduation-cap:`, `:heart-check:`), shown in the text colour; see them all in Storybook (Foundations → Icons). Inserted as `:name:` (e.g. `:bsc-shield:`) |
+| **Templates** | Per site (see Page Templates): Blue Shield: Section landing page, Text page, Story article. Stellarus: Landing page, Text page. Ascendiun: Section landing page, Text page |
+| **Icons** | Logos: bsc-logo, bsc-logo-white, bsc-shield (the shield on its own), stellarus-logo (the star), stellarus-logo-full (star + Stellarus wordmark), ascendiun-logo, ascendiun-logo-white. Social and UI: facebook, twitter, instagram, linkedin, glassdoor, search. Line icons: the client's 2026 set of 159 (e.g. `:calendar:`, `:graduation-cap:`, `:heart-check:`), shown in the text colour; the library **Icons** tab lists them all. Inserted as `:name:` (e.g. `:bsc-shield:`) |
 | **Media** | Images already uploaded to Document Authoring |
 
 **Slash menu:** inside a block table, type `/` in a value cell to pick from the allowed values (for example
 Columns `2 | 3 | 4`, or the Roles list on a story). These lists live in the `options` tab of
-`/tools/library/blocks` and are the **same lists the blog filters use**, so you only maintain them in one place.
+`/tools/library/blocks`, so you only maintain them in one place.
 
 ## How blocks work
 
@@ -93,7 +120,13 @@ A block is a table. The first row holds the block name, with the variation in br
 - Optional rows and cells can be left out.
 - Buttons: put the link alone in its own paragraph and format it. **Bold** = solid button, _italic_ =
   outline button, **_bold and italic_** = high-impact button. An unformatted link stays a text link.
+- Bold and italic together in text shows as bold, upright (Fieldwork DemiBold), as the Blue Shield
+  brand book asks; italic inside a Blue Shield heading is upright too. For editorial italics, use
+  italic alone (Fieldwork Light Italic). Stellarus keeps its italics.
 - Always write alt text on images (right-click the image → alt text).
+
+Story image captions are fully italic paragraphs directly after an image. A paragraph with
+non-italic text alongside an italic phrase remains body text.
 
 ## Available Blocks
 
@@ -101,8 +134,8 @@ A block is a table. The first row holds the block name, with the variation in br
 
 | Block | Purpose | Variations | How to author |
 | --- | --- | --- | --- |
-| **Hero** | Page-opening image with a headline and button | `home` (home page, full image with headline), `centered` (centered text without an image, used on Stellarus). Section page headers are **Columns (curve)** | Row 1: background image (leave empty for `centered`). Row 2: H1 heading, optional paragraphs, and an optional button link in its own paragraph |
-| **Banner** | Heading, text and button over a background image | `locations` (navy band, office locations), `statement` (large statement text over an image), `image-cta` ("View our job opportunities" band) | Row 1: background image. Row 2: H2 heading, paragraphs, and a button link in its own paragraph |
+| **Hero** | Page-opening image with a headline and button | `home` (home page, full image with headline), `centered` (centered text without an image, used on Stellarus). Section page headers are **Columns (curve)** | Row 1: background image (leave empty for `centered`). Row 2: H1 heading, optional paragraphs, and an optional button link in its own paragraph. Any heading level or a plain paragraph still shows over the photo (white, each in its own size), but use **H1** for the page title: it is the page's main heading for search and screen readers |
+| **Banner** | Heading, text and button over a background image | `locations` (navy band, office locations), `statement` (large statement text over an image), `image-cta` ("View our job opportunities" band) | Row 1: background image. Row 2: H2 heading, paragraphs, and a button link in its own paragraph. Any heading level (H1-H6) shows in the band's light text colour |
 | **Gallery** | Edge-to-edge row of photos; the middle one is wider | none | One row per image; the cell holds the image and an optional caption. Photos are display-only: links are ignored (client decision) |
 
 ### Content blocks
@@ -114,7 +147,8 @@ A block is a table. The first row holds the block name, with the variation in br
 | **Accordion** | Expandable questions and answers (FAQ) | none | One row per item: question (plain text) in the first cell, answer (paragraphs, lists, links) in the second |
 | **Quote** | Employee quotation with a round portrait | none | Row 1: portrait (optional). Row 2: the quotation. Row 3: name and role |
 | **Table** | Data table, or a bordered callout box | `no-header` (no header row). A table with a **single cell** becomes a callout box | One block row per table row, one cell per column. The first row is the header unless `no-header` is set |
-| **Image** | Story image that the text wraps around | `left`, `right` | One cell: the picture, optionally followed by an italic caption. Place it between paragraphs; the text that follows wraps beside it |
+| **Image** | Story image that the text wraps around | `left`, `right`; size `small` (200px), `large` (600px) or `width-<px>` (exact width, e.g. `width-300`); `no-wrap` (the text that follows starts below the image) | One cell: the picture, optionally followed by an italic caption. Place it between paragraphs; the text that follows wraps beside it, unless the block has `no-wrap` |
+| **Text** | Story text with an alignment (e.g. right-aligned sign-offs), or a pull-quote box | `right`, `center`; `box` (light-blue panel), `float-left` (a third wide, the photo and text beside it) | One cell with the paragraphs; place it between story paragraphs |
 | **Embed** | Responsive 16:9 video | `video` (MP4 file, used as story hero video) | Row 1: poster image (optional). Row 2: the link (`.mp4` for `video`, or a YouTube / Vimeo URL). Shortcut: a YouTube or Vimeo URL pasted alone on its own line becomes a video automatically |
 | **Fragment** | Reuse content from another document | none | One cell with the path of the document to include, e.g. `/drafts/fragments/find-your-next-role`. A link to a `/fragments/` path on its own also becomes a fragment |
 
@@ -123,9 +157,9 @@ A block is a table. The first row holds the block name, with the variation in br
 | Block | Purpose | Variations | How to author |
 | --- | --- | --- | --- |
 | **Article List** | Curated cards for chosen stories ("More Stories" on every story, "Growth & development stories") | Set by option rows (below) | One row per story with a single cell: a story link (`/blog/<name>`), any other site page (e.g. `/how-to-get-hired`), or an off-site story URL listed in the `external-stories` sheet. Add option rows as needed |
-| **Story Listing** | The searchable, filterable, paginated story grid on `/blog` | none | Settings only, as key / value rows (below). Cards, filters and paging are built automatically |
+| **Story Listing** | The searchable, sortable, paginated story grid on `/blog` (no Roles / Topics filters) | none | Settings only, as key / value rows (below). Search, sort, cards and paging are built automatically |
 | **Article Header** | Story header: Roles/Topics links, title, date, author line, share links and hero | none | **Not authored.** Built automatically on pages with Template `blog-article` from the page metadata, the H1 and the image or video right after it |
-| **Share** | Share links (LinkedIn, Facebook, X) | none | Added automatically inside the Article Header. If authored on another page: one cell with the label ("Share"), or an empty cell for the default label. The icons are drawn when the page is previewed or published, so in the editor the block shows only its label |
+| **Share** | Share or social links (icons) with a title | none | Added automatically inside the Article Header; a Share table on the page (title row, `:icon:` + link rows, `shareShow`, `sharePosition`) replaces it, and `/fragments/share` sets the site default. See "Share buttons and author byline". Icons are drawn on preview and live, not in the editor |
 
 **Article List options** (two-cell rows; type `/` in the value cell for the allowed values):
 
@@ -137,23 +171,24 @@ A block is a table. The first row holds the block name, with the variation in br
 | Display Short description | Yes, No | Yes | Show the story's Description on the card |
 | Link Label | any text, or No | "View highlights" on Tinted/Dark, none on Light | Text of the card link label (not in the slash menu; type it) |
 
-The heading ("More Stories") and a "View More Stories" link go **above** the block as normal text; they are
-not part of it. Cards are filled in from the story index, so a story only shows up after it has been
+The heading ("More Stories") and, if wanted, a link such as "View More Stories" go **above** the block as normal
+text; they are not part of it. The "Growth & development stories" row on `/growth-development` has no
+"View More Stories" link (removed at the client's request, November 2026). Cards are filled in from the story index, so a story only shows up after it has been
 **published** (see Troubleshooting).
 
 **Story Listing settings** (all optional; the `/blog` page already has them):
 
 | Key | Value | Default |
 | --- | --- | --- |
-| Filters | Which filters to show | Roles, Topics |
 | Page Size | Stories per page | 9 |
 | Sort | Newest, Oldest, Title A-Z, Title Z-A | Newest |
-| Roles / Topics | Fixed dropdown values (normally leave out: the library option lists are used) | library `options` tab |
 | External Stories | Sheet with off-site stories | `/blog/external-stories.json` |
-| Search Label, Search Placeholder, Filter Label, Clear Label, Sort Label, Roles Label, Topics Label, No Results | Replacement text for the on-screen labels | built-in text |
+| Search Label, Search Placeholder, Sort Label, No Results | Replacement text for the on-screen labels | built-in text |
 
-Visitors can share a filtered view: the address keeps the search, filters, sort and page
-(`/blog?role=Finance&page=2`).
+The blog has no Roles or Topics filters (removed at the client's request, November 2026). Visitors search and
+sort; the address keeps the search, sort and page (`/blog?q=intern&page=2`), so a view can be shared. Links to
+filtered views (`/blog?role=…`, `/blog?topic=…`, such as the Roles / Topics links above a story's title, or old
+`/blog?c=…` links) open the full list.
 
 ### Site-wide and library-only blocks
 
@@ -175,19 +210,26 @@ shows in white). Sections are separated with `---`.
 | `/nav` | 1. Utility links (bulleted list). 2. Brand: logo image, then the "Careers" link. 3. Main menu (bulleted list; a nested list under an item makes it a dropdown). 4. The call-to-action link |
 | `/footer` | 1. Logo. 2. Notice: heading and paragraphs. 3. Link groups: a bold label followed by a bulleted list, per group. 4. Social: a bulleted list of linked icons (`:facebook:`, `:linkedin:` …). 5. Utility links. 6. Copyright paragraph |
 
-A footer link to `#cookie-preferences` opens the cookie preference center. A page can use a different header
+The **Cookie preferences** item in the footer utility links opens the cookie preference center. Blue Shield's
+cookie script finds it by its text, so keep it as a list item whose text is exactly `Cookie preferences`
+(capitals do not matter), linked to `#cookie-preferences`. Renamed or translated, it no longer opens anything.
+On Stellarus, which has no cookie banner, the item is hidden. A page can use a different header
 or footer with the `nav` / `footer` metadata (not needed today).
+
+On preview links (`aem.page`) the cookie banner and preference center come from Blue Shield's OneTrust **test**
+setup; its layout can differ from the live site. Check their look on the `aem.live` link or the production domain.
 
 ## Page Templates
 
-Insert a template from **Library** → **Templates**, then replace the sample content.
+Insert a template from **Library** → **Templates**, then replace the sample content. Each site (and its Stage site)
+has only the starters that fit it; their sample photos are stored in the site's `/tools/library/templates/media/`.
 
 | Template | Use for | Contains | Required metadata |
 | --- | --- | --- | --- |
-| **Story article** | A new employee story in `/blog/` | H1, hero image (or an Embed (video) block) right after the H1, story text, "More Stories" heading and an Article List | Title, Description, **Template = blog-article**, Roles, Topics, Publication Date, Author, Author Title, Image |
-| **Section landing page** | Pages like Life at Blue Shield or How to Get Hired | Columns (curve) page header, a centered intro section, content sections, Banner (image-cta) | Title, Description, Image |
-| **Text page** | Simple text pages (e.g. Why Relocate) | H1, paragraphs, lists | Title, Description |
-| **Stellarus landing page** | Pages in the Stellarus DA site | Hero (centered) with the two buttons | Title, Description (the theme comes from the site's `/metadata`) |
+| **Story article** (Blue Shield) | A new employee story in `/blog/` | H1, hero image (or an Embed (video) block) right after the H1, story text, "More Stories" heading and an Article List | Title, Description, **Template = blog-article**, Roles, Topics, Publication Date, Author, Author Title, Image |
+| **Section landing page** (Blue Shield, Ascendiun) | Pages like Life at Blue Shield or How to Get Hired | Columns (curve) page header, a centered intro section, content sections, Banner (image-cta) | Title, Description, Image |
+| **Text page** (all sites) | Simple text pages (e.g. Why Relocate) | H1, paragraphs, lists | Title, Description |
+| **Landing page** (Stellarus) | Pages in the Stellarus DA site | Hero (centered) with the two buttons | Title, Description (the theme comes from the site's `/metadata`) |
 
 **Story video hero:** put an **Embed (video)** block directly after the H1, with the poster image in row 1 and
 the MP4 link in row 2. (The "Hero video" field offered in the metadata slash menu is not used; ignore it.)
@@ -207,6 +249,8 @@ end of it:
 | `light-blue` | Rounded light-blue panel around the section's text (on stories: a full-width band) |
 | `blue` | Brand blue band with white text |
 | `two-up` | Offered in the slash menu but has **no visible effect** at the moment |
+| `narrow` | A 960px reading column on wide screens (normal width below 1200px), as the resource groups on /a-culture-of-belonging |
+| `centered-mobile` | Headings centered below 992px; text and lists stay left, and everything is left-aligned on desktop (as the /why-relocate title) |
 
 Several styles can be combined with a comma: `light-blue, centered`.
 
@@ -220,7 +264,10 @@ Every page ends with a **Metadata** block. Type `/` in a value cell for the allo
 | Description | Yes | Search result text and the card text in story lists | One or two sentences |
 | Image | Recommended | Share image (social networks) and story card image. Replace the picture to change it | 1200×630 image |
 | Template | Stories | `blog-article` turns on the story layout and the automatic Article Header | `blog-article` |
-| Roles | Stories | Role tags: shown above the title and used by the blog Roles filter. Several: separate with commas | `Finance, Operations` |
+| Article width | Rarely | `wide`: the story text uses the full page width (the title stays narrow), for stories that are wide on the old site | `wide` |
+| Share | Rarely | `off` hides the Share buttons on the story (default `on`) | `off` |
+| Share position | Rarely | `left`, `right` or `center`. Default: right of the author byline, or left under the date when the story has no author | `right` |
+| Roles | Stories | Role tags: shown above the title and kept in the story index. Several: separate with commas | `Finance, Operations` |
 | Topics | Stories | Topic tags, same as Roles | `Life at Blue Shield` |
 | Publication Date | Stories | Date shown on the story and its cards, and used for sorting | `2026-10-13` |
 | Author | Stories | Author name(s). Several: separate with `;` | `Jane Doe; John Roe` |
@@ -228,10 +275,29 @@ Every page ends with a **Metadata** block. Type `/` in a value cell for the allo
 | Author Image | Optional | Author photo URL, one per author, separated by `;` | |
 | Theme | Rarely | Overrides the brand theme from the folder | `stellarus` |
 | nav / footer | Rarely | Use another header / footer document | `/nav` |
+| Analytics | Rarely | Adobe Analytics (CJA): `off` turns it off on the page, `staging` uses the Launch staging library, `on` or empty is the normal production tracking. See "Turn analytics (CJA) on or off" | `off` |
+| Consent | Rarely | `off` removes the cookie banner **and** analytics from the page; `on` forces the banner | `off` |
 
 Roles and Topics must use the exact values from the library lists (the slash menu shows them). To add a new
 Role or Topic, ask an administrator to add it to the `options` tab of `/tools/library/blocks` and preview it;
-it then appears in the slash menu **and** in the blog filters.
+it then appears in the slash menu.
+
+### Turn analytics (CJA) on or off
+
+Analytics (Adobe Launch, which sends the data to Customer Journey Analytics) runs on pages with the cookie banner
+(Blue Shield and Ascendiun) once the visitor has made a cookie choice: **Continue** on the banner, or saving
+their **Cookie preferences** (whatever they chose there; turning cookies off blocks YouTube only). This is how
+Blue Shield's cookie script works on the live site. Authors control it with the **Analytics** metadata value:
+
+| To change | Where | What to set |
+| --- | --- | --- |
+| One page | The page's **Metadata** block: add a row `Analytics` | `off`, `staging` or `on`, then Preview and Publish the page |
+| A folder or the whole site | The site's `/metadata` sheet: add a column `analytics`; one row per folder (`URL` such as `/drafts/**` or `/**`) | The same values, then Preview and Publish `/metadata`, and ask an administrator to re-index the site (publishing `/metadata` clears the index fields) |
+
+A value on the page wins over the sheet. `Consent: off` also turns analytics off (no cookie banner means no
+consent). The Stage and Dev sites (`<brand>-careers-stage`, `<brand>-careers-develop`) set `analytics: off`
+for `/**`, so test visits stay out of the production reports. The Ascendiun production site
+(`ascendiun-careers`) also has `analytics: off` for `/**` until Ascendiun confirms its cookie and analytics setup.
 
 ## Configuration Sheets
 
@@ -256,6 +322,15 @@ the change to apply.
 **Workflow:** edit in Document Authoring → **Preview** → check → **Publish**. Many pages at once:
 https://da.live/apps/bulk.
 
+**See it while you edit:** the editor's **Preview** tab (top right, above **Versions**) shows the page as you type,
+in mobile, tablet, laptop and desktop sizes. In a few cases (around 2%) it can differ from the real page; when in
+doubt, use **Preview** in the Sidekick. Only for the Document Authoring editor (`da.live/edit#…`); the newer
+Experience Workspace editor (`#canvas`) has a layout view instead.
+
+**Version history:** every document and sheet keeps its versions. Open the **Versions** (or **History**) tab on the
+right to see earlier versions and restore one. Restoring changes the document only; preview and publish again to
+change the site.
+
 **Story index:** the blog listing and every Article List read a story index that is updated **only when a page
 is published**. A new or changed story appears in the listing and in "More Stories" after you publish it, not
 after preview.
@@ -265,7 +340,7 @@ after preview.
 | Task | Steps |
 | --- | --- |
 | **Add a story** | `/blog` → New document → insert the **Story article** template → write the story → fill Metadata (Template `blog-article`, Roles, Topics, Publication Date, Author, Image) → Preview → Publish |
-| **Add an off-site story** | Upload the card image (JPG or PNG, 1200 x 630) to the `/blog/external-images` folder, named after the story (e.g. `women-transforming-health-care-jane-doe.jpg`) → Preview and publish the image → add a row to `/blog/external-stories` with the article link (without tracking parameters such as `utm_…`) and the image path `/blog/external-images/<name>.jpg` → Preview and publish the sheet |
+| **Add an off-site story** | Upload the card image (JPG or PNG, 1200 x 630) to the `/blog/external-images` folder, named after the story (e.g. `women-transforming-health-care-jane-doe.jpg`) → Preview and publish the image → add a row to `/blog/external-stories` with the article link (without tracking parameters such as `utm_…`) and the image path `/blog/external-images/<name>.jpg` → if the article is a video, put `Yes` in the row's **`video`** column (the card then shows the play badge on /blog and in More Stories; empty = no) → Preview and publish the sheet |
 | **Change "More Stories" on a story** | Edit the Article List rows (one story link per row) → Preview → Publish |
 | **Edit a page** | Open it → change → Preview → Publish |
 | **Delete or move a page** | Add a row to `/redirects` first → delete or move the document → preview and publish `/redirects` |
@@ -285,6 +360,14 @@ after preview.
 Best practices: descriptive file names, alt text on every image, a 1200×630 share image for each page. Images
 are resized and compressed automatically.
 
+- **Upload images into Document Authoring** (drag and drop or **Add image**); they're stored in a hidden folder next
+  to the document (e.g. `.life-at-blue-shield/`). Don't paste image links from other websites: the page then depends
+  on that site, and the image disappears from the next preview if it's removed there.
+- **Alt text:** describe what the photo shows (right-click → alt text). Leave it empty only for decorative images
+  such as icons next to a heading that already says the same thing.
+- **Links to our own pages:** use the site path (e.g. `/growth-development`) or the full production URL, never a
+  preview address (`…aem.page`).
+
 ### Ascendiun brand rules for authors
 
 From the Ascendiun Brand Guidelines. The theme already applies the colours, fonts and logo sizes; these are
@@ -298,13 +381,109 @@ the choices that are up to you:
 | Bold | Body copy is not bolded. Use bold (DemiBold) only for subheads and to call out an important detail such as a phone number or web address |
 | Colour | Digital Blue is reserved for links and calls to action. Don't use it for headings or decoration |
 
+### Share buttons and author byline
+
+Every story gets a Share row automatically under the title. Authors change it without code with a **Share** table:
+
+| Share | |
+| --- | --- |
+| Share | |
+| :facebook: | https://www.facebook.com/BlueShieldCA |
+| :linkedin: | https://www.linkedin.com/company/blue-shield-of-california |
+| :twitter: | https://twitter.com/BlueShieldCA |
+| shareShow | on |
+| sharePosition | right |
+
+- **Title row** (one cell): the text before the icons. Empty or missing: the placeholder `Share.Label` ("Share").
+- **Icon rows**: an icon (`:facebook:`, `:linkedin:`, `:twitter:`, `:x:` or any icon from the Icons library) or a pasted
+  image, then a link. The rows set the order; delete a row to drop that icon. Links open in a new tab exactly as typed
+  (`facebook.com` gets `https://`). They are plain links: to share the page, put `{url}` (and `{title}`) in the link,
+  e.g. `https://www.linkedin.com/sharing/share-offsite/?url={url}`, `https://www.facebook.com/sharer/sharer.php?u={url}`,
+  `https://x.com/intent/tweet?url={url}&text={title}`. Facebook, LinkedIn, Twitter and X keep the built-in round icons.
+- **`shareShow`**: `on` or `off`. **`sharePosition`**: `left`, `right` or `center`. Names are not case-sensitive
+  (`share show`, `show`, `share position`, `position` also work).
+- **Every row is optional.** Without any Share table the row shows LinkedIn, Facebook and X *share* links for the page.
+
+Which setting wins, strongest first:
+
+1. A Share table in the story itself (it is moved into the story header and replaces the automatic row);
+2. page metadata `Share` (on / off) and `Share position`;
+3. the site default: the Share table on the page **`/fragments/share`** (all stories of that site);
+4. the built-in default (shown; right of the author byline, or left under the date without an author; LinkedIn,
+   Facebook and X share links).
+
+Title and icon rows follow the same order (page table, then `/fragments/share`, then built-in); page metadata only sets
+on/off and position. On other pages a Share table shows where it is placed, aligned by its own `sharePosition`.
+
+**Site default:** create the page `/fragments/share` with only this table, then preview and publish it; every story of
+the site uses it. The byline comes from `Author`, `Author Title` and `Author Image` (several authors separated by
+semicolons, in the same order).
+
+### Page not found (404)
+
+Each site shows its own theme, header and footer on its "page not found" page. To write the message, create a
+document **`/fragments/errors/404`** in your site (for example a heading such as "We can't find that page", a
+sentence and a button link to the home page or open positions), then Preview and Publish it. Without that document
+the default "404 / Page Not Found / Go home" content is shown. Each brand site (Blue Shield, Stellarus,
+Ascendiun, Stage) has its own.
+
+
+## Placeholders: interface text
+
+Labels, buttons and screen-reader texts that the site code adds (not page content) come from the sheet
+**`/placeholders/global`** in each site (columns `Key` and `Value`). The code keeps the text below as the
+default, so a missing sheet, key or empty value changes nothing. Preview and publish the sheet after a change;
+each site (Blue Shield, Stellarus, Ascendiun, Stage) has its own sheet. `{name}` parts are filled in by the
+code (keep them). Keys are not case-sensitive. A value authored in a block (e.g. a Story Listing
+`Search Label` row) wins over the sheet.
+
+| Key | Default | Where |
+| --- | --- | --- |
+| `Global.SearchLabel` | Search Blogs | Blog listing: search label and search button |
+| `Global.SearchPlaceholder` | Search Blog | Blog listing: text inside the search box |
+| `Blog.SortLabel` | Sort By | Blog listing: sort title |
+| `Blog.SortNewest` | Newest | Blog listing: sort option |
+| `Blog.SortOldest` | Oldest | Blog listing: sort option |
+| `Blog.SortTitleAZ` | Title A-Z | Blog listing: sort option |
+| `Blog.SortTitleZA` | Title Z-A | Blog listing: sort option |
+| `Blog.ResultsPaged` | Showing {start}–{end} of {total} {noun} | Blog listing: results count (screen readers) with several pages |
+| `Blog.ResultsAll` | {total} {noun} | Blog listing: results count on one page |
+| `Blog.StoryOne` | story | Blog listing: {noun} for 1 result |
+| `Blog.StoryMany` | stories | Blog listing: {noun} for several results |
+| `Blog.NoResults` | No stories match your search. Try different keywords. | Blog listing: nothing matches |
+| `Blog.NoStories` | No stories are available right now. | Blog listing: the story index could not be loaded |
+| `Blog.PreviousPage` | Previous page | Blog listing: pagination (screen readers) |
+| `Blog.NextPage` | Next page | Blog listing: pagination (screen readers) |
+| `Blog.PageNumber` | Page {page} | Blog listing: pagination numbers (screen readers) |
+| `Stories.ViewHighlights` | View highlights | More Stories cards: link label (tinted / dark rows) |
+| `Share.Label` | Share | Story pages: share row label |
+| `Share.LinkLabel` | Share on {network} (opens in a new tab) | Story pages: share links (screen readers) |
+| `Share.OpenLabel` | {network} (opens in a new tab) | Share table plain links without `{url}` (screen readers) |
+| `Video.Play` | Play video | Video tiles: name of the play button / title |
+| `Video.PlayTitled` | Play video: {title} | Video tiles and embeds: play button with the video title |
+| `Video.Download` | Download the video | MP4 videos: fallback link |
+| `Video.ConsentText` | This video is hosted by {provider}. Accept cookies to play it here, or | YouTube/Vimeo without cookie consent: notice |
+| `Video.ConsentLink` | watch it on {provider} | YouTube/Vimeo notice: link |
+| `Video.ConsentEnd` | (opens in a new tab). | YouTube/Vimeo notice: end |
+| `Header.OpenNavigation` | Open navigation | Header: menu button (screen readers) |
+| `Header.CloseNavigation` | Close navigation | Header: menu button when open |
+| `Header.MainNavigation` | Main | Header: navigation name (screen readers) |
+| `Header.Home` | Home | Header: logo link without a name |
+| `Header.Menu` | Menu | Header: mobile menu title |
+| `Footer.SocialMedia` | Social media | Footer: social links list (screen readers) |
+| `Footer.UtilityLinks` | Blue Shield of California | Footer: utility links (screen readers); set the brand name on brand sites |
+| `Icon.<icon-name>` | brand / network name | Icon-only links, e.g. Icon.linkedin = LinkedIn, Icon.bsc-logo = Blue Shield of California |
+| `Error.NotFound` | Page Not Found | 404 page (without an authored /fragments/errors/404) |
+| `Error.GoHome` | Go home | 404 page: home button |
+| `Error.GoBack` | Go back | 404 page: back button |
+
 ## Troubleshooting
 
 | Issue | Solution |
 | --- | --- |
 | A new story is missing from the blog listing or "More Stories" | Publish it: the story index only includes published pages. Check that Template is `blog-article` |
 | A story card has no image or text | Check the story's Image and Description metadata, then publish it again |
-| A Role or Topic is missing from the filters | The value must exist in the library `options` tab, and the tab must be previewed/published |
+| A Role or Topic is missing from the slash menu | The value must exist in the library `options` tab, and the tab must be previewed/published |
 | Page not updating after publish | Wait 1-2 minutes, then hard refresh (Cmd/Ctrl + Shift + R) |
 | A block looks like a plain table | Check the block name and variation spelling in the first row |
 | A button shows as a plain link | Put the link alone in its own paragraph and make it bold (solid) or italic (outline) |
