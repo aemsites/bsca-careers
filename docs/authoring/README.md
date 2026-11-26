@@ -107,7 +107,7 @@ the cursor.
 
 **Slash menu:** inside a block table, type `/` in a value cell to pick from the allowed values (for example
 Columns `2 | 3 | 4`, or the Roles list on a story). These lists live in the `options` tab of
-`/tools/library/blocks` and are the **same lists the blog filters use**, so you only maintain them in one place.
+`/tools/library/blocks`, so you only maintain them in one place.
 
 ## How blocks work
 
@@ -157,7 +157,7 @@ non-italic text alongside an italic phrase remains body text.
 | Block | Purpose | Variations | How to author |
 | --- | --- | --- | --- |
 | **Article List** | Curated cards for chosen stories ("More Stories" on every story, "Growth & development stories") | Set by option rows (below) | One row per story with a single cell: a story link (`/blog/<name>`), any other site page (e.g. `/how-to-get-hired`), or an off-site story URL listed in the `external-stories` sheet. Add option rows as needed |
-| **Story Listing** | The searchable, filterable, paginated story grid on `/blog` | none | Settings only, as key / value rows (below). Cards, filters and paging are built automatically |
+| **Story Listing** | The searchable, sortable, paginated story grid on `/blog` (no Roles / Topics filters) | none | Settings only, as key / value rows (below). Search, sort, cards and paging are built automatically |
 | **Article Header** | Story header: Roles/Topics links, title, date, author line, share links and hero | none | **Not authored.** Built automatically on pages with Template `blog-article` from the page metadata, the H1 and the image or video right after it |
 | **Share** | Share or social links (icons) with a title | none | Added automatically inside the Article Header; a Share table on the page (title row, `:icon:` + link rows, `shareShow`, `sharePosition`) replaces it, and `/fragments/share` sets the site default. See "Share buttons and author byline". Icons are drawn on preview and live, not in the editor |
 
@@ -171,23 +171,24 @@ non-italic text alongside an italic phrase remains body text.
 | Display Short description | Yes, No | Yes | Show the story's Description on the card |
 | Link Label | any text, or No | "View highlights" on Tinted/Dark, none on Light | Text of the card link label (not in the slash menu; type it) |
 
-The heading ("More Stories") and a "View More Stories" link go **above** the block as normal text; they are
-not part of it. Cards are filled in from the story index, so a story only shows up after it has been
+The heading ("More Stories") and, if wanted, a link such as "View More Stories" go **above** the block as normal
+text; they are not part of it. The "Growth & development stories" row on `/growth-development` has no
+"View More Stories" link (removed at the client's request, November 2026). Cards are filled in from the story index, so a story only shows up after it has been
 **published** (see Troubleshooting).
 
 **Story Listing settings** (all optional; the `/blog` page already has them):
 
 | Key | Value | Default |
 | --- | --- | --- |
-| Filters | Which filters to show | Roles, Topics |
 | Page Size | Stories per page | 9 |
 | Sort | Newest, Oldest, Title A-Z, Title Z-A | Newest |
-| Roles / Topics | Fixed dropdown values (normally leave out: the library option lists are used) | library `options` tab |
 | External Stories | Sheet with off-site stories | `/blog/external-stories.json` |
-| Search Label, Search Placeholder, Filter Label, Clear Label, Sort Label, Roles Label, Topics Label, No Results | Replacement text for the on-screen labels | built-in text |
+| Search Label, Search Placeholder, Sort Label, No Results | Replacement text for the on-screen labels | built-in text |
 
-Visitors can share a filtered view: the address keeps the search, filters, sort and page
-(`/blog?role=Finance&page=2`).
+The blog has no Roles or Topics filters (removed at the client's request, November 2026). Visitors search and
+sort; the address keeps the search, sort and page (`/blog?q=intern&page=2`), so a view can be shared. Links to
+filtered views (`/blog?role=…`, `/blog?topic=…`, such as the Roles / Topics links above a story's title, or old
+`/blog?c=…` links) open the full list.
 
 ### Site-wide and library-only blocks
 
@@ -266,7 +267,7 @@ Every page ends with a **Metadata** block. Type `/` in a value cell for the allo
 | Article width | Rarely | `wide`: the story text uses the full page width (the title stays narrow), for stories that are wide on the old site | `wide` |
 | Share | Rarely | `off` hides the Share buttons on the story (default `on`) | `off` |
 | Share position | Rarely | `left`, `right` or `center`. Default: right of the author byline, or left under the date when the story has no author | `right` |
-| Roles | Stories | Role tags: shown above the title and used by the blog Roles filter. Several: separate with commas | `Finance, Operations` |
+| Roles | Stories | Role tags: shown above the title and kept in the story index. Several: separate with commas | `Finance, Operations` |
 | Topics | Stories | Topic tags, same as Roles | `Life at Blue Shield` |
 | Publication Date | Stories | Date shown on the story and its cards, and used for sorting | `2026-10-13` |
 | Author | Stories | Author name(s). Several: separate with `;` | `Jane Doe; John Roe` |
@@ -279,7 +280,7 @@ Every page ends with a **Metadata** block. Type `/` in a value cell for the allo
 
 Roles and Topics must use the exact values from the library lists (the slash menu shows them). To add a new
 Role or Topic, ask an administrator to add it to the `options` tab of `/tools/library/blocks` and preview it;
-it then appears in the slash menu **and** in the blog filters.
+it then appears in the slash menu.
 
 ### Turn analytics (CJA) on or off
 
@@ -440,10 +441,6 @@ code (keep them). Keys are not case-sensitive. A value authored in a block (e.g.
 | --- | --- | --- |
 | `Global.SearchLabel` | Search Blogs | Blog listing: search label and search button |
 | `Global.SearchPlaceholder` | Search Blog | Blog listing: text inside the search box |
-| `Blog.FilterLabel` | Filter Posts | Blog listing: filters title |
-| `Blog.Filter.roles` | Roles | Blog listing: first option of the Roles filter |
-| `Blog.Filter.topics` | Topics | Blog listing: first option of the Topics filter |
-| `Blog.ClearFilters` | Clear Filters | Blog listing: link that resets the filters |
 | `Blog.SortLabel` | Sort By | Blog listing: sort title |
 | `Blog.SortNewest` | Newest | Blog listing: sort option |
 | `Blog.SortOldest` | Oldest | Blog listing: sort option |
@@ -453,7 +450,7 @@ code (keep them). Keys are not case-sensitive. A value authored in a block (e.g.
 | `Blog.ResultsAll` | {total} {noun} | Blog listing: results count on one page |
 | `Blog.StoryOne` | story | Blog listing: {noun} for 1 result |
 | `Blog.StoryMany` | stories | Blog listing: {noun} for several results |
-| `Blog.NoResults` | No stories match your search. Try different keywords or clear the filters. | Blog listing: nothing matches |
+| `Blog.NoResults` | No stories match your search. Try different keywords. | Blog listing: nothing matches |
 | `Blog.NoStories` | No stories are available right now. | Blog listing: the story index could not be loaded |
 | `Blog.PreviousPage` | Previous page | Blog listing: pagination (screen readers) |
 | `Blog.NextPage` | Next page | Blog listing: pagination (screen readers) |
@@ -486,7 +483,7 @@ code (keep them). Keys are not case-sensitive. A value authored in a block (e.g.
 | --- | --- |
 | A new story is missing from the blog listing or "More Stories" | Publish it: the story index only includes published pages. Check that Template is `blog-article` |
 | A story card has no image or text | Check the story's Image and Description metadata, then publish it again |
-| A Role or Topic is missing from the filters | The value must exist in the library `options` tab, and the tab must be previewed/published |
+| A Role or Topic is missing from the slash menu | The value must exist in the library `options` tab, and the tab must be previewed/published |
 | Page not updating after publish | Wait 1-2 minutes, then hard refresh (Cmd/Ctrl + Shift + R) |
 | A block looks like a plain table | Check the block name and variation spelling in the first row |
 | A button shows as a plain link | Put the link alone in its own paragraph and make it bold (solid) or italic (outline) |

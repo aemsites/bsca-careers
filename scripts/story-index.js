@@ -18,7 +18,8 @@ export const STORY_SOURCES = {
   exclude: ['/blog', '/blog/authors', '/blog/search'],
 };
 
-/** The story listing page and its URL filter parameter per story field. */
+/** The story listing page, and the URL parameter per story field used by the category links
+ * above a story's title (the listing no longer filters by them: it lists every story). */
 export const STORY_LISTING = {
   path: '/blog',
   params: { roles: 'role', topics: 'topic' },
@@ -143,25 +144,6 @@ export function fetchSheet(url) {
   if (!url) return Promise.resolve([]);
   if (!sheetCache.has(url)) sheetCache.set(url, fetchAllRows(url));
   return sheetCache.get(url);
-}
-
-/**
- * Reads the authored values of one key from the library block-options sheet
- * (key | blocks | values | type | label), the same list authors pick from in the
- * slash menu. "Label=value" entries resolve to their value. Resolves to [] when
- * the sheet or the key is missing.
- * @param {string} url e.g. /tools/library/blocks.json?sheet=options
- * @param {string} key e.g. roles
- * @returns {Promise<string[]>}
- */
-export async function loadOptionValues(url, key) {
-  const rows = await fetchSheet(url);
-  const row = rows.find((r) => normalizeText(r.key) === normalizeText(key));
-  if (!row) return [];
-  return String(row.values || '')
-    .split('|')
-    .map((item) => item.split('=').pop().trim())
-    .filter(Boolean);
 }
 
 /** `video` cell of a sheet row (column name in any case): yes, true, x or 1. */
@@ -289,26 +271,18 @@ export function createStoryLookup(stories) {
 }
 
 /**
- * Filters stories by keyword (every word must appear in the title or
- * description) and by facet values (AND across facets, case-insensitive).
+ * Filters stories by keyword: every word must appear in the title or description.
  * @param {object[]} stories
  * @param {object} criteria
  * @param {string} [criteria.query]
- * @param {Object<string, string>} [criteria.facets] e.g. { roles: 'Finance' }
  * @returns {object[]}
  */
-export function filterStories(stories, { query = '', facets = {} } = {}) {
+export function filterStories(stories, { query = '' } = {}) {
   const words = normalizeText(query).split(' ').filter(Boolean);
-  const active = Object.entries(facets)
-    .filter(([, value]) => value)
-    .map(([key, value]) => [key, normalizeText(value)]);
+  if (!words.length) return stories;
   return stories.filter((story) => {
-    if (words.length) {
-      const haystack = normalizeText(`${story.title} ${story.description}`);
-      if (!words.every((word) => haystack.includes(word))) return false;
-    }
-    return active.every(([key, value]) => (story[key] || [])
-      .some((item) => normalizeText(item) === value));
+    const haystack = normalizeText(`${story.title} ${story.description}`);
+    return words.every((word) => haystack.includes(word));
   });
 }
 
