@@ -28,7 +28,8 @@ export const BRANCH_TYPES = ['feature', 'fix', 'hotfix', 'release', 'chore', 'do
 const PROTECTED_BRANCHES = ['main', 'stage'];
 const DIRECT_BRANCHES = ['develop']; // may be pushed without a <type>/ prefix
 const VENDORED = ['scripts/aem.js']; // blocked unless ALLOW_AEM_JS=1
-export const GENERATED_PATHS = ['helix-importer-ui/']; // not linted
+// tools/storybook: the Storybook build output is generated as well
+export const GENERATED_PATHS = ['storybook/storybook-static/', 'helix-importer-ui/']; // not linted
 const MAX_DESCRIPTION = 72;
 const MAX_HOST_LABEL = 63; // DNS label limit for <branch>--<repo>--<owner>.aem.page
 // extra sites on the same code (repoless): GitHub owner/repo -> more <repo>--<owner> labels.
