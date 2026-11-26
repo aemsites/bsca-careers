@@ -13,3 +13,4 @@ migration-work/*
 default-query.yaml
 default-sitemap.yaml
 tools/rules.mjs
+e2e/*
