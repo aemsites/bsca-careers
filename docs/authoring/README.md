@@ -209,8 +209,14 @@ shows in white). Sections are separated with `---`.
 | `/nav` | 1. Utility links (bulleted list). 2. Brand: logo image, then the "Careers" link. 3. Main menu (bulleted list; a nested list under an item makes it a dropdown). 4. The call-to-action link |
 | `/footer` | 1. Logo. 2. Notice: heading and paragraphs. 3. Link groups: a bold label followed by a bulleted list, per group. 4. Social: a bulleted list of linked icons (`:facebook:`, `:linkedin:` …). 5. Utility links. 6. Copyright paragraph |
 
-A footer link to `#cookie-preferences` opens the cookie preference center. A page can use a different header
+The **Cookie preferences** item in the footer utility links opens the cookie preference center. Blue Shield's
+cookie script finds it by its text, so keep it as a list item whose text is exactly `Cookie preferences`
+(capitals do not matter), linked to `#cookie-preferences`. Renamed or translated, it no longer opens anything.
+On Stellarus, which has no cookie banner, the item is hidden. A page can use a different header
 or footer with the `nav` / `footer` metadata (not needed today).
+
+On preview links (`aem.page`) the cookie banner and preference center come from Blue Shield's OneTrust **test**
+setup; its layout can differ from the live site. Check their look on the `aem.live` link or the production domain.
 
 ## Page Templates
 
@@ -277,8 +283,10 @@ it then appears in the slash menu **and** in the blog filters.
 
 ### Turn analytics (CJA) on or off
 
-Analytics (Adobe Launch, which sends the data to Customer Journey Analytics) runs on Blue Shield and Ascendiun
-pages after the visitor accepts cookies. Authors control it with the **Analytics** metadata value:
+Analytics (Adobe Launch, which sends the data to Customer Journey Analytics) runs on pages with the cookie banner
+(Blue Shield and Ascendiun) once the visitor has made a cookie choice: **Continue** on the banner, or saving
+their **Cookie preferences** (whatever they chose there; turning cookies off blocks YouTube only). This is how
+Blue Shield's cookie script works on the live site. Authors control it with the **Analytics** metadata value:
 
 | To change | Where | What to set |
 | --- | --- | --- |
@@ -286,8 +294,9 @@ pages after the visitor accepts cookies. Authors control it with the **Analytics
 | A folder or the whole site | The site's `/metadata` sheet: add a column `analytics`; one row per folder (`URL` such as `/drafts/**` or `/**`) | The same values, then Preview and Publish `/metadata`, and ask an administrator to re-index the site (publishing `/metadata` clears the index fields) |
 
 A value on the page wins over the sheet. `Consent: off` also turns analytics off (no cookie banner means no
-consent). The Stage sites (`bsca-careers-stage`, `stellarus-careers-stage`, `ascendiun-careers-stage`) set
-`analytics: off` for `/**`, so test visits stay out of the production reports.
+consent). The Stage and Dev sites (`<brand>-careers-stage`, `<brand>-careers-develop`) set `analytics: off`
+for `/**`, so test visits stay out of the production reports. The Ascendiun production site
+(`ascendiun-careers`) also has `analytics: off` for `/**` until Ascendiun confirms its cookie and analytics setup.
 
 ## Configuration Sheets
 
