@@ -8,6 +8,8 @@ no Storybook.
 - References are captured **only** from LIVE, **only** with `npm run visual:baseline`.
 - Comparisons visit **only** the site under test and **never** write or update references.
 - A missing reference fails and prints the exact capture command.
+- The site under test is shown with **LIVE's fonts** (see "LIVE fonts on the site under test"), so the
+  comparisons measure layout and spacing, not the font change from Proxima Nova to Fieldwork.
 
 ## Requirements
 
@@ -132,11 +134,30 @@ Every case runs the same preparation on both sides (`visual/stabilize.js`):
 
 1. Block the approved hosts below before navigating.
 2. Navigate and check the status, final origin and path. A 429 or 503 is retried up to 3 times, honoring `Retry-After`, within a 60s budget.
+   On the site under test only, add LIVE's fonts (next section).
 3. Wait for the application to be ready.
 4. Turn off animations, transitions, the text caret and smooth scrolling, and pause any audio or video.
 5. Scroll in bounded steps to trigger lazy loading. Fail if the page keeps growing past 40,000px.
 6. Wait for every rendered image and for the web fonts in use. Any broken image or required font that failed to load is an error.
 7. Return to the top and park the pointer.
+
+**LIVE fonts on the site under test** (`visual/live-fonts.js`). LIVE sets its text in Adobe Fonts
+(kit `wcg8bju`: Proxima Nova, Trade Gothic Next Condensed); the new site uses Fieldwork. Before the
+readiness and font waits, the suite adds LIVE's kit stylesheet (`https://use.typekit.net/wcg8bju.css`)
+to the page under test and points the site's font tokens (`styles/brand.css`) at the LIVE fonts:
+
+| Token | LIVE value | Site value |
+|---|---|---|
+| `--font-body`, `--font-heading` | `proxima-nova` | Fieldwork |
+| `--font-display` (large uppercase headings) | `trade-gothic-next-condensed` | Fieldwork |
+| `--font-weight-body` | 400 | 300 |
+| `--font-weight-display` | 500 (the kit's 700 face, as on LIVE) | 600 |
+
+Sizes, line heights and letter spacing already match LIVE and are not touched. The site code is not
+changed, LIVE reference captures never get this step, and nothing is applied when LIVE itself is the site
+under test. Consequence: **font changes on the new site are not caught**; the tests compare layout and spacing.
+No font files are committed: the fonts are licensed and served by Adobe Fonts, which only serves the
+kit's allowed domains (it serves `http://localhost:3000` and the `*.aem.page` previews, checked November 2026).
 
 **Blocked hosts** (`visual/config.js`), applied to both sides:
 
@@ -212,7 +233,7 @@ A baseline capture prints "Baseline capture: N reference screenshot(s) approved"
 | `[missing-baseline]` | Run the printed `visual:baseline` command (with the same `--grep`/`--project`). |
 | `[stale-baseline]` | Settings, browser or case definition changed since capture. Recapture the affected cases, or delete `visual/__screenshots__` and recapture everything. |
 | `[readiness] Broken images` | A rendered image failed to load on the site under test, e.g. Document Authoring image URLs (`content.da.live`) return 401 to the local preview. |
-| `[readiness] Web fonts failed` | A font used by rendered text failed to load. Adobe Fonts only serves allowed domains; check the kit's domain list. |
+| `[readiness] Web fonts failed` | A font used by rendered text failed to load. Adobe Fonts only serves allowed domains: if `proxima-nova` or `trade-gothic-next-condensed` fail on the site under test, the test host must be added to the allowed domains of kit `wcg8bju` (Blue Shield's Adobe Fonts project). |
 | `[navigation] HTTP 404` | The page doesn't exist on the target, e.g. not yet uploaded and previewed in Document Authoring. |
 | `[size]` / `[pixels]` | A real visual difference. Open the report's diff. If LIVE content changed, review and recapture. |
 | HTTP 429/503 | Rate limiting; the suite retries within a budget. Lower `VISUAL_WORKERS`. |

@@ -1,10 +1,13 @@
 /**
  * Shared page preparation, applied identically to LIVE (reference) and the site under test.
  * Every step waits for an explicit DOM/asset condition and throws a VisualError on failure.
+ * One exception: the site under test gets LIVE's fonts (live-fonts.js), so the comparison
+ * measures layout, not the font change.
  */
 
 import { CAPTURE_SETTINGS } from './config.js';
 import { VisualError } from './errors.js';
+import { applyLiveFonts } from './live-fonts.js';
 
 const RETRYABLE = [429, 503];
 const MAX_NAV_ATTEMPTS = 4;
@@ -217,7 +220,8 @@ export async function settleFrame(page) {
 }
 
 /**
- * Full preparation pipeline. Same steps on both sides.
+ * Full preparation pipeline. Same steps on both sides, plus LIVE's fonts on the site under
+ * test (not when LIVE itself is the site under test: that runs with side "reference").
  * @returns {Promise<void>}
  */
 export async function preparePage(page, {
@@ -225,6 +229,7 @@ export async function preparePage(page, {
 }) {
   await installRequestBlocking(page);
   await gotoChecked(page, url, expectedStatus);
+  if (side === 'actual') await applyLiveFonts(page);
   await waitForAppReady(page, side, readySelector);
   await freezeMotion(page);
   await settleLazyContent(page);
