@@ -54,6 +54,17 @@ const TEMPLATE_NAMES = {
 };
 
 const read = (file) => fs.readFileSync(file, 'utf8');
+/**
+ * A sheet from the content export (metadata, external stories, library). Some exports have the
+ * pages but not the sheets: then the current fixture is kept as it is (returns null).
+ */
+const readSheet = (rel) => {
+  const file = path.join(CONTENT, rel);
+  if (fs.existsSync(file)) return read(file);
+  // eslint-disable-next-line no-console
+  console.warn(`fixtures: ${rel} is not in the content export; keeping the current fixture`);
+  return null;
+};
 const write = (file, text) => {
   fs.mkdirSync(path.dirname(file), { recursive: true });
   fs.writeFileSync(file, text);
@@ -110,6 +121,12 @@ function metadata(html) {
 /** Page fixture: relative media (./media/x.png) points at the copied fixture media. */
 function copyPage(rel, toDir) {
   const html = withIcons(read(path.join(CONTENT, `${rel}.plain.html`)));
+  // a page saved from the Document Authoring source keeps content.da.live image addresses, which
+  // need a sign-in: Storybook cannot show them (export the page again, or check its fixture)
+  if (html.includes('https://content.da.live/')) {
+    // eslint-disable-next-line no-console
+    console.warn(`fixtures: ${rel} has content.da.live images (they need a sign-in and do not load in Storybook)`);
+  }
   const dir = path.posix.dirname(rel) === '.' ? '' : `/${path.posix.dirname(rel)}`;
   const fixed = html.replace(/(src|srcset)="\.\/media\//g, `$1="/fixtures/${toDir}${dir}/media/`);
   write(path.join(PUBLIC, 'fixtures', toDir, `${rel}.plain.html`), fixed);
@@ -166,16 +183,26 @@ function storiesFile({
 // --- shared documents and media -------------------------------------------------------------
 ['nav', 'footer', 'stellarus/nav', 'stellarus/footer'].forEach((doc) => write(path.join(PUBLIC, `${doc}.plain.html`), withIcons(read(path.join(CONTENT, `${doc}.plain.html`)))));
 // bulk metadata: brand folders with their own header and footer (e.g. /stellarus/** -> /stellarus/nav)
-write(path.join(PUBLIC, 'metadata.json'), read(path.join(CONTENT, 'metadata.json')));
+const bulkMetadata = readSheet('metadata.json');
+if (bulkMetadata !== null) write(path.join(PUBLIC, 'metadata.json'), bulkMetadata);
 copyDir(path.join(CONTENT, 'media-da'), path.join(PUBLIC, 'media-da'));
 // shared fragments, at their site paths (the Fragment block example includes one)
 copyDir(path.join(CONTENT, 'drafts/fragments'), path.join(PUBLIC, 'drafts/fragments'));
 
 // --- sheets ---------------------------------------------------------------------------------
-write(path.join(PUBLIC, 'blog/external-stories.json'), read(path.join(CONTENT, 'blog/external-stories.json')));
-const library = JSON.parse(read(path.join(CONTENT, 'tools/library/blocks.json')));
-write(path.join(PUBLIC, 'tools/library/blocks.json'), sheet(library.data.data));
-library[':names'].forEach((name) => write(path.join(PUBLIC, `tools/library/blocks.${name}.json`), sheet(library[name].data)));
+const externalStories = readSheet('blog/external-stories.json');
+if (externalStories !== null) write(path.join(PUBLIC, 'blog/external-stories.json'), externalStories);
+// the library's block list (name per example page): from the export, else the current fixture
+const librarySheet = readSheet('tools/library/blocks.json');
+let libraryRows;
+if (librarySheet !== null) {
+  const library = JSON.parse(librarySheet);
+  libraryRows = library.data.data;
+  write(path.join(PUBLIC, 'tools/library/blocks.json'), sheet(libraryRows));
+  library[':names'].forEach((name) => write(path.join(PUBLIC, `tools/library/blocks.${name}.json`), sheet(library[name].data)));
+} else {
+  libraryRows = JSON.parse(read(path.join(PUBLIC, 'tools/library/blocks.json'))).data;
+}
 
 // --- indexes (same columns as default-query.yaml) --------------------------------------------
 const blogRows = [];
@@ -214,7 +241,7 @@ write(path.join(PUBLIC, 'blog/query-index.json'), sheet(blogRows));
 write(path.join(PUBLIC, 'sitemap.json'), sheet(siteRows));
 
 // --- block stories --------------------------------------------------------------------------
-const libraryNames = Object.fromEntries(library.data.data.map((r) => [r.path.split('/').pop(), r.name]));
+const libraryNames = Object.fromEntries(libraryRows.map((r) => [r.path.split('/').pop(), r.name]));
 clearDir(path.join(PUBLIC, 'fixtures/blocks'));
 clearDir(path.join(STORIES, 'blocks'));
 const blockDir = path.join(CONTENT, 'tools/library/blocks');

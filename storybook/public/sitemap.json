@@ -1,7 +1,7 @@
 {
-  "total": 88,
+  "total": 89,
   "offset": 0,
-  "limit": 88,
+  "limit": 89,
   "data": [
     {
       "path": "/a-culture-of-belonging",
@@ -27,7 +27,7 @@
       "path": "/blog",
       "title": "Our people",
       "description": "What we stand for sets us apart. Our people bring us together. Get to know us. Get to know more about life at Blue Shield of California.",
-      "image": "https://iprsoftwaremedia.com/399/files/20222/622fa566b3aed30a89b12b55_blog-hero-image/blog-hero-image_hero.jpg?v=af34ae8d-9a43-4dee-8812-da6a85301695",
+      "image": "https://content.da.live/blueshieldca/bsca-careers/.blog/blog-hero-image-hero.jpg",
       "template": "",
       "robots": "",
       "lastModified": "1793417274",
@@ -804,10 +804,20 @@
       "theme": ""
     },
     {
+      "path": "/fragments/errors/404",
+      "title": "",
+      "description": "",
+      "image": "",
+      "template": "",
+      "robots": "",
+      "lastModified": "1793417274",
+      "theme": ""
+    },
+    {
       "path": "/growth-development",
       "title": "Growth & development programs",
       "description": "Every career at Blue Shield of California offers an opportunity for growth. Once you're here, you'll have the opportunity to plan your career, take advantage of our development opportunities, and grow personally, professionally, and financially.",
-      "image": "https://iprsoftwaremedia.com/399/files/20233/6434af29b3aed30eda1dd7b9_BSC-UCD-DEI-Event-22/BSC-UCD-DEI-Event-22_hero.jpg?v=427da1d9-8944-4c8a-92c8-2f0e024a1c04",
+      "image": "https://content.da.live/blueshieldca/bsca-careers/.growth-development/bsc-ucd-dei-event-22-hero.jpg",
       "template": "",
       "robots": "",
       "lastModified": "1793417274",
