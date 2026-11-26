@@ -112,6 +112,8 @@ async function startConsent({ enabled }) {
   };
   loadCSS(BANNER_CSS_URL);
   loadCSS(`${window.hlx.codeBasePath}/styles/onetrust.css`);
+  // SDK rem spacing at this site's 10px root size (the client's onetrust.css stays as delivered)
+  loadCSS(`${window.hlx.codeBasePath}/styles/onetrust-rem.css`);
   try {
     const domainScript = await getDomainScript();
     await loadScript(`https://cdn.cookielaw.org/consent/${domainScript}/OtAutoBlock.js`, { type: 'text/javascript' });

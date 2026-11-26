@@ -1,0 +1,28 @@
+/*
+ * OneTrust preference center: the SDK styles size some spacing in rem, which assumes a 16px
+ * root font size; this site's root is 10px (62.5%), so those spacings came out 37.5% smaller
+ * than on careers.blueshieldca.com. These rules restore the SDK values in px (rem x 16).
+ * Kept apart from styles/onetrust.css, the client's file, which stays as delivered.
+ * `#onetrust-consent-sdk` raises specificity above the SDK styles, which load later.
+ */
+
+/* category row: 0.7rem 0 */
+#onetrust-consent-sdk #onetrust-pc-sdk .ot-vs-config .ot-acc-hdr {
+  padding: 11.2px 0;
+}
+
+/* category title and toggle / arrow column: 0 0.5rem */
+#onetrust-consent-sdk #onetrust-pc-sdk .ot-vs-config .ot-acc-hdr .ot-cat-header,
+#onetrust-consent-sdk #onetrust-pc-sdk .ot-vs-config .ot-acc-hdr div:last-child {
+  margin-inline: 8px;
+}
+
+/* close button: margin-bottom 1rem */
+#onetrust-consent-sdk #onetrust-pc-sdk #close-pc-btn-handler {
+  margin-bottom: 16px;
+}
+
+/* privacy link in the description: not underlined, as on careers.blueshieldca.com */
+#onetrust-consent-sdk #onetrust-pc-sdk #ot-pc-desc a {
+  text-decoration: none;
+}
