@@ -111,7 +111,8 @@
     },
     {
       "files": [
-        "styles/onetrust.css"
+        "styles/onetrust.css",
+        "styles/onetrust-rem.css"
       ],
       "rules": {
         "scale-unlimited/declaration-strict-value": null

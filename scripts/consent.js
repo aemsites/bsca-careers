@@ -2,8 +2,13 @@ import { loadCSS, loadScript } from './aem.js';
 import getConfigValue from './configs.js';
 
 /**
- * Consent (OneTrust) and analytics (Adobe Launch for CJA), kept off the critical path as the
- * aem.live performance guidance asks for third-party tools (FAQ, "Keeping it 100"):
+ * Consent (OneTrust) and analytics (Adobe Launch for CJA) with the files Blue Shield delivered,
+ * used as delivered: scripts/onetrust.js, scripts/cookieprefs.js and styles/onetrust.css. Their
+ * HEAD.HTML snippet (Launch, OtAutoBlock.js and the SDK stub with the same IDs, onetrust.css) is
+ * loaded from here instead of head.html: the head is shared by every brand site, and the site's
+ * CSP blocks document.write and scripts without the nonce.
+ * Kept off the critical path as the aem.live performance guidance asks for third-party tools
+ * (FAQ, "Keeping it 100"):
  * - initConsent: OneTrust (OtAutoBlock.js, then the SDK stub, which pulls in the banner),
  *   started by scripts.js after the page has loaded (end of loadLazy), not before LCP;
  * - loadAnalytics: Adobe Launch, started by scripts.js in the delayed phase (3s after load),
@@ -97,6 +102,8 @@ async function startConsent({ enabled }) {
   }
   // Blue Shield OneTrust wrapper: defines window.OptanonWrapper before the SDK loads
   await import('./onetrust.js');
+  // Blue Shield "Cookie preferences" footer link (it waits for the footer if needed)
+  import('./cookieprefs.js');
   // the Blue Shield wrapper first, then the consent state for this site's blocks
   const brandWrapper = window.OptanonWrapper;
   window.OptanonWrapper = () => {
@@ -105,6 +112,8 @@ async function startConsent({ enabled }) {
   };
   loadCSS(BANNER_CSS_URL);
   loadCSS(`${window.hlx.codeBasePath}/styles/onetrust.css`);
+  // SDK rem spacing at this site's 10px root size (the client's onetrust.css stays as delivered)
+  loadCSS(`${window.hlx.codeBasePath}/styles/onetrust-rem.css`);
   try {
     const domainScript = await getDomainScript();
     await loadScript(`https://cdn.cookielaw.org/consent/${domainScript}/OtAutoBlock.js`, { type: 'text/javascript' });
