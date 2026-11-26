@@ -8,7 +8,6 @@ test/*
 sync-block-collection.sh
 catalog/*
 site-scope/*
-e2e/*
 docs/*
 migration-work/*
 default-query.yaml
