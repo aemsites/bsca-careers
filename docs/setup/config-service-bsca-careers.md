@@ -7,7 +7,7 @@ Authoring, so the site runs at `https://{branch}--bsca-careers--blueshieldca.aem
 | | Value |
 | --- | --- |
 | Organization / site | `blueshieldca` / `bsca-careers` (the same names as in Document Authoring, so the DA Preview and Publish buttons reach this site) |
-| Code | GitHub `aemsites/bsca-careers` (branches `develop` → Dev, `stage` → Stage, `main` → Prod, see §7; also `storybook`) |
+| Code | GitHub `aemsites/bsca-careers` (branches `develop` → Dev, `stage` → Stage, `main` → Prod, see §7; tooling branches `tools/storybook` and `tools/visual-testing` are not site code, see RULES.md) |
 | Content | Document Authoring `blueshieldca/bsca-careers` (`https://content.da.live/blueshieldca/bsca-careers`) |
 | Reference | The working site `nehaadobe/aca-careers-eds` has the same settings with the old names |
 
