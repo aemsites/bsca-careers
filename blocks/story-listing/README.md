@@ -1,12 +1,14 @@
 # story-listing
 
-Custom **story-listing** block. Purpose: Searchable, filterable, sortable and paginated grid of employee stories.
+Custom **story-listing** block. Purpose: Searchable, sortable and paginated grid of employee stories.
+
+The Roles and Topics filters were removed at the client's request (November 2026): visitors search and sort only.
 
 ## Authoring (Document Authoring)
 
 Model: `standalone`
 
-Single block table. Content: Configuration only: two-cell key | value rows (read with readBlockConfig). Cards, filters and pagination are built at runtime from the site query index merged with the external-stories sheet.
+Single block table. Content: Configuration only: two-cell key | value rows (read with readBlockConfig). Search, sort, cards and pagination are built at runtime from the site query index merged with the external-stories sheet.
 
 Off-site stories (`/blog/external-stories`) with **`video: Yes`** (also `yes`, `true`, `x`, `1`) show the play badge on their image in the listing cards; an empty `video` cell means no badge.
 
@@ -24,17 +26,15 @@ N/A (Document Authoring project)
 
 | Key | Value |
 | --- | --- |
-| Filters | Comma-separated facets to show (default: Roles, Topics) |
 | Page Size | Stories per page (default: 9) |
 | Sort | Default sort: Newest, Oldest, Title A-Z or Title Z-A (default: Newest) |
-| Roles | Comma-separated Roles dropdown options; if omitted, read from the library options sheet (row `roles`), else derived from the stories |
-| Topics | Comma-separated Topics dropdown options; if omitted, read from the library options sheet (row `topics`), else derived from the stories |
-| Filter Values | Options sheet for Roles/Topics (default `/tools/library/blocks.json?sheet=options`). The same rows feed the authoring slash menu, so authors keep one list. |
 | Index | Optional query index URL (default: /blog/query-index.json) |
 | External Stories | Optional external stories sheet URL (default: /blog/external-stories.json) |
 | Path | Optional path prefix for index entries (default: /blog/) |
 | Exclude | Optional comma-separated listing paths to drop (default: /blog, /blog/authors, /blog/search) |
-| Search Label / Search Placeholder / Filter Label / Clear Label / Sort Label / Roles Label / Topics Label / No Results | Optional UI text overrides |
+| Search Label / Search Placeholder / Sort Label / No Results | Optional UI text overrides |
+
+Rows from the removed filters (`Filters`, `Roles`, `Topics`, `Filter Values`, `Filter Label`, `Clear Label`, `Roles Label`, `Topics Label`) are ignored.
 
 ## Data sources
 
@@ -42,4 +42,4 @@ N/A (Document Authoring project)
 - External stories: EDS sheet JSON with columns title, url, image, description, date, roles, topics; links open off-site in the same tab with rel=noopener.
   `image` is a path on this site (`/blog/external-images/<name>.jpg`, uploaded to that Document Authoring folder and previewed), so the card gets an optimized picture; images on other hosts are shown as plain, unoptimized images
 
-URL state: ?q=&role=&topic=&sort=&page= (defaults omitted); back/forward restores the view. Data loading lives in /scripts/story-index.js (loadStories, filterStories, sortStories) for reuse.
+URL state: ?q=&sort=&page= (defaults omitted); back/forward restores the view. Filter parameters (?role=, ?topic=, the previous site's ?c=), e.g. from the category links above a story's title, list every story and are dropped from the URL. Data loading lives in /scripts/story-index.js (loadStories, filterStories (keyword search), sortStories) for reuse.
