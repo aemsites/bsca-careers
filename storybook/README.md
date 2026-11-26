@@ -44,6 +44,12 @@ in the address with `&globals=brand:stellarus`.
 `npm run fixtures` reads `../content` (the local `.plain.html` export used by the local preview); it is not
 committed, so run it on a machine that has the content export, then commit the regenerated files.
 
+- Sheets missing from the export (`metadata.json`, `blog/external-stories.json`, `tools/library/blocks.json`)
+  keep their current fixture; the script says so.
+- A page saved from the Document Authoring source keeps `content.da.live` image addresses, which need a
+  sign-in and do not load in Storybook; the script warns. Keep that page's previous fixture (and apply the
+  content change to it), or export the page again from the site.
+
 ## Notes
 
 - Photos load from their original addresses (internet connection needed).

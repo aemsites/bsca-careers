@@ -4,7 +4,7 @@ import { frameStory } from '../../src/frame.js';
 export default {
   title: "Blocks/Quote",
   tags: ['autodocs'],
-  parameters: { docs: { description: { component: "Custom **quote** block. Purpose: Employee quotation with a circular portrait and attribution.\n\n## Authoring (Document Authoring)\n\nModel: `standalone`\n\nSingle block table. Content: row 1: portrait image (optional); row 2: quotation; row 3: attribution (name, role).\n\n## Supported variations\n\nNo variations.\n\n## Universal Editor fields\n\nN/A (Document Authoring project)\n" } } },
+  parameters: { docs: { description: { component: "Custom **quote** block. Purpose: Employee quotation with a circular portrait and attribution.\n\n## Authoring (Document Authoring)\n\nModel: `standalone`\n\nSingle block table. Content: row 1: portrait image (optional); row 2: quotation; row 3: attribution (name, role).\n\n## Supported variations\n\nNo variations.\n\n## Layout\n\nAdjacent Quote blocks in the same section stack below 900px and sit in centered columns from 900px. The section heading stays on its own row above the quotes, including on wide and ultrawide monitors. Portrait sizes and quotation typography are unchanged.\n\n## Universal Editor fields\n\nN/A (Document Authoring project)\n" } } },
 };
 
 export const Quote = {
