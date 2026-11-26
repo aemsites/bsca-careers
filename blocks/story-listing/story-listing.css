@@ -1,9 +1,9 @@
-/* Story listing: filter panel, story grid, pagination (source /blog .indexFilter, .tiles, .pagination) */
+/* Story listing: search and sort panel, story grid, pagination (source /blog .indexFilter, .tiles, .pagination) */
 .story-listing {
   color: var(--color-text);
 }
 
-/* Filter panel */
+/* Search and sort panel (the Roles / Topics filters were removed at the client's request) */
 .story-listing .story-listing-filters {
   display: flex;
   flex-direction: column;
@@ -21,30 +21,10 @@
   min-width: 0;
 }
 
-/* "Filter Posts" title with "Clear Filters" on the right; the link's taller line overhangs like the source float */
-.story-listing .story-listing-field-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: var(--space-m);
-  height: calc(var(--body-font-size-m) * var(--body-line-height));
-}
-
 .story-listing .story-listing-label {
   font-size: var(--body-font-size-m);
   font-weight: var(--font-weight-strong);
   line-height: var(--body-line-height);
-}
-
-.story-listing a.story-listing-clear:any-link {
-  flex: none;
-  color: var(--color-link);
-  font-weight: var(--font-weight-strong);
-  line-height: var(--story-filters-clear-line-height);
-}
-
-.story-listing a.story-listing-clear:hover {
-  color: var(--color-link-hover);
 }
 
 /* Search input with the submit button overlaying its right end */
@@ -165,12 +145,6 @@
   border-radius: var(--radius-hairline);
   background-color: currentcolor;
   transform: rotate(45deg);
-}
-
-.story-listing .story-listing-selects {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-s);
 }
 
 /* Results count: not shown on the source; kept for screen readers (role=status) */
@@ -334,14 +308,9 @@
 }
 
 @media (width >= 768px) {
-  /* Source md: groups still stacked, but the selects keep their own width and touch */
+  /* Source md: search and sort still stacked; the sort menu keeps its own width */
   .story-listing .story-listing-filters {
     padding-bottom: var(--story-filters-padding-block);
-  }
-
-  .story-listing .story-listing-selects {
-    align-items: flex-start;
-    gap: 0;
   }
 
   .story-listing .story-listing-select {
@@ -352,43 +321,22 @@
 }
 
 @media (width >= 992px) {
-  /* Source lg (Bootstrap col-lg-4 tiles): search on its own row, then facets and
-     sort; when sort wraps (below 1200px) it sits right under the facets */
+  /* Source lg (Bootstrap col-lg-4 tiles): search and sort on one row, 30px apart as on the
+     source; the search takes the remaining width, the sort menu sizes to its options */
   .story-listing .story-listing-filters {
-    flex-flow: row wrap;
-    justify-content: space-between;
-    gap: 0 var(--space-m);
-  }
-
-  .story-listing .story-listing-field {
-    flex: 0 1 auto;
-  }
-
-  .story-listing .story-listing-search {
-    flex: 0 0 100%;
-    margin-bottom: var(--space-m);
-  }
-
-  .story-listing .story-listing-selects {
-    flex-direction: row;
-    gap: var(--space-m);
-  }
-
-  .story-listing .story-listing-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (width > 1400px) {
-  /* All three filter groups on one row, 30px apart as on the source; the selects size to
-     their options and shrink a little to fit (the brand font is wider than the source's) */
-  .story-listing .story-listing-filters {
-    flex-wrap: nowrap;
+    flex-flow: row nowrap;
     column-gap: var(--space-l);
   }
 
   .story-listing .story-listing-search {
-    flex: 0 0 var(--story-search-width);
-    margin-bottom: 0;
+    flex: 1 1 auto;
+  }
+
+  .story-listing .story-listing-sort {
+    flex: 0 0 auto;
+  }
+
+  .story-listing .story-listing-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }

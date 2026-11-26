@@ -4,7 +4,6 @@ import {
   buildStoryImage,
   buildStoryTime,
   filterStories,
-  loadOptionValues,
   loadStories,
   sortStories,
   splitList,
@@ -14,25 +13,24 @@ import {
 import { loadPlaceholders, placeholder as placeholderText } from '../../scripts/placeholders.js';
 
 /**
- * Story listing block: searchable, filterable, sortable and paginated grid of
- * stories built at runtime from the site query index plus an external-stories
- * sheet. Authored content is configuration only (key | value rows):
+ * Story listing block: searchable, sortable and paginated grid of stories built at
+ * runtime from the site query index plus an external-stories sheet. Authored content
+ * is configuration only (key | value rows):
  *
- *   Filters | Roles, Topics          facets to show (each needs story data)
  *   Page Size | 9
  *   Sort | Newest                    Newest, Oldest, Title A-Z, Title Z-A
- *   Roles | A, B, C                  dropdown options; when not authored they come from
- *   Topics | A, B, C                   the library options sheet, else from the stories
- *   Filter Values | /tools/library/blocks.json?sheet=options   optional options sheet
  *   Index | /blog/query-index.json   optional
  *   External Stories | /blog/external-stories.json   optional
  *   Path | /blog/                    optional index path prefix
  *   Exclude | /blog, /blog/authors   optional listing pages to drop
- *   Search Label, Search Placeholder, Filter Label, Clear Label, Sort Label,
- *   Roles Label, Topics Label, No Results   optional UI text
+ *   Search Label, Search Placeholder, Sort Label, No Results   optional UI text
  *
- * State lives in the URL (?q=&role=&topic=&sort=&page=) so views are
- * shareable and back/forward restores them.
+ * There are no Roles / Topics filters (removed at the client's request). Filter
+ * parameters in a URL (?role=, ?topic=, the previous site's ?c=; e.g. from the
+ * category links above a story's title) list every story and are dropped from the URL.
+ *
+ * State lives in the URL (?q=&sort=&page=) so views are shareable and back/forward
+ * restores them.
  */
 
 const SORTS = [
@@ -52,90 +50,48 @@ function text(value, fallback = '') {
 
 function readConfig(block) {
   const raw = readBlockConfig(block);
-  const facetNames = splitList(raw.filters ?? 'Roles, Topics').map(toClassName).filter(Boolean);
-  const facets = facetNames.map((key) => ({
-    key,
-    param: STORY_LISTING.params[key] || key.replace(/s$/, ''),
-    label: text(raw[`${key}-label`], placeholderText(null, `Blog.Filter.${key}`, key.charAt(0).toUpperCase() + key.slice(1).replace(/-/g, ' '))),
-    options: splitList(raw[key]),
-  }));
   const pageSize = parseInt(text(raw['page-size']), 10);
   const sort = toClassName(text(raw.sort));
   return {
-    facets,
     pageSize: pageSize > 0 ? pageSize : 9,
     defaultSort: SORTS.some((s) => s.value === sort) ? sort : 'newest',
     index: text(raw.index, STORY_SOURCES.index),
     external: text(raw['external-stories'], STORY_SOURCES.external),
-    optionsSheet: text(raw['filter-values'], '/tools/library/blocks.json?sheet=options'),
     pathPrefix: text(raw.path, STORY_SOURCES.pathPrefix),
     exclude: raw.exclude ? splitList(raw.exclude) : STORY_SOURCES.exclude,
     labels: {
       search: text(raw['search-label'], placeholderText(null, 'Global.SearchLabel', 'Search Blogs')),
       placeholder: text(raw['search-placeholder'], placeholderText(null, 'Global.SearchPlaceholder', 'Search Blog')),
-      filter: text(raw['filter-label'], placeholderText(null, 'Blog.FilterLabel', 'Filter Posts')),
-      clear: text(raw['clear-label'], placeholderText(null, 'Blog.ClearFilters', 'Clear Filters')),
       sort: text(raw['sort-label'], placeholderText(null, 'Blog.SortLabel', 'Sort By')),
-      noResults: text(raw['no-results'], placeholderText(null, 'Blog.NoResults', 'No stories match your search. Try different keywords or clear the filters.')),
+      noResults: text(raw['no-results'], placeholderText(null, 'Blog.NoResults', 'No stories match your search. Try different keywords.')),
     },
   };
 }
 
-/** Legacy listing filter IDs from the previous site (/blog?c=<id>). */
-const LEGACY_CATEGORIES = {
-  28778: ['role', 'Commercial Markets'],
-  28786: ['role', 'Consumer Markets'],
-  28779: ['role', 'Customer Experience'],
-  28787: ['role', 'Finance'],
-  28780: ['role', 'Foundation'],
-  28788: ['role', 'Health Solutions'],
-  28781: ['role', 'Information Technology'],
-  28789: ['role', 'Innovation'],
-  28782: ['role', 'Law'],
-  28790: ['role', 'Marketing'],
-  28783: ['role', 'Medi-Cal'],
-  28784: ['role', 'Operations'],
-  28791: ['role', 'People and Engagement'],
-  28785: ['role', 'Promise Medical Clinics'],
-  28792: ['role', 'Transformation'],
-  29654: ['topic', 'Awards and Recognition'],
-  28798: ['topic', 'Blue Shield Foundation'],
-  29652: ['topic', 'Corporate Citizenship'],
-  28775: ['topic', 'Culture of Belonging'],
-  30058: ['topic', 'Employee Resource Groups'],
-  29653: ['topic', 'Growth and Development'],
-  28776: ['topic', 'Growth and Development Programs'],
-  28777: ['topic', 'Life at Blue Shield'],
-};
+/** Filter parameters of the removed Roles / Topics filters, incl. the previous site's ?c=<id>. */
+const REMOVED_FILTER_PARAMS = [...Object.values(STORY_LISTING.params), 'c'];
 
 /** Reads list state from the current URL, validated against the config. */
 function readState(config) {
   const params = new URLSearchParams(window.location.search);
   const sort = params.get('sort');
   const page = parseInt(params.get('page'), 10);
-  const facets = {};
-  config.facets.forEach((facet) => {
-    const legacy = params.getAll('c')
-      .map((id) => LEGACY_CATEGORIES[id])
-      .find((cat) => cat && cat[0] === facet.param);
-    const value = (params.get(facet.param) || (legacy ? legacy[1] : '')).trim();
-    const match = facet.options.find((opt) => opt.toLowerCase() === value.toLowerCase());
-    facets[facet.key] = match || '';
-  });
   return {
     q: (params.get('q') || '').trim(),
-    facets,
     sort: SORTS.some((s) => s.value === sort) ? sort : config.defaultSort,
     page: page > 0 ? page : 1,
   };
 }
 
-/** Builds the query string for a state; defaults are omitted. Other params survive. */
+/**
+ * Builds the query string for a state; defaults and the removed filter parameters are
+ * omitted. Other params survive.
+ */
 function stateUrl(config, state, page = state.page) {
   const params = new URLSearchParams(window.location.search);
   const set = (key, value) => (value ? params.set(key, value) : params.delete(key));
+  REMOVED_FILTER_PARAMS.forEach((key) => params.delete(key));
   set('q', state.q);
-  config.facets.forEach((facet) => set(facet.param, state.facets[facet.key]));
   set('sort', state.sort !== config.defaultSort ? state.sort : '');
   set('page', page > 1 ? String(page) : '');
   const query = params.toString();
@@ -205,38 +161,6 @@ function buildControls(config, id) {
     el('div', { className: 'story-listing-search-input' }, search, submit),
   ));
 
-  const selects = {};
-  if (config.facets.length) {
-    const group = el('div', { className: 'story-listing-selects' });
-    config.facets.forEach((facet) => {
-      selects[facet.key] = buildSelect(`${id}-${facet.param}`, facet.param, facet.label, facet.options, facet.label);
-      group.append(selects[facet.key]);
-    });
-    form.append(el(
-      'div',
-      {
-        className: 'story-listing-field story-listing-facets', role: 'group', 'aria-labelledby': `${id}-filter-label`,
-      },
-      el(
-        'div',
-        { className: 'story-listing-field-header' },
-        el('span', { className: 'story-listing-label', id: `${id}-filter-label` }, labels.filter),
-        el('a', { className: 'story-listing-clear', href: window.location.pathname }, labels.clear),
-      ),
-      group,
-    ));
-  } else {
-    form.append(el(
-      'div',
-      { className: 'story-listing-field story-listing-facets' },
-      el(
-        'div',
-        { className: 'story-listing-field-header' },
-        el('a', { className: 'story-listing-clear', href: window.location.pathname }, labels.clear),
-      ),
-    ));
-  }
-
   const sortOptions = SORTS.map((s) => ({ ...s, label: placeholderText(null, s.key, s.label) }));
   const sort = buildSelect(`${id}-sort`, 'sort', null, sortOptions);
   form.append(el(
@@ -246,9 +170,7 @@ function buildControls(config, id) {
     sort,
   ));
 
-  return {
-    form, search, selects, sort, clear: form.querySelector('.story-listing-clear'),
-  };
+  return { form, search, sort };
 }
 
 function buildPagination(config, state, totalPages, nav) {
@@ -305,15 +227,12 @@ export default async function decorate(block) {
 
   const syncControls = () => {
     controls.search.value = state.q;
-    config.facets.forEach((facet) => {
-      controls.selects[facet.key].value = state.facets[facet.key];
-    });
     controls.sort.value = state.sort;
   };
 
   const render = () => {
     if (!loaded) return;
-    const filtered = filterStories(stories, { query: state.q, facets: state.facets });
+    const filtered = filterStories(stories, { query: state.q });
     const sorted = sortStories(filtered, state.sort);
     const totalPages = Math.max(1, Math.ceil(sorted.length / config.pageSize));
     state.page = Math.min(state.page, totalPages);
@@ -338,9 +257,7 @@ export default async function decorate(block) {
   };
 
   const update = (changes, { push = true } = {}) => {
-    state = {
-      ...state, ...changes, facets: { ...state.facets, ...(changes.facets || {}) },
-    };
+    state = { ...state, ...changes };
     const url = stateUrl(config, state);
     if (url !== `${window.location.pathname}${window.location.search}${window.location.hash}`) {
       window.history[push ? 'pushState' : 'replaceState'](null, '', url);
@@ -362,21 +279,7 @@ export default async function decorate(block) {
       if (q !== state.q) update({ q, page: 1 }, { push: false });
     }, 300);
   });
-  config.facets.forEach((facet) => {
-    controls.selects[facet.key].addEventListener('change', (e) => {
-      update({ facets: { [facet.key]: e.target.value }, page: 1 });
-    });
-  });
   controls.sort.addEventListener('change', (e) => update({ sort: e.target.value, page: 1 }));
-  controls.clear.addEventListener('click', (e) => {
-    e.preventDefault();
-    clearTimeout(typing);
-    const facets = Object.fromEntries(config.facets.map((facet) => [facet.key, '']));
-    update({
-      q: '', facets, sort: config.defaultSort, page: 1,
-    });
-    syncControls();
-  });
   nav.addEventListener('click', (e) => {
     const a = e.target.closest('a[data-page]');
     if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
@@ -400,23 +303,9 @@ export default async function decorate(block) {
     exclude: config.exclude,
   });
 
-  // Facets without authored options use the library options sheet (authored order,
-  // so values without stories are listed too); failing that, the stories' values.
-  await Promise.all(config.facets.map(async (facet) => {
-    if (facet.options.length) return;
-    let values = await loadOptionValues(config.optionsSheet, facet.key);
-    if (!values.length) {
-      values = [...new Set(stories.flatMap((story) => story[facet.key] || []))]
-        .sort((a, b) => a.localeCompare(b));
-    }
-    facet.options = values;
-    values.forEach((v) => controls.selects[facet.key].append(el('option', { value: v }, v)));
-  }));
-
-  state = readState(config);
-  syncControls();
   loaded = true;
   block.classList.remove('story-listing-loading');
   block.removeAttribute('aria-busy');
-  render();
+  // renders; also drops the removed filter parameters (?role=, ?topic=, ?c=) from the URL
+  update({}, { push: false });
 }
