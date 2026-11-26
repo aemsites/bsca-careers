@@ -12,6 +12,48 @@
  */
 const params = new URLSearchParams(window.location.search);
 const frameId = params.get('id') || '';
+let authoring = {};
+
+function receiveAuthoring() {
+  if (!params.has('authoring')) return Promise.resolve({});
+  return new Promise((resolve, reject) => {
+    let timer;
+    function receive(event) {
+      if (event.origin !== window.location.origin || event.source !== window.parent
+        || event.data?.sbFrame !== frameId || event.data.type !== 'authoring') return;
+      clearTimeout(timer);
+      window.removeEventListener('message', receive);
+      resolve(event.data.values || {});
+    }
+    timer = setTimeout(() => {
+      window.removeEventListener('message', receive);
+      reject(new Error('Storybook authoring controls did not connect. Reload the story.'));
+    }, 10000);
+    window.addEventListener('message', receive);
+    window.parent.postMessage({ sbFrame: frameId, type: 'authoring-ready' }, window.location.origin);
+  });
+}
+
+function reportInteraction(event) {
+  const target = event.target instanceof Element
+    ? event.target.closest('a,button,input,select,textarea,summary,details,form') : null;
+  if (!target) return;
+  const label = target.getAttribute('aria-label')
+    || target.getAttribute('name')
+    || (target.matches('a,button,summary') ? target.textContent.trim() : '')
+    || target.tagName.toLowerCase();
+  window.parent.postMessage({
+    sbFrame: frameId,
+    type: 'interaction',
+    event: event.type,
+    element: target.tagName.toLowerCase(),
+    label: label.slice(0, 120),
+  }, window.location.origin);
+}
+
+['click', 'change', 'submit', 'toggle'].forEach((type) => {
+  document.addEventListener(type, reportInteraction, true);
+});
 
 /** Same rule the server uses for metadata names ("Publication Date" -> publication-date). */
 const toClassName = (name) => String(name).toLowerCase().replace(/[^0-9a-z]/gi, '-')
@@ -25,6 +67,17 @@ const toClassName = (name) => String(name).toLowerCase().replace(/[^0-9a-z]/gi, 
 const siteFetch = window.fetch.bind(window);
 window.fetch = (input, init) => {
   const url = new URL(typeof input === 'string' ? input : input.url, window.location.href);
+  const override = [['nav', 'navHtml'], ['footer', 'footerHtml']].find(([name, field]) => {
+    const fragmentPath = document.head.querySelector(`meta[name="${name}"]`)?.content || `/${name}`;
+    return authoring[field] !== undefined && url.origin === window.location.origin
+      && url.pathname === `${fragmentPath.replace(/(\.plain)?\.html$/, '')}.plain.html`;
+  });
+  if (override) {
+    const response = new Response(authoring[override[1]], { headers: { 'Content-Type': 'text/html' } });
+    // The site resolves fragment images against the response URL, which synthetic responses lack.
+    Object.defineProperty(response, 'url', { value: url.href });
+    return Promise.resolve(response);
+  }
   const sheet = url.searchParams.get('sheet');
   if (url.origin === window.location.origin && url.pathname.endsWith('.json') && sheet) {
     url.pathname = url.pathname.replace(/\.json$/, `.${sheet}.json`);
@@ -116,7 +169,18 @@ async function start() {
   if (params.get('chrome') !== '1') document.body.classList.add('sb-no-chrome');
   new ResizeObserver(reportHeight).observe(document.documentElement);
   try {
+    authoring = await receiveAuthoring();
     await loadFixture(main);
+    if (params.has('authoring')) {
+      const { applyAuthoring } = await import('/sb-src/authoring.js');
+      applyAuthoring(main, params.get('authoring'), authoring);
+      if (params.get('authoring') === 'fragment' && authoring.fragmentPath !== undefined) {
+        const response = await fetch(`${authoring.fragmentPath}.plain.html`);
+        if (!response.ok) {
+          throw new Error(`Fragment "${authoring.fragmentPath}" is not available in Storybook (${response.status}).`);
+        }
+      }
+    }
   } catch (error) {
     document.body.classList.add('sb-frame-error');
     main.textContent = error.message;

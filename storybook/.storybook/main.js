@@ -27,6 +27,7 @@ const config = {
   staticDirs: [
     // site code at its site paths (/blocks, /scripts, /styles, ...)
     ...SITE_FOLDERS.map((folder) => ({ from: `../../${folder}`, to: `/${folder}` })),
+    { from: '../src', to: '/sb-src' },
     // frame page, content fixtures and mock data (/nav.plain.html, /blog/query-index.json, ...)
     '../public',
   ],

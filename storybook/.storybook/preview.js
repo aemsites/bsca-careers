@@ -25,6 +25,7 @@ const preview = {
   initialGlobals: { brand: 'auto' },
   parameters: {
     layout: 'fullscreen',
+    controls: { disableSaveFromUI: true },
     options: {
       storySort: {
         order: [

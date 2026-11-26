@@ -16,10 +16,32 @@ npm run fixtures         # refresh content fixtures and generated stories from .
 The toolbar **Brand** switches the theme (Page default, Blue Shield, Stellarus, Ascendiun); it can be set
 in the address with `&globals=brand:stellarus`.
 
+In a block story's **Controls** panel, expand **Block authoring** to edit supported variations,
+content and configuration (for example Hero heading/image/link, Article List columns/background,
+Share label/position, or Story Listing page size/sort). Unset fields preserve the original fixture;
+use **Reset controls** to restore it. Controls apply before the site's normal block decoration.
+
+**Advanced authoring → Authoring rows (HTML cells)** replaces the first block's rows with a JSON
+array of rows, each containing cell HTML strings, without a block-name row. This supports all
+authored cells, including additional cards, gallery images, table cells and share icons. For example,
+an Accordion can use `[["First question", "<p>First answer</p>"], ["Second question", "Second answer"]]`.
+Named controls apply after the row replacement. Missing content or malformed rows produce an
+explicit error in the preview; reset the control or supply the required rows. Header/footer stories
+instead expose their shared document HTML, preserving their authored section structure.
+
+The **Preview** controls toggle the site header/footer or adjust the minimum preview height.
+The frame still grows to fit its content. Changing a control only updates the preview, not fixtures,
+DA or the website. Saving stories from the Controls panel is disabled so these experiments cannot
+rewrite generated story files. Use **Reset controls** to discard preview edits.
+**Actions** logs clicks, changes, form submissions and
+disclosure toggles inside the preview, without recording input values. Select a story rather than a
+guide documentation page to use these panels; press `A` if the addon panel is hidden.
+
 ## How it works
 
 - `.storybook/main.js` serves the site folders (`blocks`, `scripts`, `styles`, `fonts`, `icons`,
-  `favicons`) at their site paths, plus `public/`. The site needs no build step and has no
+  `favicons`) at their site paths, plus `public/` and the shared authoring helpers at `/sb-src/`.
+  The site needs no build step and has no
   Storybook-specific code.
 - Every story renders `public/sb-frame.html` in an iframe (`src/frame.js`). The frame loads a content
   fixture (`public/fixtures/<path>.plain.html`), moves its Metadata block into `<head>` like the server

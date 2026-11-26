@@ -8,9 +8,13 @@ export default {
 };
 
 export const Hero = {
+  args: {
+    heading: "hello Try a new authoring headline"
+  },
+
   ...frameStory("blocks/hero", 0),
   name: "Hero",
-  parameters: { docs: { description: { story: "Full-width photo with a centered headline and a call-to-action button. Use once, at the top of the homepage." } } },
+  parameters: { docs: { description: { story: "Full-width photo with a centered headline and a call-to-action button. Use once, at the top of the homepage." } } }
 };
 
 export const HeroCentered = {
