@@ -508,6 +508,9 @@ body {
   --page-background: var(--color-background);
   --color-text-secondary: var(--color-text); /* body copy on intros */
 
+  /* body font under the name the client's OneTrust styles use (styles/onetrust.css, kept as delivered) */
+  --body-font-family: var(--font-body);
+
   /* full-width accent band (section style `blue`, statement banner, menus, video captions) */
   --color-band-accent: var(--color-primary);
   --color-on-band-accent: var(--color-on-primary);

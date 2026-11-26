@@ -63,40 +63,18 @@ function isConsentLink(a) {
     || a.textContent.trim().toLowerCase() === CONSENT_LABEL;
 }
 
-/** Opens the OneTrust preference center (any of the SDK globals, as in cookieprefs.js). */
-function openConsentPreferences() {
-  const sdk = [window.Optanon, window.OneTrust, window.Onetrust]
-    .find((candidate) => typeof candidate?.ToggleInfoDisplay === 'function');
-  sdk?.ToggleInfoDisplay();
-}
-
 /**
- * Wires "Cookie preferences" to the OneTrust preference center, as the client cookieprefs.js
- * does: a list item with that text and no link gets one; the link gets the OneTrust id,
- * classes and data-text. The click is handled here only (stopImmediatePropagation), so the
- * SDK's own `.ot-sdk-show-settings` handler cannot toggle the center closed again.
- * Pages without OneTrust (Stellarus) hide the item: there is no preference center to open.
+ * Prepares "Cookie preferences" for the client's scripts/cookieprefs.js, which opens the
+ * OneTrust preference center on click (loaded by scripts/consent.js with OneTrust): the link
+ * never navigates to a `javascript:` URL. Pages without OneTrust (Stellarus) hide the item:
+ * there is no preference center to open.
  * @param {Element} root
  */
 function wireConsentLinks(root) {
-  root.querySelectorAll('li').forEach((li) => {
-    if (li.querySelector('a') || li.textContent.trim().toLowerCase() !== CONSENT_LABEL) return;
-    const a = document.createElement('a');
-    a.textContent = li.textContent.trim();
-    li.replaceChildren(a);
-  });
   root.querySelectorAll('a').forEach((a) => {
     if (!isConsentLink(a)) return;
     a.setAttribute('href', '#cookie-preferences'); // never navigate to a javascript: URL
     a.setAttribute('role', 'button');
-    a.id = 'ot-cookie-pref';
-    a.classList.add('ot-link', 'ot-sdk-show-settings');
-    a.dataset.text = 'cookie-preferences';
-    a.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      openConsentPreferences();
-    });
     const item = a.closest('li') || a;
     const update = (state) => { item.hidden = state?.managed === false; };
     update(window.consentState);

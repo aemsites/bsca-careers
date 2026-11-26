@@ -1,18 +1,6 @@
+/* eslint-env browser */
 /* global OneTrust, dtrum */
-/**
- * Blue Shield OneTrust wrapper (client file; www.blueshieldca.com/vendor/onetrust/onetrust.js).
- * Imported by scripts/consent.js before the OneTrust SDK loads, so the SDK finds
- * window.OptanonWrapper. Behavior kept from the client file:
- * - the custom "We use trusted partners" banner (en, es, zh, vi) with a Continue button,
- *   shown once per session after the OneTrust banner was closed,
- * - the CJA consent signal: the `analyticsConsentReady` event and session cookie, sent on
- *   Continue and on every OneTrust consent change; Dynatrace (dtrum) is enabled then too,
- * - window.openPreferenceCenter() for links that open the OneTrust preference center.
- * Change from the client file: the cookie domain is .blueshieldca.com / .bscal.com on those
- * sites and host-only everywhere else (aem.page, aem.live, localhost), where the browser
- * would reject a cookie for another domain.
- * The banner styles come from www.blueshieldca.com/vendor/onetrust/onetrust.css (consent.js).
- */
+/* exported OptanonWrapper, openPreferenceCenter */
 
 /* CJA Script (kept exactly as-is) */
 const analyticsCustEvent = new CustomEvent('analyticsConsentReady', {
@@ -21,31 +9,24 @@ const analyticsCustEvent = new CustomEvent('analyticsConsentReady', {
   },
 });
 
+/* ---------- helpers moved above call sites (lint only) ---------- */
+
 // Utility to read a specific cookie value
 function checkOTCookie(cookieName) {
   const value = document.cookie.split('; ').find((row) => row.startsWith(`${cookieName}=`));
   return value ? value.split('=')[1] : null;
 }
 
-/**
- * Session cookie on the shared parent domain when the site runs on it, else host-only.
- * @param {string} nameValue e.g. `bannerCustShown=true`
- */
-function setSessionCookie(nameValue) {
-  const host = window.location.hostname;
-  let domain = '';
-  if (/(^|\.)blueshieldca\.com$/i.test(host)) domain = '; domain=.blueshieldca.com';
-  else if (/(^|\.)bscal\.com$/i.test(host)) domain = '; domain=.bscal.com';
-  document.cookie = `${nameValue}; path=/${domain}; SameSite=Lax`;
-}
-
 // Trap Tab key navigation within the banner
-function trapCustomBannerFocus(e) {
-  if (e.key === 'Tab') {
-    e.preventDefault();
-    const btn = document.getElementById('continueBtn');
-    if (btn) btn.focus();
-  }
+function trapCustomBannerFocus() {
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      // Look up the button safely instead of referencing an outer-scope const
+      const btn = document.getElementById('continueBtn');
+      if (btn) btn.focus();
+    }
+  });
 }
 
 // Hide the custom banner and set a session cookie to prevent re-showing
@@ -56,8 +37,21 @@ function hideOTCustomBanner() {
   }
   document.removeEventListener('keydown', trapCustomBannerFocus); // Remove focus trap
 
+  // Determine cookie domain based on environment (logic preserved)
+  let domain = '.blueshieldca.com';
+  if (window.location.host.includes('localhost')) {
+    domain = 'localhost';
+  } else if (!window.location.host.endsWith('.aem.page')) {
+    domain = '.aem.page';
+    // eslint-disable-next-line no-console
+    console.log('.aem.page domain:', domain);
+  } else if (!window.location.host.endsWith('.blueshieldca.com')) {
+    domain = '.bscal.com';
+  }
+
   // Set session cookie to mark banner as shown
-  setSessionCookie('bannerCustShown=true');
+  document.cookie = `bannerCustShown=true; path=/; domain=${domain}; SameSite=Lax`;
+  document.cookie = 'bannerCustShown=true; path=/; SameSite=Lax'; // session cookie (host-only fallback)
 }
 
 function openPreferenceCenter() {
@@ -107,10 +101,17 @@ const translations = {
 
 /* ---------- analytics consent (unchanged behavior) ---------- */
 function setAnalyticsConsentCookie() {
+  let domain = '.blueshieldca.com';
+  if (window.location.host.includes('localhost')) {
+    domain = 'localhost';
+  } else if (!window.location.host.endsWith('.blueshieldca.com')) {
+    domain = '.bscal.com';
+  }
+
   window.dispatchEvent(analyticsCustEvent);
 
   if (!checkOTCookie('analyticsConsentReady')) {
-    setSessionCookie('analyticsConsentReady=true'); // session cookie
+    document.cookie = `analyticsConsentReady=true; path=/; domain=${domain}; SameSite=Lax`; // session cookie
   }
 
   if (typeof dtrum !== 'undefined' && typeof dtrum.enable === 'function') {
@@ -126,7 +127,8 @@ function setAnalyticsConsentCookie() {
 /* ---------- banner creation (unchanged behavior) ---------- */
 function showOTCustomBanner() {
   const languageSelected = document.documentElement.lang || 'en';
-  const languageTrans = translations[languageSelected] || translations.en;
+  const lang = languageSelected; // uncomment this
+  const languageTrans = translations[lang] || translations.en;
 
   const onetrustOverlay = document.createElement('div');
   onetrustOverlay.id = 'onetrust-overlay';
